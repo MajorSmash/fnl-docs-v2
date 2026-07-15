@@ -1,0 +1,24 @@
+# This is a CONTENT repository. It must never contain secrets or credentials.
+# See README "Secret hygiene" — nothing in this repo is a secret store.
+
+# Environment / secrets (belong to the ingestion service, never here)
+.env
+.env.*
+*.secret
+*.key
+*.pem
+credentials*.json
+
+# Editor / OS cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+
+# Local build output of the docs site (SSG — chosen later, spec O2)
+_site/
+.cache/
+dist/
+node_modules/
