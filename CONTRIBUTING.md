@@ -29,6 +29,7 @@ Never edit the bot's database directly.
 | Update the manual | Edit the file in `manual/` (keep the same filename) |
 | Update params / content / limitations | Edit the matching file in `descriptors/` |
 | Add a curated tip/answer | Add a file in `set-topics/` |
+| Add a betas 1–4 use-case / feature post (era-0) | Add a file in `set-topics/` with `doc_type: USECASE` (there is no separate `usecases/` folder — see the README) |
 | Save an approved chat Q&A | Add a file in `support/` (usually the bot does this) |
 
 Copy the exemplar for the type you need from `templates/` and fill it in. Each
@@ -94,6 +95,10 @@ release file is what tells the whole system a new version exists.
 - Every doc_type has a copy-me exemplar in `templates/`. Copy, don't edit in
   place.
 - Files under `templates/` and any file whose name starts with an underscore
-  (e.g. `releases/_TEMPLATE.md`) are **ignored by ingestion**. That is how the
-  templates live in the repo without polluting the knowledge base. Do not name a
-  real content file with a leading underscore.
+  (e.g. `releases/_TEMPLATE.md`) **must be skipped by ingestion** — that is how
+  the templates live in the repo without polluting the knowledge base. As a
+  second line of defence, every template's frontmatter uses obvious sentinel
+  values (`EXAMPLE`, `0.0.0-EXAMPLE`, `1970-01-01`) so a template can never
+  declare a real version even if the skip fails. **Do not name a real content
+  file with a leading underscore**, and replace every sentinel value when you
+  copy a template.

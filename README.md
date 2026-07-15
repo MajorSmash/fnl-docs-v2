@@ -38,7 +38,7 @@ templates/      one exemplar per doc_type — copy these, never ingested
 | `descriptors/` | `DESCRIPTOR` | The machine-structured dev corpus: `ninjalive2_params.md`, `ninjalive2_content.md`, `ninjalive2_limitations.md`. Shared verbatim with the NinjaLiveAssistant plugin. | Dev |
 | `set-topics/` | `SET_TOPIC` (and era-0 `USECASE`) | Dev-curated answers to common questions, captured from `SET TOPIC` Discord posts. Betas 1–4 use-case/feature posts also land here as era-0 content. | Dev / SET_TOPIC flywheel §6.1 |
 | `support/` | `APPROVED_SUPPORT` | Dev-approved Q&A that originated in chat, produced by the IDK flywheel. | IDK flywheel §6.2 (dev-gated) |
-| `templates/` | — | One copy-me exemplar per doc_type. **Ignored by ingestion** (see the underscore/templates rule in [CONTRIBUTING.md](CONTRIBUTING.md)). | — |
+| `templates/` | — | One copy-me exemplar per doc_type. The ingestion pipeline **must skip** `templates/` and any `_`-prefixed file (see the [templates rule in CONTRIBUTING.md](CONTRIBUTING.md#templates-and-the-_-convention)); template frontmatter also uses sentinel values as a second line of defence. | — |
 
 **One logical unit per file.** One release per release file, one Q&A per support
 file, one SET_TOPIC per set-topic file. The `manual/` and `descriptors/` files
@@ -231,10 +231,13 @@ immediately. No transfer needed to start contributing.
 6. **Update the two env vars on the ingestion service.**
    - `DOCS_REPO_OWNER` → Andras' account name.
    - `WEBHOOK_SECRET` → the new secret from step 5 (must match exactly).
-   - If the service's local clone is re-created under a new path, also update
-     `DOCS_REPO_PATH`. Otherwise point the existing clone's remote at the new
-     owner: `git remote set-url origin https://github.com/<andras-account>/fnl-docs-v2.git`
-     (the old URL redirects, but updating it is cleaner).
+   - **Re-point the service's local clone remote** (required, not optional):
+     `git remote set-url origin https://github.com/<andras-account>/fnl-docs-v2.git`.
+     GitHub's redirect from the old URL only holds until someone creates a new
+     repo named `fnl-docs-v2` under Seth's account, at which point `git pull`
+     would silently break and halt ingestion — so update the remote now, don't
+     rely on the redirect. If the clone is re-created under a new path, also
+     update `DOCS_REPO_PATH`.
    - Restart the service so it picks up the new environment.
 7. **Verify end-to-end.**
    - GitHub webhook page → **Recent Deliveries** → "Redeliver" a test push, or
