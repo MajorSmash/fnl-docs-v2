@@ -1,0 +1,29 @@
+---
+doc_type: SET_TOPIC
+title: "LIVE-2 WAVEGEN vs RVT INPUT"
+date: 2026-06-23
+source_url: "https://discord.com/channels/850913821240983553/1319655034803458069/1519087792448344164"
+author: "andrasketzer"
+source_channel: "live2-public-discussion"
+scope: LIVE2
+version_min: null
+version_max: null
+media_urls: []
+---
+
+🖐️ I am glad you are already into testing UE 5.8 features!
+SET TOPIC: **LIVE-2 WAVEGEN vs RVT INPUT**
+Briefly: *the wavegen does not work with RVT*
+
+Details:
+The best way to learn about a given feature, is to hover the mouse over the param on the UI, and read the tooltip.
+*/LiveComponent /LiveSimulation /WavesFromLandscapeGradient /InvertLandscapeGradientUnderClampedHeight*
+Tooltip mirrored on the server: [Discord](https://discord.com/channels/850913821240983553/1504848929915797737/1504849077744173258)
+The tooltip already hints to Landscape Component input - as a prerequisite --- and a new manual chapter called "Limitations" explains this in details:
+
+LIMITATONS / Chapter 1.4
+https://drive.google.com/file/d/1-yQDZ3qlxh5xf_xcRW3dhdvggVBAv32n
+
+"*LIVE-2 comes with EXPERIMENTAL coastal wave generator that uses the terrain slope gradiant to generate waves that travel perpendicular to the coast. The function has critical prerequisites. The most important factor: it DOES NOT WORK with data coming from RVT or SceneCapture sources, only Landscape Components. In later ninja versions, wavegen should be generalized to all kind of height inputs.*"
+
+Side note: I am working on the manual right now, hopefully finished until 4th July / scattered text blocks integrated into a single file.
