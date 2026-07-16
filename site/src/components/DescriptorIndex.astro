@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import { sitePath } from '../lib/site-path.mjs';
+
+const descriptors = (await getCollection('docs', ({ data }) => data.doc_type === 'DESCRIPTOR')).sort(
+  (a, b) => a.data.title.localeCompare(b.data.title),
+);
+---
+
+<div class="document-grid not-content">
+  {
+    descriptors.map((entry) => (
+      <a class="document-card" href={sitePath(`${entry.id}/`)}>
+        <span class="eyebrow">Descriptor</span>
+        <strong>{entry.data.title}</strong>
+        <small>
+          {entry.data.doc_revision ? `Revision ${entry.data.doc_revision}` : 'Canonical reference'}
+        </small>
+      </a>
+    ))
+  }
+</div>

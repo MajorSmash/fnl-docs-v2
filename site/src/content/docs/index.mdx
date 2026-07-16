@@ -1,0 +1,46 @@
+---
+title: FluidNinja LIVE 2 Documentation
+description: Canonical product knowledge for building responsive real-time fluid effects in Unreal Engine.
+template: splash
+sidebar:
+  hidden: true
+hero:
+  tagline: Canonical product knowledge for building responsive real-time fluid effects in Unreal Engine — from first setup to production rendering.
+  actions:
+    - text: Read the manual
+      link: ./manual/
+      icon: right-arrow
+      variant: primary
+    - text: Browse Set Topics
+      link: ./set-topics/
+      icon: magnifier
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+import CorpusStats from '../../components/CorpusStats.astro';
+
+<CorpusStats />
+
+## One source of truth, shaped for people and search
+
+The manual and descriptors are the canonical references. Set Topics preserve focused developer guidance from the FluidNinja community, while approved support answers and release notes join the same searchable library as they pass review.
+
+<CardGrid>
+  <Card title="Manual" icon="open-book">
+    Work through the chaptered FluidNinja LIVE 2 manual, from architecture and setup building to water, volumetrics, performance, cinematics, and limitations.
+  </Card>
+  <Card title="Parameters" icon="document">
+    Search the parameter, content, and limitations descriptors. Structured `{P.}` and `{G.}` grammar is rendered as scannable reference data.
+  </Card>
+  <Card title="Set Topics" icon="magnifier">
+    Find focused answers on water, particles, Niagara, movie rendering, volumetrics, packaging, and production edge cases.
+  </Card>
+  <Card title="Support Q&A" icon="puzzle">
+    Developer-approved answers from support conversations appear here only after they clear the knowledge-base review gate.
+  </Card>
+</CardGrid>
+
+## Built for traceability
+
+Every source document carries its type, date, version context, and original source link. Discord links are visibly marked before you leave the site, and the full corpus is indexed locally by Pagefind.

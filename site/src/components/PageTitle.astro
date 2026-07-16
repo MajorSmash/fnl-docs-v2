@@ -1,0 +1,57 @@
+---
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+import { Badge } from '@astrojs/starlight/components';
+import type { StarlightRouteData } from '@astrojs/starlight/route-data';
+
+import { sectionForDocType, versionBadges } from '../lib/document-meta.mjs';
+
+const route = Astro.locals.starlightRoute as StarlightRouteData;
+const data = route.entry.data as StarlightRouteData['entry']['data'] & {
+  doc_type?: string;
+  date?: Date | string;
+  source_url?: string | null;
+  doc_revision?: string | number | null;
+  version?: string | number | null;
+  version_min?: string | number | null;
+  version_max?: string | number | null;
+  ue_versions?: Array<string | number>;
+};
+
+const date = data.date ? new Date(data.date) : undefined;
+const formattedDate =
+  date && !Number.isNaN(date.valueOf())
+    ? new Intl.DateTimeFormat('en', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        timeZone: 'UTC',
+      }).format(date)
+    : undefined;
+const versionLabels = versionBadges(data);
+const isDiscordSource = data.source_url?.includes('discord.com/');
+---
+
+<Default />
+
+{
+  data.doc_type && (
+    <div class="document-meta" aria-label="Document metadata">
+      <Badge text={sectionForDocType(data.doc_type)} variant="tip" size="small" />
+      <Badge text={data.doc_type.replaceAll('_', ' ')} variant="note" size="small" />
+      {formattedDate && <Badge text={formattedDate} variant="default" size="small" />}
+      {versionLabels.map((label) => (
+        <Badge text={label} variant="success" size="small" />
+      ))}
+      {data.source_url && (
+        <a
+          class:list={['source-badge', { 'discord-link': isDiscordSource }]}
+          href={data.source_url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Original source <span aria-hidden="true">↗</span>
+        </a>
+      )}
+    </div>
+  )
+}

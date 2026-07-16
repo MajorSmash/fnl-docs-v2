@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import { sitePath } from '../lib/site-path.mjs';
+
+const releases = (await getCollection('docs', ({ data }) => data.doc_type === 'RELEASE')).sort(
+  (a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0),
+);
+---
+
+{
+  releases.length ? (
+    <div class="document-grid not-content">
+      {releases.map((entry) => (
+        <a class="document-card" href={sitePath(`${entry.id}/`)}>
+          <span class="eyebrow">Release</span>
+          <strong>{entry.data.title}</strong>
+          <small>{entry.data.version ? `Version ${entry.data.version}` : 'Release notes'}</small>
+        </a>
+      ))}
+    </div>
+  ) : (
+    <div class="empty-state not-content">
+      <strong>Release registry pending</strong>
+      <p>Verified FluidNinja LIVE 2 release notes will appear here as they are published.</p>
+    </div>
+  )
+}

@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import { sitePath } from '../lib/site-path.mjs';
+
+const answers = (
+  await getCollection('docs', ({ data }) => data.doc_type === 'APPROVED_SUPPORT')
+).sort((a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0));
+---
+
+{
+  answers.length ? (
+    <div class="document-grid not-content">
+      {answers.map((entry) => (
+        <a class="document-card" href={sitePath(`${entry.id}/`)}>
+          <span class="eyebrow">Approved answer</span>
+          <strong>{entry.data.title}</strong>
+          <small>{entry.data.date?.toISOString().slice(0, 10) ?? 'Undated'}</small>
+        </a>
+      ))}
+    </div>
+  ) : (
+    <div class="empty-state not-content">
+      <strong>Approved Q&A is growing</strong>
+      <p>
+        Developer-approved support answers will appear here after they pass the knowledge-base
+        review gate.
+      </p>
+    </div>
+  )
+}

@@ -1,0 +1,26 @@
+{
+  "name": "fnl-docs-v2-site",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "dev": "astro dev",
+    "check": "astro check",
+    "test": "node --test tests/*.test.mjs",
+    "build": "astro build",
+    "check:links": "node scripts/check-internal-links.mjs",
+    "verify:search": "node scripts/verify-search.mjs",
+    "build:verify": "pnpm run test && pnpm run check && pnpm run build && pnpm run check:links"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.2.1",
+    "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/starlight": "^0.41.3",
+    "astro": "^7.0.9"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "pagefind": "^1.5.2",
+    "typescript": "^6.0.2"
+  }
+}

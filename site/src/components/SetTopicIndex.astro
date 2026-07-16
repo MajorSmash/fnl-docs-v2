@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import { sitePath } from '../lib/site-path.mjs';
+
+const topics = (
+  await getCollection('docs', ({ data }) => data.doc_type === 'SET_TOPIC' || data.doc_type === 'USECASE')
+).sort((a, b) => a.data.title.localeCompare(b.data.title));
+---
+
+<div class="topic-browser not-content">
+  <label class="topic-search">
+    <span>Filter {topics.length} set topics</span>
+    <input
+      id="topic-filter"
+      type="search"
+      inputmode="search"
+      placeholder="Try water, volumetrics, Niagara…"
+      autocomplete="off"
+    />
+  </label>
+  <p id="topic-count" class="topic-count" aria-live="polite">{topics.length} topics shown</p>
+  <ul id="topic-list" class="topic-list">
+    {
+      topics.map((entry) => (
+        <li data-topic={`${entry.data.title} ${entry.id}`.toLocaleLowerCase()}>
+          <a href={sitePath(`${entry.id}/`)}>
+            <strong>{entry.data.title}</strong>
+            <span>{entry.data.date?.toISOString().slice(0, 10) ?? 'Undated'}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('#topic-filter');
+  const count = document.querySelector<HTMLElement>('#topic-count');
+  const rows = [...document.querySelectorAll<HTMLElement>('#topic-list [data-topic]')];
+
+  input?.addEventListener('input', () => {
+    const query = input.value.trim().toLocaleLowerCase();
+    let visible = 0;
+
+    for (const row of rows) {
+      const show = !query || row.dataset.topic?.includes(query);
+      row.hidden = !show;
+      if (show) visible += 1;
+    }
+
+    if (count) count.textContent = `${visible} ${visible === 1 ? 'topic' : 'topics'} shown`;
+  });
+</script>

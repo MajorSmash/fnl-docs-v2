@@ -179,6 +179,37 @@ This is a public-shaped content repository. Treat it as world-readable.
 
 ---
 
+## Documentation site
+
+The public documentation site lives in [`site/`](site/) and is built with
+Astro Starlight. It loads the canonical Markdown directly from `manual/`,
+`descriptors/`, `set-topics/`, `support/`, and `releases/`; those files are
+not copied into the site and remain the single source of truth.
+
+From `site/`:
+
+```text
+pnpm install
+pnpm run dev
+pnpm run build:verify
+pnpm run verify:search
+```
+
+A push to `main` runs [the GitHub Pages workflow](.github/workflows/deploy-pages.yml),
+which tests, type-checks, builds, rejects broken internal links, verifies the
+Pagefind corpus, and deploys `site/dist`.
+
+### GitHub Pages after ownership transfer
+
+Repository transfer can require Pages to be re-enabled for the new owner. The
+ownership-transfer runbook below makes that part of step 4: after Andras accepts
+the transfer, open **Settings → Pages**, select **GitHub Actions** as the source,
+and run the **Build and deploy docs site** workflow. The workflow derives the
+owner and repository name from GitHub at build time, so no site code changes are
+needed.
+
+---
+
 ## OWNERSHIP TRANSFER RUNBOOK
 
 This repository is currently staged on **Seth's** GitHub account and will later
@@ -218,6 +249,10 @@ immediately. No transfer needed to start contributing.
 4. **Andras accepts.** Andras confirms the transfer from the email/notification
    GitHub sends. The repo now lives at
    `https://github.com/<andras-account>/fnl-docs-v2`.
+   - **Re-enable GitHub Pages on the new owner.** Open
+     `Settings → Pages`, choose **GitHub Actions** as the source, then run the
+     **Build and deploy docs site** workflow. Confirm its deployment URL opens
+     before continuing.
 5. **Re-create the webhook on the new owner.** GitHub does **not** carry webhooks
    across a transfer. On the transferred repo:
    `Settings → Webhooks → Add webhook`.

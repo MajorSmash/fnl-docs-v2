@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+
+const docs = await getCollection('docs', ({ data }) => Boolean(data.doc_type));
+const counts = docs.reduce(
+  (acc, entry) => {
+    const docType = entry.data.doc_type;
+    if (docType) acc[docType] = (acc[docType] ?? 0) + 1;
+    return acc;
+  },
+  {} as Record<string, number>,
+);
+
+const stats = [
+  ['Manual', counts.MANUAL ?? 0],
+  ['Descriptors', counts.DESCRIPTOR ?? 0],
+  ['Set Topics', (counts.SET_TOPIC ?? 0) + (counts.USECASE ?? 0)],
+  ['Support answers', counts.APPROVED_SUPPORT ?? 0],
+];
+---
+
+<div class="corpus-stats not-content" aria-label="Documentation corpus at a glance">
+  {stats.map(([label, value]) => (
+    <div class="corpus-stat">
+      <strong>{value}</strong>
+      <span>{label}</span>
+    </div>
+  ))}
+</div>

@@ -1,0 +1,31 @@
+---
+import { getEntry } from 'astro:content';
+import { sitePath } from '../lib/site-path.mjs';
+
+const manual = await getEntry('docs', 'manual/ninjalive2-manual');
+const headings = (manual?.rendered?.metadata?.headings ?? []) as Array<{
+  depth: number;
+  slug: string;
+  text: string;
+}>;
+const chapters = headings.filter(
+  (heading) => heading.depth === 2 && heading.text.toLocaleLowerCase() !== 'contents',
+);
+---
+
+{
+  chapters.length ? (
+    <ol class="chapter-grid not-content">
+      {chapters.map((heading) => (
+        <li>
+          <a href={`${sitePath('manual/ninjalive2-manual/') }#${heading.slug}`}>
+            <span>{heading.text.match(/^\d+/)?.[0] ?? '•'}</span>
+            {heading.text.replace(/^\d+\.\s*/, '')}
+          </a>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p>The manual is available as one canonical document with an on-page table of contents.</p>
+  )
+}
