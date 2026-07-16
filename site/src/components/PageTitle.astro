@@ -3,6 +3,7 @@ import Default from '@astrojs/starlight/components/PageTitle.astro';
 import { Badge } from '@astrojs/starlight/components';
 import type { StarlightRouteData } from '@astrojs/starlight/route-data';
 
+import { isDiscordUrl } from '../lib/discord-url.mjs';
 import { sectionForDocType, versionBadges } from '../lib/document-meta.mjs';
 
 const route = Astro.locals.starlightRoute as StarlightRouteData;
@@ -28,7 +29,7 @@ const formattedDate =
       }).format(date)
     : undefined;
 const versionLabels = versionBadges(data);
-const isDiscordSource = data.source_url?.includes('discord.com/');
+const isDiscordSource = isDiscordUrl(data.source_url);
 ---
 
 <Default />

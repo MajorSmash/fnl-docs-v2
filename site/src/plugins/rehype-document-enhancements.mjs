@@ -1,4 +1,5 @@
-const DISCORD_HOSTS = new Set(['discord.com', 'www.discord.com', 'discordapp.com']);
+import { isDiscordUrl } from '../lib/discord-url.mjs';
+
 const GRAMMAR_PATTERN = /^\{([PG])\.([^,}]+),\s*([^}]+)\}/;
 
 function walk(node, visitor, parent = undefined) {
@@ -18,14 +19,7 @@ function discordLink(node) {
   const href = node.properties?.href;
   if (typeof href !== 'string') return;
 
-  let url;
-  try {
-    url = new URL(href);
-  } catch {
-    return;
-  }
-
-  if (!DISCORD_HOSTS.has(url.hostname.toLocaleLowerCase())) return;
+  if (!isDiscordUrl(href)) return;
 
   const className = Array.isArray(node.properties.className) ? node.properties.className : [];
   node.properties.className = [...className, 'discord-link'];

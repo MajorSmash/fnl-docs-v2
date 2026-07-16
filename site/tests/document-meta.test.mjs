@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+import { isDiscordUrl } from '../src/lib/discord-url.mjs';
 import { sectionForDocType, versionBadges } from '../src/lib/document-meta.mjs';
 import rehypeDocumentEnhancements from '../src/plugins/rehype-document-enhancements.mjs';
 import remarkDocumentHeadings from '../src/plugins/remark-document-headings.mjs';
@@ -107,4 +108,12 @@ test('imported Markdown H1s are demoted beneath the Starlight page title', () =>
 
   assert.equal(tree.children[0].depth, 2);
   assert.equal(tree.children[1].depth, 2);
+});
+
+test('Discord URL detection uses exact supported hostnames', () => {
+  assert.equal(isDiscordUrl('https://discord.com/channels/1/2/3'), true);
+  assert.equal(isDiscordUrl('https://www.discord.com/channels/1/2/3'), true);
+  assert.equal(isDiscordUrl('https://discordapp.com/channels/1/2/3'), true);
+  assert.equal(isDiscordUrl('https://discord.com.evil.example/channels/1/2/3'), false);
+  assert.equal(isDiscordUrl('not a URL'), false);
 });

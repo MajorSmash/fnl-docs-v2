@@ -8,8 +8,12 @@ const headings = (manual?.rendered?.metadata?.headings ?? []) as Array<{
   slug: string;
   text: string;
 }>;
+const manualTitle = String(manual?.data.title ?? '').trim().toLocaleLowerCase();
 const chapters = headings.filter(
-  (heading) => heading.depth === 2 && heading.text.toLocaleLowerCase() !== 'contents',
+  (heading) =>
+    heading.depth === 2 &&
+    heading.text.trim().toLocaleLowerCase() !== 'contents' &&
+    heading.text.trim().toLocaleLowerCase() !== manualTitle,
 );
 ---
 
