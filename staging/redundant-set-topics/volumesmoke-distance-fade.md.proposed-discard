@@ -1,0 +1,14 @@
+---
+doc_type: SET_TOPIC
+title: "VOLUMESMOKE DISTANCE FADE"
+date: 2022-07-14
+source_url: "https://discord.com/channels/850913821240983553/851482546100633601/997072606803009546"
+author: "andrasketzer"
+source_channel: "tips-tricks"
+scope: LIVE2
+version_min: null
+version_max: null
+media_urls: ["https://cdn.discordapp.com/attachments/851482546100633601/997072606245171220/VolumeSmokeDistanceFade.png?ex=6a58a4ba&is=6a57533a&hm=5189e2b66f4dfe3e076e283c891e794a89348cf309619fcf8000456737296e16&"]
+---
+
+See the "**XDistanceFade**" parameter-group in the VolumeSmoke Material Instance, with RANGE and FALLOFF params!

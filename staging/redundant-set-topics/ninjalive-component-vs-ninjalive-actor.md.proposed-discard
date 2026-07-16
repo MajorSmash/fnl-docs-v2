@@ -1,0 +1,25 @@
+---
+doc_type: SET_TOPIC
+title: "NinjaLive COMPONENT vs NinjaLive ACTOR"
+date: 2024-12-03
+source_url: "https://discord.com/channels/850913821240983553/851482546100633601/1313506071192801290"
+author: "andrasketzer"
+source_channel: "tips-tricks"
+scope: LIVE2
+version_min: null
+version_max: null
+media_urls: []
+---
+
+thanks: all clear! Please let me explain:
+1. on your screenshot, we see the Details Panel of NinjaLive**Component** -- and these options influence how the **Component** behaves / these options do not effect NinjaLive**Actor**.
+2. Ninja could be used in TWO modes:
+(A) when we use NinjaLive**Actor**, the simulation could interact with **all objects** placed on level.
+(B) when we use NinjaLive**Component** added to a non-ninja-actor (eg. a Pawn, or a Vehicle), the simulation could interact **ONLY with the components of the host actor**.
+
+In practice, this means:
+- if I attach ninjalive ACTOR to a pawn: the sim could interact with everything
+- if I add ninjalive COMPONENT to the pawn: the sim could interact only with the pawn.
+.
+This ⬆️ is all explained in the "**introduction to ninja**" tutorial, please carefully examine it: https://www.youtube.com/watch?v=vXalfRAnXak
+Another reference is a 5 episode "*how to add ninja to my character" tut-series*: https://www.youtube.com/playlist?list=PLVCUepYV6TvPYbofpEf_ghznfihM-yt-B
