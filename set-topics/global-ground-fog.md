@@ -12,7 +12,6 @@ media_urls: []
 ---
 
 GLOBAL GROUND FOG
-Thanks for reaching out!
 Ninja is using local containers to deliver fluidsim. Three ways to make this global:
 (1) via TILING (using local fluidsim repeated in a global field) see: https://youtu.be/uH2DRdKruaU
 (2) via WORLD OFFSET (adding local fluidsim to a global non-fluid field) see:

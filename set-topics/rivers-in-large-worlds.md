@@ -12,7 +12,6 @@ media_urls: []
 ---
 
 🖐️ --- Let us break this ⬆️ down into smaller features!
-SET TOPIC: LIVE-2 **RIVERS IN LARGE WORLDS**
 LIVE-2 comes with support for the below listed features:
 .
 1. Large World Coordinates (LWC), so simulation and setup elements work beyond the UE standard 20x20 kilometers base tile

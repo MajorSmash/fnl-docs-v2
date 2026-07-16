@@ -13,7 +13,7 @@ media_urls: []
 
 Multiplayer: [Discord](https://discord.com/channels/850913821240983553/851482546100633601/1050688301956354088)
 .
-SET TOPIC: LIVE-2 **dynamic simulations vs limited sim area** ---> very good question ---> multiple ways to solve this.
+LIVE-2 **dynamic simulations vs limited sim area** ---> very good question ---> multiple ways to solve this.
 
 **A.** we can define a water level that is "automatically filled up" --- ignoring simulation state --- while above the clamping level, simulation is considered. For example, in this lake scene [Discord](https://discord.com/channels/850913821240983553/1319654945254932510/1507485220402757832) the lake is auto filled (no matter what the simulation does) --- but waves added on top of the surface - and fluid washing the shore is dynamically simulated --- so, in case we have a sim area that is **attached to the player**: the shoreline around the player is always simulated, while we see a passive lake surface outside the sim area
 

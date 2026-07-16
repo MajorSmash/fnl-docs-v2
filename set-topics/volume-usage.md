@@ -11,8 +11,6 @@ version_max: null
 media_urls: []
 ---
 
-🖐️ thanks for joining the debate!
-SET TOPIC: LIVE-1, LIVE-2 **VOLUME USAGE**
 Using different rendering technologies / visualization domains inside Unreal is largely constrained by EPIC engineers: they have designed certain technologies for certain usecases / and they can not (easily) be used the other way. Let me provide you with an example:
 
 Clouds-volumes (CVOL) are self-shadowed, lit, raymarched volumes - just like heterogeneous volumes (HVOL).

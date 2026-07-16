@@ -11,7 +11,6 @@ version_max: null
 media_urls: []
 ---
 
-Thanks for reaching out 🖐️
 Briefly:
 1. Add NinjaLiveComponent to your character
 2. Make sure your character mesh's collision profile settings match ninja filters ("generate overlap events TRUE, class = PAWN")

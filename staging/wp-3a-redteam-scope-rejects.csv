@@ -1,0 +1,8 @@
+file,reason,canon_evidence,disposition
+preset-manager.md,"LIVE-1 Preset Manager UI instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone; parameters are managed from Component Details Panel.",proposed-scope-reject
+preset-manager-error-handling.md,"LIVE-1 PresMan actor/client/error-handling instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+preset-name-filtering.md,"LIVE-1 Preset Manager row/filter instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone; UI parameters were reorganized.",proposed-scope-reject
+preset-manager-vs-inactive-ninja-actors.md,"LIVE-1 PresMan UI and sleeping-client instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+custom-tracemesh-vs-overlap-detection.md,"TraceMesh collision setup is a removed LIVE-1 workflow.","Manual: tracemesh as a technical object is gone in LIVE-2.",proposed-scope-reject
+projecting-3d-world-pos-to-sim-space.md,"Line-trace projection and FindCollisionUV instructions are a removed LIVE-1 workflow.","Manual: linetracing as a projection method is gone in LIVE-2.",proposed-scope-reject
+tagging.md,"The post includes FloorSnapper workflow presented as current behavior.","Manual: FloorSnapper is gone and replaced by an integrated LIVE-2 method.",proposed-scope-reject

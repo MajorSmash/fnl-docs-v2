@@ -11,9 +11,6 @@ version_max: null
 media_urls: []
 ---
 
-Thanks for reaching out !
-
-SET TOPIC: **SINKING SHIP SETUP**
 I would suggest using a faux method --- supported by some real fluid sim.
 1. The currently available ninjalive 1.9 ([Discord](https://discord.com/channels/850913821240983553/865943662411644928/1460537575650492437)) is not suitable for this
 2. the upcoming ninjalive 2.0 ([Discord](https://discord.com/channels/850913821240983553/1319654748873560145/1389543526932676722)) could be used. I would do the following setup:

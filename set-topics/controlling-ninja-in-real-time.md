@@ -11,8 +11,6 @@ version_max: null
 media_urls: []
 ---
 
-SET TOPIC -** CONTROLLING NINJA IN REAL TIME**
-
 To grasp the idea of "realtime control": load any ninja tutorial level, place a Preset Manager, start Play and use the PresMan to (A) interactively set Fluidsim Parameters, (B) change Input Textures and (C) Output Materials. See these following vids.
 Changing Sim Params: https://youtu.be/0O11SNavhM4?t=632
 Changing Output Materials: https://youtu.be/0O11SNavhM4?t=364 + https://youtu.be/_HbkZ_X4bRE?t=349

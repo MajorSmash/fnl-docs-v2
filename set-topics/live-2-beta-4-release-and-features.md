@@ -13,8 +13,6 @@ media_urls: []
 
 ## Release announcement
 
-Dear   folks ðŸ–ï¸ 
-
 FluidNinja LIVE-2 **BETA-4** available: [Discord](https://discord.com/channels/850913821240983553/1466656509239758899/1512178125734281478) / [Discord](https://discord.com/channels/850913821240983553/1466649696956317746/1466737082834751489)
 
 BETA-4  feature list: [Discord](https://discord.com/channels/850913821240983553/1466643263774527741/1512186744533946560)

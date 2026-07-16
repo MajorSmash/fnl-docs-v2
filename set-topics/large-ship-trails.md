@@ -11,8 +11,6 @@ version_max: null
 media_urls: ["https://cdn.discordapp.com/attachments/850913821827792940/1260510795238866974/sim_size_300m.jpg?ex=6a589428&is=6a5742a8&hm=4384159e08e785b7ab0d991cc788ac2fd51dc51ff36745319c6451e509db0776&"]
 ---
 
-🖐️ Thanks for reaching out!
-SET TOPIC: **LARGE SHIP TRAILS**
 Briefly: yes, it is possible to use ninja in large-scale scenes, and create trails for large objects
 .
 I have created a test setup, to see how it looks - based on Usecase Level 1 setup elements

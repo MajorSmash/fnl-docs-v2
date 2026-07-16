@@ -11,7 +11,6 @@ version_max: null
 media_urls: []
 ---
 
-thanks for reaching out!
 *"need something quick to show for start"* --- I would describe ninja systems in terms of **increasing complexity**, this way:
 **1.** a simple 2D sim, visualized on ninja's internal (built in) tracemesh - eg.: Tutorial Level 2 (https://youtu.be/0O11SNavhM4?t=226)
 

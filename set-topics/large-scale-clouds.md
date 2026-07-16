@@ -13,8 +13,6 @@ media_urls: []
 
 🖐️ Thanks for reaching out! ---- I have collected some references for you:
 
-SET TOPIC: **LARGE SCALE CLOUDS**
-
 Planet, total: https://youtu.be/T8VaCep_eio?t=17
 A similar setup in the ninja project: Tutorial Level21, Stage 8
 

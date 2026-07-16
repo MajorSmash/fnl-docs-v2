@@ -11,8 +11,6 @@ version_max: null
 media_urls: []
 ---
 
-🖐️ I am glad you are already into testing UE 5.8 features!
-SET TOPIC: **LIVE-2 WAVEGEN vs RVT INPUT**
 Briefly: *the wavegen does not work with RVT*
 
 Details:
