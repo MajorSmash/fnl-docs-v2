@@ -1,9 +1,43 @@
-file,reason,canon_evidence,disposition
-controlling-ninja-in-real-time.md,"Includes LIVE-1 Preset Manager UI instructions presented as current realtime control.","Manual: Preset Manager as a separate UI is gone; parameters are managed from Component Details Panel.",proposed-scope-reject
-preset-manager.md,"LIVE-1 Preset Manager UI instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone; parameters are managed from Component Details Panel.",proposed-scope-reject
-preset-manager-error-handling.md,"LIVE-1 PresMan actor/client/error-handling instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
-preset-name-filtering.md,"LIVE-1 Preset Manager row/filter instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone; UI parameters were reorganized.",proposed-scope-reject
-preset-manager-vs-inactive-ninja-actors.md,"LIVE-1 PresMan UI and sleeping-client instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
-custom-tracemesh-vs-overlap-detection.md,"TraceMesh collision setup is a removed LIVE-1 workflow.","Manual: tracemesh as a technical object is gone in LIVE-2.",proposed-scope-reject
-projecting-3d-world-pos-to-sim-space.md,"Line-trace projection and FindCollisionUV instructions are a removed LIVE-1 workflow.","Manual: linetracing as a projection method is gone in LIVE-2.",proposed-scope-reject
-tagging.md,"The post includes FloorSnapper workflow presented as current behavior.","Manual: FloorSnapper is gone and replaced by an integrated LIVE-2 method.",proposed-scope-reject
+file,original_redundancy_bucket,reason,canon_evidence,disposition
+controlling-ninja-in-real-time.md,PARTIAL,"Includes LIVE-1 Preset Manager UI instructions presented as current realtime control.","Manual: Preset Manager as a separate UI is gone; parameters are managed from Component Details Panel.",proposed-scope-reject
+preset-manager.md,PARTIAL,"LIVE-1 Preset Manager UI instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone; parameters are managed from Component Details Panel.",proposed-scope-reject
+preset-manager-error-handling.md,NOVEL,"LIVE-1 PresMan actor/client/error-handling instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+preset-name-filtering.md,NOVEL,"LIVE-1 Preset Manager row/filter instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone; UI parameters were reorganized.",proposed-scope-reject
+preset-manager-vs-inactive-ninja-actors.md,NOVEL,"LIVE-1 PresMan UI and sleeping-client instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+custom-tracemesh-vs-overlap-detection.md,NOVEL,"TraceMesh collision setup is a removed LIVE-1 workflow.","Manual: tracemesh as a technical object is gone in LIVE-2.",proposed-scope-reject
+projecting-3d-world-pos-to-sim-space.md,PARTIAL,"Line-trace projection and FindCollisionUV instructions are a removed LIVE-1 workflow.","Manual: linetracing as a projection method is gone in LIVE-2.",proposed-scope-reject
+tagging.md,PARTIAL,"The post includes FloorSnapper workflow presented as current behavior.","Manual: FloorSnapper is gone and replaced by an integrated LIVE-2 method.",proposed-scope-reject
+changing-fluidsim-texture-input.md,PARTIAL,"Uses the removed LIVE-1 NinjaLive_PresetManager actor and UI as the current runtime texture workflow.","Manual: Preset Manager as a separate UI is gone; LIVE-2 parameters are managed from component details or actor/component APIs.",proposed-scope-reject
+changing-flow-direction-of-world-space-sims.md,PARTIAL,"Uses the removed LIVE-1 Preset Manager workflow to change tile-generator flow direction.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+ninjalivecomponent-not-recognized.md,NOVEL,"Prescribes the removed LIVE-1 NinjaLive INTERFACE/Preset Manager recognition workflow.","Manual: Preset Manager as a separate UI is gone and LIVE-2 actor/component architecture changed.",proposed-scope-reject
+noise.md,PARTIAL,"Locates LIVE controls in the removed LIVE-1 Preset Manager UI.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+pipes.md,PARTIAL,"Includes removed LIVE-1 Preset Manager instructions presented as current setup guidance.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+river-speed.md,PARTIAL,"Uses the removed LIVE-1 Preset Manager UI for river controls.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+sim-edges-and-clamping.md,NOVEL,"Uses the removed LIVE-1 Preset Manager UI for buffer-edge controls.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+sim-inputs-adding-and-subtracting-brush-strokes.md,PARTIAL,"Uses the removed LIVE-1 Preset Manager panel as the current location for brush controls.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+tiling.md,PARTIAL,"Uses removed LIVE-1 Preset Manager paths for pressure and collision masking.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+tiling-1.md,PARTIAL,"Duplicate payload using removed LIVE-1 Preset Manager paths for pressure and collision masking.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+volume-cloud-speed.md,PARTIAL,"Uses the removed LIVE-1 Preset Manager UI for volumetric controls.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+waves.md,PARTIAL,"Uses the removed LIVE-1 Preset Manager UI as current wave-control guidance.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
+destructibles.md,NOVEL,"States that Chaos destructibles are unsupported, directly contradicting LIVE-2 canon.","Manual section 10 documents supported Chaos destructible interaction methods.",proposed-scope-reject
+cloud-rendering.md,PARTIAL,"Source channel is live2-public-discussion, explicitly outside WP-3A bootstrap scope.","WP-3A task 0e excludes live2-public-discussion Q&A pairs from bootstrap.",proposed-scope-reject
+rivers-in-large-worlds.md,PARTIAL,"Source channel is live2-public-discussion, explicitly outside WP-3A bootstrap scope.","WP-3A task 0e excludes live2-public-discussion Q&A pairs from bootstrap.",proposed-scope-reject
+splinemeshgenerator-v2.md,PARTIAL,"Source channel is live2-public-discussion, explicitly outside WP-3A bootstrap scope.","WP-3A task 0e excludes live2-public-discussion Q&A pairs from bootstrap.",proposed-scope-reject
+tracks-footprints.md,PARTIAL,"Source channel is live2-public-discussion, explicitly outside WP-3A bootstrap scope.","WP-3A task 0e excludes live2-public-discussion Q&A pairs from bootstrap.",proposed-scope-reject
+complexity.md,PARTIAL,"Describes the removed LIVE-1 internal TraceMesh as the current simulation display architecture.","Manual: TraceMesh as a technical object is gone in LIVE-2.",proposed-scope-reject
+details.md,PARTIAL,"Uses TraceMesh dimensions as current LIVE setup instructions.","Manual: TraceMesh as a technical object is gone in LIVE-2.",proposed-scope-reject
+fps-hands-vfx.md,PARTIAL,"Uses the removed LIVE-1 PresetManager UI and line-tracing workflow as current FPS guidance.","Manual: Preset Manager, line tracing, and TraceMesh-era workflows are gone or replaced in LIVE-2.",proposed-scope-reject
+jumping-off-the-simulation.md,PARTIAL,"Prescribes removed LIVE-1 TraceMesh, FloorSnapper, and LiveInterface workflows.","Manual: TraceMesh and FloorSnapper are gone and the interaction architecture changed in LIVE-2.",proposed-scope-reject
+landscape-splines.md,PARTIAL,"Prescribes the removed LIVE-1 internal TraceMesh/output-material workflow.","Manual: TraceMesh as a technical object is gone in LIVE-2.",proposed-scope-reject
+lave-update-step-by-step-guide.md,PARTIAL,"Migration instructions depend on removed LIVE-1 TraceMesh parameters.","Manual: TraceMesh as a technical object is gone in LIVE-2.",proposed-scope-reject
+mapping-sim-on-deformed-surfaces.md,PARTIAL,"Describes a user-defined TraceMesh workflow as current behavior.","Manual: TraceMesh as a technical object is gone in LIVE-2.",proposed-scope-reject
+masking-a-boat.md,PARTIAL,"Uses removed LIVE-1 TraceMeshPos and TraceMeshScale variables as current masking guidance.","Manual: TraceMesh as a technical object is gone in LIVE-2.",proposed-scope-reject
+material-usage.md,PARTIAL,"Describes internal TraceMesh output-material behavior as current architecture.","Manual: TraceMesh as a technical object is gone in LIVE-2.",proposed-scope-reject
+moving-ninja-to-a-new-subfolder.md,NOVEL,"Uses the removed LIVE-1 PresMan container and preset-definition workflow.","Manual: Preset Manager as a separate UI is gone in LIVE-2.",proposed-scope-reject
+overlapping.md,PARTIAL,"Describes TraceMesh and camera line-trace projection as current interaction architecture.","Manual: TraceMesh and line tracing as projection methods are gone in LIVE-2.",proposed-scope-reject
+preparing-ninjalive-for-a-new-feature.md,PARTIAL,"Uses TraceMesh velocity and legacy module instructions as the current extension workflow.","Manual: TraceMesh as a technical object is gone in LIVE-2.",proposed-scope-reject
+running-fluidsim-on-custom-meshes.md,PARTIAL,"Directs readers to the obsolete TraceMesh workflow.","Manual: TraceMesh as a technical object is gone in LIVE-2.",proposed-scope-reject
+sim-size-resolution-aspect.md,PARTIAL,"Uses Ninja TraceMesh size as the current simulation canvas configuration.","Manual: TraceMesh as a technical object is gone in LIVE-2.",proposed-scope-reject
+spawning-vs-conflicting-live-components.md,NOVEL,"Describes line-tracer and TraceMesh collision conflicts from the removed LIVE-1 architecture.","Manual: TraceMesh and line tracing as projection methods are gone in LIVE-2.",proposed-scope-reject
+visualizing-a-2d-sim-via-3d-volumes.md,PARTIAL,"Sizes LIVE volumetrics against the obsolete Ninja TraceMesh.","Manual: TraceMesh as a technical object is gone in LIVE-2.",proposed-scope-reject
+volumesmoke-on-character.md,PARTIAL,"Uses removed LIVE-1 CameraFacingTraceMesh and PresetManager workflows.","Manual: TraceMesh and Preset Manager are gone or replaced in LIVE-2.",proposed-scope-reject
