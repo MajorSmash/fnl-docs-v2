@@ -1,4 +1,5 @@
 file,reason,canon_evidence,disposition
+controlling-ninja-in-real-time.md,"Includes LIVE-1 Preset Manager UI instructions presented as current realtime control.","Manual: Preset Manager as a separate UI is gone; parameters are managed from Component Details Panel.",proposed-scope-reject
 preset-manager.md,"LIVE-1 Preset Manager UI instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone; parameters are managed from Component Details Panel.",proposed-scope-reject
 preset-manager-error-handling.md,"LIVE-1 PresMan actor/client/error-handling instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone.",proposed-scope-reject
 preset-name-filtering.md,"LIVE-1 Preset Manager row/filter instructions conflict with LIVE-2 canon.","Manual: Preset Manager as a separate UI is gone; UI parameters were reorganized.",proposed-scope-reject
