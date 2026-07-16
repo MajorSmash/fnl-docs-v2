@@ -1,0 +1,22 @@
+---
+doc_type: SET_TOPIC
+title: "CUSTOM TRACEMESH vs OVERLAP DETECTION"
+date: 2021-12-02
+source_url: "https://discord.com/channels/850913821240983553/850926358196125726/915903867860967484"
+author: "andrasketzer"
+source_channel: "ninjalive-issues"
+scope: LIVE2
+version_min: null
+version_max: null
+media_urls: []
+---
+
+lets get this working!
+SET TOPIC: **CUSTOM TRACEMESH vs OVERLAP DETECTION**
+(1) Pls confirm: you have checked this video (https://youtu.be/aIfebrrR6CM?t=107) and Level 21 Stage 4 as an example
+(2) Before using TraceMesh to detect collision: lets start with a simple one: using custom tracemesh (https://youtu.be/CNqf1B3X34Q)
+once done: could you pls confirm that you have successfully set up a custom TraceMesh?
+(3) Lets try the opposite: pls try to use a DEFAULT ninja actor (with default, planar TraceMesh) to set up TraceMesh based Collision
+Pls confirm you have succeeded.
+(4) once 2 and 3 are done: we could ponder, what could be the problem with the combination of these two. The main culprit is your custom TraceMesh COLLISION PROPERTIES. Pls (a) make sure your custom mesh is a StaticMesh --- and (b) by double clicking it go to the Mesh editor --- and Compare the Collision properties against the mesh that is used on Level21 Stage4. Hopefully you will find something that helps --- also check Level21 Stage2 -- a reminder on what flags to set for collision detection on the "other side" (the objects entering ninja interaction volume)
+Hope this helps!
