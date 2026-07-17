@@ -69,3 +69,37 @@ export function manualSidebarFromHeadings(
     ],
   }));
 }
+
+export function sidebarWithManualFragments(entries) {
+  return entries.map((entry) => {
+    if (entry.type === 'group') {
+      return { ...entry, entries: sidebarWithManualFragments(entry.entries) };
+    }
+
+    const attrs = { ...entry.attrs };
+    const fragment = attrs['data-manual-fragment'];
+    delete attrs['data-manual-fragment'];
+    return {
+      ...entry,
+      attrs,
+      href: typeof fragment === 'string' ? `${entry.href}#${fragment}` : entry.href,
+      // Starlight matches current pages by pathname. Every chapter targets the
+      // same canonical document, so its first match would otherwise open and
+      // mark chapter 1 even when another fragment was requested.
+      isCurrent: typeof fragment === 'string' ? false : entry.isCurrent,
+    };
+  });
+}
+
+export function pageLevelPagination(pagination) {
+  const isManualFragment = (entry) =>
+    typeof entry?.attrs?.['data-manual-fragment'] === 'string';
+
+  // These entries navigate within one canonical page, not between documents.
+  // Excluding them prevents Starlight's page pagination from emitting bare,
+  // same-page links after it strips the fragment-bearing sidebar attributes.
+  return {
+    prev: isManualFragment(pagination.prev) ? undefined : pagination.prev,
+    next: isManualFragment(pagination.next) ? undefined : pagination.next,
+  };
+}

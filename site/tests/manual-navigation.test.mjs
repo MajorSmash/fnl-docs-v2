@@ -7,6 +7,8 @@ import { createMarkdownProcessor } from '@astrojs/markdown-remark';
 import {
   manualChaptersFromHeadings,
   manualSidebarFromHeadings,
+  pageLevelPagination,
+  sidebarWithManualFragments,
 } from '../src/lib/manual-navigation.mjs';
 import remarkDocumentHeadings from '../src/plugins/remark-document-headings.mjs';
 
@@ -69,6 +71,47 @@ test('manual navigation fails closed on duplicate chapter numbers or fragments',
       ]),
     /duplicate heading slug: 2-assets/,
   );
+});
+
+test('rendered sidebar links append fragments and do not falsely mark chapter 1 current', () => {
+  const sidebar = sidebarWithManualFragments([
+    {
+      type: 'group',
+      label: '1. Introduction',
+      collapsed: true,
+      entries: [
+        {
+          type: 'link',
+          label: 'Chapter overview',
+          href: '/fnl-docs-v2/manual/ninjalive2-manual/',
+          isCurrent: true,
+          attrs: { 'data-manual-fragment': '1-introduction' },
+        },
+      ],
+    },
+  ]);
+
+  assert.equal(sidebar[0].entries[0].href, '/fnl-docs-v2/manual/ninjalive2-manual/#1-introduction');
+  assert.equal(sidebar[0].entries[0].isCurrent, false);
+  assert.deepEqual(sidebar[0].entries[0].attrs, {});
+});
+
+test('page pagination excludes synthetic in-document chapter entries', () => {
+  const documentLink = { label: 'Parameters', href: '/parameters/', attrs: {} };
+  const chapterLink = {
+    label: 'Chapter overview',
+    href: '/manual/ninjalive2-manual/',
+    attrs: { 'data-manual-fragment': '2-assets' },
+  };
+
+  assert.deepEqual(pageLevelPagination({ prev: chapterLink, next: documentLink }), {
+    prev: undefined,
+    next: documentLink,
+  });
+  assert.deepEqual(pageLevelPagination({ prev: documentLink, next: chapterLink }), {
+    prev: documentLink,
+    next: undefined,
+  });
 });
 
 test('the canonical manual currently yields the complete numbered chapter navigation', async () => {

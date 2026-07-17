@@ -39,6 +39,7 @@ export default defineConfig({
       customCss: ['./src/styles/custom.css'],
       components: {
         PageTitle: './src/components/PageTitle.astro',
+        Pagination: './src/components/Pagination.astro',
         Sidebar: './src/components/Sidebar.astro',
       },
       head: [
