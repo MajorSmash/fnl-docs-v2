@@ -1912,7 +1912,7 @@ In this Chapter:
 - 6.1 <a href="#61-sparse-vs-dense-setups">Sparse vs Dense Setups</a>
 - 6.2 <a href="#62-surface-alignment">Surface Alignment</a>
 	- <a href="#height-input-none">A   Dense setup, Height Input:  NONE</a>
-	- <a href="#height-input-labdscape">B   Dense setup, Height Input  LANDSCAPE</a>
+	- <a href="#height-input-landscape">B   Dense setup, Height Input  LANDSCAPE</a>
 	- <a href="#height-input-scenecap">C   Dense setup, Height Input  SCENECAPTURE</a>
 	- <a href="#height-input-rvt">D   Dense setup, Height Input  RVT</a>
 	- <a href="#sparse-flat">E   Sparse setup, FLAT</a>
@@ -2000,7 +2000,7 @@ Key factors of Surface-alignment:
 
 DENSE Setups on STAGE 2 are showcasing methods to access world height data:
 	- <a href="#height-input-none">A   Dense setup, Height Input:  NONE</a>
-	- <a href="#height-input-labdscape">B   Dense setup, Height Input  LANDSCAPE</a>
+	- <a href="#height-input-landscape">B   Dense setup, Height Input  LANDSCAPE</a>
 	- <a href="#height-input-scenecap">C   Dense setup, Height Input  SCENECAPTURE</a>
 	- <a href="#height-input-rvt">D   Dense setup, Height Input  RVT</a>
 

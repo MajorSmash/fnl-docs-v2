@@ -36,8 +36,8 @@ FACTS ABOUT THE SYNTAX OF THIS TEXT FILE:
 2. <a href="#2-livecomponent-param-groups">LiveComponent Param Groups</a>
 3. <a href="#3-livecomponent-param-groups-with-param-names">LiveComponent Param Groups with Param Names</a>
 4. <a href="#4-livecomponent-param-groups-with-param-names-and-metadata">LiveComponent Param Groups with Param Names and Metadata</a>
-5. <a href="#5-liveactor-paramr-groups-with-param-names">LiveActor Param Groups with Param Names</a>
-6. <a href="#6-liveactor-paramr-groups-with-param-names-and-metadata">LiveActor Param Groups with Param Names and Metadata</a>
+5. <a href="#5-liveactor-param-groups-with-param-names">LiveActor Param Groups with Param Names</a>
+6. <a href="#6-liveactor-param-groups-with-param-names-and-metadata">LiveActor Param Groups with Param Names and Metadata</a>
 7. <a href="#7-livecore-special-params">LiveCore Special Params</a>
 
 
