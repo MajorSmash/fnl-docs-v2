@@ -1,9 +1,9 @@
 ---
 doc_type: DESCRIPTOR
 title: "NinjaLive v2 Content Descriptor"
-date: 2026-06-16
+date: 2026-07-16
 source_url: "https://drive.google.com/file/d/15d3QdfleD1jDw8LJ3YQEGpAP-89b9bKa"
-doc_revision: "1.34"
+doc_revision: "1.35"
 version_min: null
 version_max: null
 media_urls: []
@@ -12,661 +12,676 @@ media_urls: []
 # LEVEL CONTENT DESCRIPTOR
 LEVELS, STAGES AND SETUPS IN THE FLUIDNINJA LIVE-2 PROJECT
 
+**Updated:** 16 July 2026  
 
-Text file version: 1.34
-Last modified: 16 June 2026
-
-
-Permanent Link to [this text file](https://drive.google.com/file/d/15d3QdfleD1jDw8LJ3YQEGpAP-89b9bKa)
-This text file is referenced by the FluidNinja LIVE-2 [Manual](https://drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa)
-
-
-\------------------------------------------------------------------------------------------------------------------------------
+---
 
 
 FACTS ABOUT THE SYNTAX OF THIS TEXT FILE:
 
 
-- This file uses MarkDown syntax. It could be viewed as simple text. Opening it with an MD viewer is recommended for visual clarity.
+- This file uses MarkDown syntax. It could be viewed as simple text. Opening it with an [MD viewer](https://markpad.dev) is recommended for visual clarity.
 - Level and Stage names are "telling names": not just a unique ID, but a brief reference to content.
 - Curly Braces {} are used exclusively for level, stage and setup descriptors.
 - Synonyms used in the text: level = map, level content = assets placed on levels, sim = simulation, param = parameter = variable, NinjaLive Component = LiveComponent, ninja = fluidninja = fluidninja live = ninjalive = live, dynamic output material instances = MIDs, HVOL = HVolume = Heterogeneous Volume, FVOL = FVolume = Fog Volume, SVOL = SVolume = Smoke Volume, velo = velocity, Landscape Utility = DriveExternalSystemsWithSimData
 
 
+---------------------------------------------------------------------------------------
 
-\------------------------------------------------------------------------------------------------------------------------------
-
-
-CONTENTS OF THIS TEXT FILE:
+## Table of Contents
 
 
-CHAPTER 1: INTRODUCTION TO LEVEL CONTENT
-CHAPTER 2: LEVELS LISTED
-CHAPTER 3: LEVELS, STAGES AND SETUPS LISTED
-CHAPTER 4: LEVELS, STAGES AND SETUPS LISTED WITH METADATA
+1. <a href="#1-introduction">Introduction</a>
+2. <a href="#2-levels-listed">Levels Listed</a>
+3. <a href="#3-levels-stages-and-setups-listed">Levels, Stages and Setups listed</a>
+4. <a href="#4-levels-stages-and-setups-listed-with-metadata">Levels, Stages and Setups listed with Metadata</a>
 
 
+---
 
-\------------------------------------------------------------------------------------------------------------------------------
+**EXTERNAL RESOURCES:**  
+- [Parameter Descriptor](https://drive.google.com/file/d/1FedZwfW3iE1OgJr_Ye551TgaSLjqVUdj), all Parameters of Live Component and Live Actor - with description.
+- [Level Content Descriptor](https://drive.google.com/file/d/15d3QdfleD1jDw8LJ3YQEGpAP-89b9bKa), Levels, Stages and Setups in the ninja project - with on-level texts.  
+- [Manual](https://drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa) for FluidNinja LIVE-2
+
+The above text files are using MarkDown syntax. 
+Recommended MarkDown Viewer: [MarkPad](https://markpad.dev)  
+
+---------------------------------------------------------------------------------------
 
 
-### CHAPTER 1: INTRODUCTION TO LEVEL CONTENT
+## 1. Introduction
 
 
 Content in the FluidNinja LIVE-2 project is organised in a 3 layer hierarchy:
 
 
-- LEVELS (MAPS): ninja assets (niagara systems, blueprints) are placed on levels to demonstrate usage. In the FluidNinja LIVE-2 project, all levels are stored under a single folder: /Content /FluidNinjaLive /Levels
+1. **LEVELS (MAPS)**: ninja assets (niagara systems, blueprints) are placed on levels to demonstrate usage. In the FluidNinja LIVE-2 project, all levels are stored under a single folder: 
+`/Content /FluidNinjaLive /Levels`
 
-- STAGES: level content is organized into NUMBERED stages, where a specific mode of using ninja is demonstrated (e.g. "Stage 17 Bonfire")
+2. **STAGES**: level content is organized into NUMBERED stages, where a specific mode of using ninja is demonstrated (e.g. `Stage 17 Bonfire`)
 
-- SETUPS: when a stage contains large amount of content, it is partitioned into setups, marked with LETTERS (A,B,C...)
+3. **SETUPS**: when a stage contains large amount of content, it is partitioned into setups, marked with LETTERS (A,B,C...)
 
-Important technical demo levels reside in the "Levels" folder root:
-/Content /FluidNinjaLive /Levels
+---
 
-Tutorial levels with example setups and educational text reside in this subfolder: 
-/Content /FluidNinjaLive /Levels /Starter
+Important technical demo levels reside in the `Levels` folder root:  
+`/Content /FluidNinjaLive /Levels`
 
-Minimal setups using NinjaLiveCore NiagaraSystem without a blueprint wrapper, are in this subfolder:
-/Content /FluidNinjaLive /Levels /CoreOnly
+Tutorial levels with example setups and educational text reside in this subfolder:  
+`/Content /FluidNinjaLive /Levels /Starter`
 
-Less important technical demo levels reside in this subfolder:
-/Content /FluidNinjaLive /Levels /Misc
+Minimal setups using NinjaLiveCore NiagaraSystem without a blueprint wrapper:  
+`/Content /FluidNinjaLive /Levels /CoreOnly`
 
-
-\------------------------------------------------------------------------------------------------------------------------------
-
-
-### CHAPTER 2: LEVELS LISTED
+Less important technical demo levels reside in this subfolder:  
+`/Content /FluidNinjaLive /Levels /Misc`
 
 
-SYNTAX DEFINITION FOR LEVEL CONTENT LIST ITEMS:
-- "Folder" type list item: {F.folder number, folder path}
-- "Level" type list item: {L.level number, level name}
+---------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 
-STRUCTURED LIST OF FOLDERS AND LEVELS
-COUNT: 57 LEVELS LISTED
-
-
-**{F.0, /Content /FluidNinjaLive /Levels}**
-{L.0.1, Clouds.umap}
-{L.0.2, Clouds_PASSIVE.umap}
-{L.0.3, Fire_Smoke_Explosive.umap}
-{L.0.4, Fog_Mist.umap}
-{L.0.5, Fog_Mist_PASSIVE.umap}
-{L.0.6, Grass.umap}
-{L.0.7, Sand.umap}
-{L.0.8, Sand_Destructibles.umap}
-{L.0.9, Snow.umap}
-{L.0.10, Snow_Minimal.umap}
-{L.0.11, Viscous_Blood_Mud.umap}
-{L.0.12, Water_Dense_Creek1.umap}
-{L.0.13, Water_Dense_Creek2.umap}
-{L.0.14, Water_Dense_Lake.umap}
-{L.0.15, Water_Dense_Sea.umap}
-{L.0.16, Water_Sparse_Lake.umap}
-{L.0.17, Water_Sparse_River.umap}
-{L.0.18, Water_Sparse_Rivers_Minimal.umap}
-{L.0.19, Water_Sparse_Sea_Minimal.umap}
-{L.0.20, Water_Sparse_Sea_Quiet.umap}
-{L.0.21, Water_Sparse_Sea_Stormy.umap}
-{L.0.22, Water_Sparse_Sea_Windy.umap}
-{L.0.23, Water_Sparse_Various.umap}
-
-
-**{F.1, /Content /FluidNinjaLive /Levels /Starter}**
-{L.1.0, StartingGuide.umap}
-{L.1.1, Tutorial01_Basics.umap}
-{L.1.2, Tutorial02_Inputs_Interaction.umap}
-{L.1.3, Tutorial03_KeyConceptsForWater.umap}
-{L.1.4, Tutorial04_Presets_Spawning_Caching.umap}
-{L.1.5, Tutorial05_Tricks.umap}
-{L.1.6, Tutorial06_SplineBasedRivers.umap}
-
-
-**{F.2, /Content /FluidNinjaLive /Levels /CoreOnly}**
-{L.2.1, CamfaceTest.umap}
-{L.2.2, Desert_SimplePainter_Landscape.umap}
-{L.2.3, Desert_SimplePainter_Mesh.umap}
-{L.2.4, Destructibles_as_SDF.umap}
-{L.2.5, LandscapeAlignedWater_ProtoVersion.umap}
-{L.2.6, River.umap}
-
-
-**{F.3, /Content /FluidNinjaLive /Levels /Misc}**
-{L.3.1, Destructibles_as_Points_CameraFacing.umap}
-{L.3.2, Destructibles_as_Points_WorldAligned.umap}
-{L.3.3, Destructibles_as_SDF_WorldAligned.umap}
-{L.3.4, DrivingParticlesWithFluidsim.umap}
-{L.3.5, Lava_Sparse.umap}
-{L.3.6, PerformanceTest_Particles.umap}
-{L.3.7, PerformanceTest_Primitives.umap}
-{L.3.8, PerformanceTest_SimContainers.umap}
-{L.3.9, PerformanceTest_SimplePainterContainers.umap}
-{L.3.10, PerformanceTest_SkeletalMeshes.umap}
-{L.3.11, VolumeDemo_FAKE.umap}
-{L.3.12, VolumeDemo_FVOL_Small.umap}
-{L.3.13, VolumeDemo_HVOL_Medium.umap}
-{L.3.14, VolumeDemo_HVOL_Small.umap}
-{L.3.15, VolumeDemo_HVOL_Small_PASSIVE.umap}
-{L.3.16, VolumeDemo_SVOL_Medium.umap}
-{L.3.17, VolumeDemo_SVOL_Small.umap}
-{L.3.18, Water_Dense_Rain.umap}
-{L.3.19, Water_Dense_vs_Sparse.umap}
-{L.3.20, Water_Sparse_DoubleSim_TilingWaves.umap}
-{L.3.21, Water_Sparse_DoubleSim_Vortex.umap}
-{L.3.22, Water_Sparse_Sea_Ship.umap}
-
-
-\------------------------------------------------------------------------------------------------------------------------------
-
-
-### CHAPTER 3: LEVELS, STAGES AND SETUPS LISTED
+## 2. Levels Listed
 
 
 SYNTAX DEFINITION FOR LEVEL CONTENT LIST ITEMS:
-- "Folder" type list item: {F.folder number, folder path}
-- "Level" type list item: {L.level number, level name, path}
-- "Stage" type list item: {S.stage number, stage name}
-- "Setup" type list item: {SE.setup number, setup name}
+- `Folder` type list item: `{F.folder number, folder path}`
+- `Level` type list item: `{L.level number, level name}`
+
+---
+
+STRUCTURED LIST OF FOLDERS AND LEVELS  
+`COUNT: 58 LEVELS LISTED`
 
 
-STRUCTURED LIST OF FOLDERS, LEVELS, STAGES AND SETUPS
-COUNT: 57 LEVELS, 222 STAGES, 296 SETUPS LISTED
+- **{F.0, /Content /FluidNinjaLive /Levels}**
+  - {L.0.1, Clouds.umap}
+  - {L.0.2, Clouds_PASSIVE.umap}
+  - {L.0.3, Fire_Smoke_Explosive.umap}
+  - {L.0.4, Fog_Mist.umap}
+  - {L.0.5, Fog_Mist_PASSIVE.umap}
+  - {L.0.6, Grass.umap}
+  - {L.0.7, Sand.umap}
+  - {L.0.8, Sand_Destructibles.umap}
+  - {L.0.9, Snow.umap}
+  - {L.0.10, Snow_Minimal.umap}
+  - {L.0.11, Viscous_Blood_Mud.umap}
+  - {L.0.12, Water_Dense_Creek1.umap}
+  - {L.0.13, Water_Dense_Creek2.umap}
+  - {L.0.14, Water_Dense_Lake.umap}
+  - {L.0.15, Water_Dense_Sea.umap}
+  - {L.0.16, Water_Sparse_Lake.umap}
+  - {L.0.17, Water_Sparse_River.umap}
+  - {L.0.18, Water_Sparse_Rivers_Minimal.umap}
+  - {L.0.19, Water_Sparse_Sea_Minimal.umap}
+  - {L.0.20, Water_Sparse_Sea_Quiet.umap}
+  - {L.0.21, Water_Sparse_Sea_Stormy.umap}
+  - {L.0.22, Water_Sparse_Sea_Windy.umap}
+  - {L.0.23, Water_Sparse_Various.umap}
+  - {L.0.24, Water_Sparse_Swamp.umap}
+
+
+- **{F.1, /Content /FluidNinjaLive /Levels /Starter}**
+  - {L.1.0, StartingGuide.umap}
+  - {L.1.1, Tutorial01_Basics.umap}
+  - {L.1.2, Tutorial02_Inputs_Interaction.umap}
+  - {L.1.3, Tutorial03_KeyConceptsForWater.umap}
+  - {L.1.4, Tutorial04_Presets_Spawning_Caching.umap}
+  - {L.1.5, Tutorial05_Tricks.umap}
+  - {L.1.6, Tutorial06_SplineBasedRivers.umap}
+
+
+- **{F.2, /Content /FluidNinjaLive /Levels /CoreOnly}**
+  - {L.2.1, CamfaceTest.umap}
+  - {L.2.2, Desert_SimplePainter_Landscape.umap}
+  - {L.2.3, Desert_SimplePainter_Mesh.umap}
+  - {L.2.4, Destructibles_as_SDF.umap}
+  - {L.2.5, LandscapeAlignedWater_ProtoVersion.umap}
+  - {L.2.6, River.umap}
+
+
+- **{F.3, /Content /FluidNinjaLive /Levels /Misc}**
+  - {L.3.1, Destructibles_as_Points_CameraFacing.umap}
+  - {L.3.2, Destructibles_as_Points_WorldAligned.umap}
+  - {L.3.3, Destructibles_as_SDF_WorldAligned.umap}
+  - {L.3.4, DrivingParticlesWithFluidsim.umap}
+  - {L.3.5, Lava_Sparse.umap}
+  - {L.3.6, PerformanceTest_Particles.umap}
+  - {L.3.7, PerformanceTest_Primitives.umap}
+  - {L.3.8, PerformanceTest_SimContainers.umap}
+  - {L.3.9, PerformanceTest_SimplePainterContainers.umap}
+  - {L.3.10, PerformanceTest_SkeletalMeshes.umap}
+  - {L.3.11, VolumeDemo_FAKE.umap}
+  - {L.3.12, VolumeDemo_FVOL_Small.umap}
+  - {L.3.13, VolumeDemo_HVOL_Medium.umap}
+  - {L.3.14, VolumeDemo_HVOL_Small.umap}
+  - {L.3.15, VolumeDemo_HVOL_Small_PASSIVE.umap}
+  - {L.3.16, VolumeDemo_SVOL_Medium.umap}
+  - {L.3.17, VolumeDemo_SVOL_Small.umap}
+  - {L.3.18, Water_Dense_Rain.umap}
+  - {L.3.19, Water_Dense_vs_Sparse.umap}
+  - {L.3.20, Water_Sparse_DoubleSim_TilingWaves.umap}
+  - {L.3.21, Water_Sparse_DoubleSim_Vortex.umap}
+  - {L.3.22, Water_Sparse_Sea_Ship.umap}
+
+
+--------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
+
+## 3. Levels Stages and Setups listed
+
+
+SYNTAX DEFINITION FOR LEVEL CONTENT LIST ITEMS:
+- `Folder` type list item: `{F.folder number, folder path}`
+- `Level` type list item: `{L.level number, level name, path}`
+- `Stage` type list item: `{S.stage number, stage name}`
+- `Setup` type list item: `{SE.setup number, setup name}`
+
+---
+
+STRUCTURED LIST OF FOLDERS, LEVELS, STAGES AND SETUPS  
+`COUNT: 58 LEVELS, 223 STAGES, 297 SETUPS LISTED`
+
+
+{F.0, /Content /FluidNinjaLive /Levels}  
+{L.0.1, Clouds.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.1.1, Stage 1 Fluidsim driven responsive Cloud Setups}  
+		{SE.0.1.1.1, Setup 1 SmokePillars CVOL 20km simdriven}  
+		{SE.0.1.1.2, Setup 2 Vortex CVOL 20km Simdriven}  
+		{SE.0.1.1.3, Setup 3 Impulse CVOL 50km Simdriven}  
+		{SE.0.1.1.4, Setup 4 Aurora CVOL 50km Simdriven}  
+		{SE.0.1.1.5, Setup 5 Titan CVOL 20km Simdriven LandscapeAligned}  
+		{SE.0.1.1.6, Setup 6 User Painted Clouds CVOL 20km Simdriven LandscapeAligned}  
+
+{L.0.2, Clouds_PASSIVE.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.2.1, Stage 1 Passive NonSimulated Cloud Setups}  
+		{SE.0.2.1.1, Setup 1 Volcano CVOL 10km Passive MultiLayer LandscapeAligned}  
+		{SE.0.2.1.2, Setup 2 Volcano CVOL Infinite Passive MultiLayer LandscapeAligned}  
+		{SE.0.2.1.3, Setup 3 Mushroom CVOL 10km Passive MultiLayer}  
+		{SE.0.2.1.4, Setup 4 Mushroom CVOL Infinite Passive MultiLayer}  
+		{SE.0.2.1.5, Setup 5 SandStorm CVOL 80km Passive SingleLayer}  
+		{SE.0.2.1.6, Setup 6 Nimbus CVOL Infinite Passive SingleLayer}  
+		{SE.0.2.1.7, Setup 7 Stratus CVOL Infinite Passive SingleLayer}  
+		{SE.0.2.1.8, Setup 8 Mammatus CVOL Infinite Passive SingleLayer}  
+		{SE.0.2.1.9, Setup 9 Tornado CVOL 10km Passive SingleLayer}  
+		{SE.0.2.1.10, Setup 10 Cyclone CVOL 20km Passive SingleLayer}  
+
+{L.0.3, Fire_Smoke_Explosive.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.3.1, Stage 1 Character FX Torch}  
+	{S.0.3.2, Stage 2 Bonfire with Particle Input}  
+	{S.0.3.3, Stage 3 Bonfire with Object Pivot Input}  
+	{S.0.3.4, Stage 4 Moving Objects on Fire}  
+		{SE.0.3.4.1, Setup A Torch}  
+		{SE.0.3.4.2, Setup B Bonfire with Multiple LiveComponents}  
+		{SE.0.3.4.3, Setup C Flaming Sword}  
+		{SE.0.3.4.4, Setup D Fairlight}  
+	{S.0.3.5, Stage 5 Bonfire and Volumetric Smoke HVOL}  
+	{S.0.3.6, Stage 6 Bonfire and Volumetric Smoke SVOL}  
+		{SE.0.3.6.1, Setup A Thin}  
+		{SE.0.3.6.2, Setup B Thick}  
+	{S.0.3.7, Stage 7 Candles}  
+		{SE.0.3.7.1, Setup A Candle Flame}  
+		{SE.0.3.7.2, Setup B Candle Smoke Single}  
+		{SE.0.3.7.3, Setup C Candle Smoke Multiple}  
+	{S.0.3.8, Stage 8 Magic Cauldron}  
+	{S.0.3.9, Stage 9 Smoke Pool}  
+	{S.0.3.10, Stage 10 Flamethrower Turret}  
+	{S.0.3.11, Stage 11 Flaming fist}  
+		{SE.0.3.19.1, Setup A Fiery}  
+		{SE.0.3.19.2, Setup B Blue Plasma}  
+	{S.0.3.12, Stage 12 Burning Man 1}  
+	{S.0.3.13, Stage 13 Burning Man 2}  
+	{S.0.3.14, Stage 14 Burning Man 3}  
+	{S.0.3.15, Stage 15 Smoking Man}  
+	{S.0.3.16, Stage 16 Explosive Block}  
+	{S.0.3.17, Stage 17 Blue Plasma Explosion}  
+	{S.0.3.18, Stage 18 Smoke Piston}  
+	{S.0.3.19, Stage 19 Fireball}  
+	{S.0.3.20, Stage 20 Hot Wheels Vehicle Setup}  
+		{SE.0.3.19.1, Setup A Tyres on Fire and Smoke}  
+		{SE.0.3.19.2, Setup B Tyres on Volumetric Smoke}  
+		{SE.0.3.19.3, Setup C Tyres on Simple Smoke}  
+	{S.0.3.21, Stage 21 Steam Puff}  
+
+{L.0.4, Fog_Mist.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.4.1, Stage 1 FVOL Only}  
+	{S.0.4.2, Stage 2 HVOL and FVOL Combo}  
+
+{L.0.5, Fog_Mist_PASSIVE.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.5.1, Stage 1 FVOL Only}  
+	{S.0.5.2, Stage 2 HVOL and FVOL Combo}  
+
+{L.0.6, Grass.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.6.1, Stage 1 Sim Driven Foliage}  
+		{SE.0.6.1.1, Setup A Wind for Grass}  
+		{SE.0.6.1.2, Setup B Harvester Vehicle FX}  
+	{S.0.6.2, Stage 2 Painter Driven Foliage}  
+
+{L.0.7, Sand.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.7.1, Stage 1 Painter and Sim Combo}  
+	{S.0.7.2, Stage 2 Single Simulation}  
+
+{L.0.8, Sand_Destructibles.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.8.1, Stage 1 Painter and Sim Combo}  
+	{S.0.8.2, Stage 2 Single Simulation}  
+	{S.0.8.3, Stage 3 Large Destructible Drop}  
+
+{L.0.9, Snow.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.9.1, Stage 1 Painter and Sim Combo}  
+	{S.0.9.2, Stage 2 Single Simulation}  
+
+{L.0.10, Snow_Minimal.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.10.1, Stage 1 Simple Painter on Landscape}  
+
+{L.0.11, Viscous_Blood_Mud.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.11.1, Stage 1 Blood Slippery Marks}  
+	{S.0.11.2, Stage 2 Blood Splash}  
+	{S.0.11.3, Stage 3 Mud - Local}  
+	{S.0.11.4, Stage 4 Mud - World Space}  
+	{S.0.11.5, Stage 5 Blood Trickle Simple}  
+	{S.0.11.6, Stage 6 Blood Trickle Complex}  
+	{S.0.11.7, Stage 7 Blood Bath}  
+
+{L.0.12, Water_Dense_Creek1.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.12.1, Stage 1 Simulated Creek}  
+
+{L.0.13, Water_Dense_Creek2.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.13.1, Stage 1 Simulated Creek}  
+
+{L.0.14, Water_Dense_Lake.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.14.1, Stage 1 Simulated Lake Coastline}  
+
+{L.0.15, Water_Dense_Sea.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.15.1, Stage 1 Simulated Sea Coastline}  
+
+{L.0.16, Water_Sparse_Lake.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.16.1, Stage 1 Simulated Lake Open Waters}  
+
+{L.0.17, Water_Sparse_River.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.17.1, Stage 1 Complex MultiRiver Setup}  
+	{S.0.17.2, Stage 2 Local Waterfall Setup}  
+
+{L.0.18, Water_Sparse_Rivers_Minimal.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.18.1, Stage 1 Large scale river}  
+	{S.0.18.2, Stage 2 Medium scale river}  
+	{S.0.18.3, Stage 3 Small scale river - Point interactors}  
+	{S.0.18.4, Stage 4 Small scale river - SDF interactors}  
+	{S.0.18.5, Stage 5 River with bedrock-collision mask}  
+	{S.0.18.6, Stage 6 Crude particle test}  
+
+{L.0.19, Water_Sparse_Sea_Minimal.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.19.1, Stage 1 Sea - Quiet Minimal}  
+
+{L.0.20, Water_Sparse_Sea_Quiet.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.20.1, Stage 1 Sea - Quiet}  
+
+{L.0.21, Water_Sparse_Sea_Stormy.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.21.1, Stage 1 Sea - Stormy}  
+
+{L.0.22, Water_Sparse_Sea_Windy.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.22.1, Stage 1 Sea - Windy}  
+
+{L.0.23, Water_Sparse_Various.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.23.1, Stage 1 Pool - Sparse}  
+	{S.0.23.2, Stage 2 Pool - Dense}  
+	{S.0.23.3, Stage 3 Spray Fountain}  
+	{S.0.23.4, Stage 4 Cauldron Minimal}  
+	{S.0.23.5, Stage 5 Cauldron}  
+	{S.0.23.6, Stage 6 Water Tank}  
+	{S.0.23.7, Stage 7 Liquid Sphere}  
+		{SE.0.23.7.1, Setup A Clear}  
+		{SE.0.23.7.2, Setup B Turbulent}  
+	{S.0.23.8, Stage 8 Waterfall}  
+	{S.0.23.9, Stage 9 Waterfalls Far Background}  
+		{SE.0.23.9.1, Setup A White}  
+		{SE.0.23.9.2, Setup B Blue}  
+	{S.0.23.10, Stage 10 Legacy Setups}  
+		{SE.0.23.10.1, Setup A Blood Orb}  
+		{SE.0.23.10.2, Setup B Watery Sand Flow}  
+
+{L.0.24, Water_Sparse_Swamp.umap, /Content /FluidNinjaLive /Levels}  
+	{S.0.24.1, Stage 1 Simulated Swamp and Muddy Coastline}  
+
+
+{F.1, /Content /FluidNinjaLive /Levels /Starter}  
+{L.1.0, StartingGuide.umap, /Content /FluidNinjaLive /Levels /Starter}  
+	{S.1.0.1, Stage 1 Starting Guide}  
+
+{L.1.1, Tutorial01_Basics.umap, /Content /FluidNinjaLive /Levels /Starter}  
+	{S.1.1.0, Stage 0 Intro}  
+	{S.1.1.1, Stage 1 Prerequisites}  
+	{S.1.1.2, Stage 2 Key Concepts}  
+	{S.1.1.3, Stage 3 What is Ninja?}  
+	{S.1.1.4, Stage 4 Interaction: Points}  
+	{S.1.1.5, Stage 5 Interaction: Fields}  
+	{S.1.1.6, Stage 6 Components of NinjaLive Actor}  
+	{S.1.1.7, Stage 7 Transforms}  
+		{SE.1.1.7.1, Setup A World Facing - World Space}  
+		{SE.1.1.7.2, Setup B World Facing Rotatable - World Space}  
+		{SE.1.1.7.3, Setup C World Facing Rotatable - Local Space}  
+		{SE.1.1.7.4, Setup D World Facing Rotatable  - Density Local Space - Velocity World Space}  
+		{SE.1.1.7.5, Setup E Camera Facing - Density World Space - Velocity World Space}  
+		{SE.1.1.7.6, Setup F SimplePainter Local Space}  
+		{SE.1.1.7.7, Setup G SimplePainter World Space - Quantizer Off}  
+		{SE.1.1.7.8, Setup H SimplePainter World Space - Quantizer On}  
+	{S.1.1.8, Stage 8 Surface Alignment and Z-position, Internal Render, External Render}  
+	{S.1.1.9, Stage 9 Direct Drive}  
+	{S.1.1.10, Stage 10 Output Materials}  
+	{S.1.1.11, Stage 11 Output Material Tricks}  
+	{S.1.1.12, Stage 12 Modularity: Building Actors From Components}  
+
+{L.1.2, Tutorial02_Inputs_Interaction.umap, /Content /FluidNinjaLive /Levels /Starter}  
+	{S.1.2.0, Stage 0 INTRO}  
+	{S.1.2.1, Stage 1 Density Input from BITMAPS }  
+		{SE.1.2.1.1, Setup A Texture}  
+		{SE.1.2.1.2, Setup B RenderTarget, Noise}  
+		{SE.1.2.1.3, Setup C RenderTarget, SceneCapture}  
+	{S.1.2.2, Stage 2 Density and Velocity Input from 2 Bitmaps}  
+	{S.1.2.3, Stage 3 Density and Velocity Input from 1 Bitmap}  
+	{S.1.2.4, Stage 4 Static Collision Mask from Bitmap}  
+	{S.1.2.5, Stage 5 Density and Velocity Input from OBJECTS FIELDS }  
+		{SE.1.2.5.1, Setup A Mesh SDF}  
+		{SE.1.2.5.2, Setup B Spline}  
+		{SE.1.2.5.3, Setup C Landscape}  
+		{SE.1.2.5.4, Setup D Destructibles}  
+		{SE.1.2.5.5, Setup E Dynamic Collision Mask from Mesh SDF}  
+	{S.1.2.6, Stage 6 PARTICLES}  
+		{SE.1.2.6.1, Setup A Particles Mapped on a World Facing surface}  
+		{SE.1.2.6.2, Setup B Particles Mapped on a Camera Facing surface}  
+	{S.1.2.7, Stage 7 DESTRUCTIBLES as Points}  
+		{SE.1.2.7.1, Setup A Destructibles Mapped on a World Facing surface}  
+		{SE.1.2.7.2, Setup B Destructibles Mapped on a Camera Facing surface}  
+	{S.1.2.8, Stage 8 Objects as Points Intro}  
+	{S.1.2.9, Stage 9 Objects as Points Using CLASS FILTERS}  
+	{S.1.2.10, Stage 10 Objects as Points Using TAGS}  
+		{SE.1.2.10.1, Setup A Single Component}  
+		{SE.1.2.10.2, Setup B Multiple Components}  
+	{S.1.2.11, Stage 11 Combining Class and Tag Filters}  
+	{S.1.2.12, Stage 12 Using Class Filters via NinjaLive Component}  
+
+{L.1.3, Tutorial03_KeyConceptsForWater.umap, /Content /FluidNinjaLive /Levels /Starter}  
+	{S.1.3.0, Stage 0 INTRO}  
+	{S.1.3.1, Stage 1 SPARSE vs DENSE SETUPS}  
+		{SE.1.3.1.1, Setup A Sparse Fluid Setup}  
+		{SE.1.3.1.2, Setup B Dense Fluid Setup}  
+		{SE.1.3.1.3, Setup C Sparse Surface Aligned Fluid Setup}  
+		{SE.1.3.1.4, Setup D Dense Surface Aligned Fluid Setup}  
+		{SE.1.3.1.5, Setup E Sparse Surface Aligned Fluid Setup driving Volumetrics}  
+		{SE.1.3.1.6, Setup F Dense Surface Aligned Fluid Setup driving SingleLayerWater}  
+	{S.1.3.2, Stage 2 SURFACE ALIGNMENT}  
+		{SE.1.3.2.1, Setup A Dense, Height Input NONE}  
+		{SE.1.3.2.2, Setup B Dense, Height Input LANDSCAPE}  
+		{SE.1.3.2.3, Setup C Dense, Height Input SCENECAPTURE}  
+		{SE.1.3.2.4, Setup D Dense, Height Input RVT}  
+		{SE.1.3.2.5, Setup E Sparse, FLAT}  
+		{SE.1.3.2.6, Setup F Sparse, SPLINE}  
+	{S.1.3.3, Stage 3 EXTENDING THE SIM AREA}  
+	{S.1.3.4, Stage 4 WAVE GENERATORS}  
+
+{L.1.4, Tutorial04_Presets_Spawning_Caching.umap, /Content /FluidNinjaLive /Levels /Starter}  
+	{S.1.4.0, Stage 0 INTRO}  
+	{S.1.4.1, Stage 1 WRITING AND READING PRESETS IN-EDITOR}  
+	{S.1.4.2, Stage 2 SPAWNING A SEA SURFACE HANDLER}  
+	{S.1.4.3, Stage 3 SPAWNING A LANDSCAPE SURFACE HANDLER}  
+	{S.1.4.4, Stage 4 WRITING AND READING SIM CACHE IN-GAME}  
+	{S.1.4.5, Stage 5 CACHING HEIGHT-MAPS}  
+
+{L.1.5, Tutorial05_Tricks.umap, /Content /FluidNinjaLive /Levels /Starter}  
+	{S.1.5.0, Stage 0 INTRO}  
+	{S.1.5.1, Stage 1 Sequencer and Interface Control}  
+		{SE.1.5.1.1, Setup A Sequencer Control}  
+		{SE.1.5.1.2, Setup B Interface Control Brush Size}  
+		{SE.1.5.1.3, Setup C Interface Control Shutdown}  
+	{S.1.5.2, Stage 2 Sim Space Wrapping (Tiling)}  
+	{S.1.5.3, Stage 3 Painting Motion Trajectories}  
+	{S.1.5.4, Stage 4 Scale brush density with Velocity}  
+	{S.1.5.5, Stage 5 Inverse Brush}  
+	{S.1.5.6, Stage 6 Brush - Velocity only No density}  
+	{S.1.5.7, Stage 7 Sim area XY proportions and scaling}  
+	{S.1.5.8, Stage 8 Object size to Brush size}  
+	{S.1.5.9, Stage 9 Brush persistence and Simulation feedback}  
+	{S.1.5.10, Stage 10 Output Materials and Buffer Visualization}  
+	{S.1.5.11, Stage 11 Brush position random}  
+	{S.1.5.12, Stage 12 Puncture}  
+	{S.1.5.13, Stage 13 Custom Visualization Mesh}  
+	{S.1.5.14, Stage 14 Simple Painter Mode}  
+		{SE.1.5.14.1, Setup A Raw paint buffer}  
+		{SE.1.5.14.2, Setup B Groundmarks}  
+		{SE.1.5.14.3, Setup C Painter driving Flowmap, World Facing}  
+		{SE.1.5.14.4, Setup D Painter driving Flowmap, Camera Facing}  
+		{SE.1.5.14.5, Setup E Velocity PaintBuffer injecting Acceleration into a Particle System}  
+	{S.1.5.15, Stage 15 Viscous Fluids}  
+
+{L.1.6, Tutorial06_SplineBasedRivers.umap, /Content /FluidNinjaLive /Levels /Starter}  
+	{S.1.6.0, Stage 0 INTRO}  
+	{S.1.6.1, Stage 1 Spline generator}  
+	{S.1.6.2, Stage 2 Mapping coordinates, Local vs World}  
+		{SE.1.6.2.1, Setup A Local UV}  
+		{SE.1.6.2.2, Setup B World UV}  
+	{S.1.6.3, Stage 3 Pattern generators in the Output Material}  
+		{SE.1.6.3.1, Setup A Flow Detail Map}  
+		{SE.1.6.3.2, Setup B Caustics}  
+		{SE.1.6.3.3, Setup C Tile Map}  
+	{S.1.6.4, Stage 4 Fluid Simulation driven by spline direction}  
+		{SE.1.6.4.1, Setup A Directional Field}  
+		{SE.1.6.4.2, Setup B Density Buffer advection}  
+		{SE.1.6.4.3, Setup C Pressure Buffer advection}  
+	{S.1.6.5, Stage 5 Composite of passive and simulated patterns}  
+	{S.1.6.6, Stage 6 Masking the simulation with Spline-Landscape intersection}  
+
+
+{F.2, /Content /FluidNinjaLive /Levels /CoreOnly}  
+{L.2.1, CamfaceTest.umap, /Content /FluidNinjaLive /Levels /CoreOnly}  
+	{S.2.1.1, Stage 1 External Visualization Mesh}  
+	{S.2.1.2, Stage 2 Internal Visualization Mesh}  
+
+{L.2.2, Desert_SimplePainter_Landscape.umap, /Content /FluidNinjaLive /Levels /CoreOnly}  
+	{S.2.2.1, Stage 1 Driving Landscape Components with NinjaCore}  
+
+{L.2.3, Desert_SimplePainter_Mesh.umap, /Content /FluidNinjaLive /Levels /CoreOnly}  
+	{S.2.3.1, Stage 1 In-Editor workflow with NinjaCore}  
+
+{L.2.4, Destructibles_as_SDF.umap, /Content /FluidNinjaLive /Levels /CoreOnly}  
+	{S.2.4.1, Stage 1 Reading Destructibles as SDF with NinjaCore}  
+
+{L.2.5, LandscapeAlignedWater_ProtoVersion.umap, /Content /FluidNinjaLive /Levels /CoreOnly}  
+	{S.2.5.1, Stage 1 Landscape aligned water with NinjaCore}  
+
+{L.2.6, River.umap, /Content /FluidNinjaLive /Levels /CoreOnly}  
+	{S.2.6.1, Stage 1 Driving Spline river with NinjaCore}  
+
+
+{F.3, /Content /FluidNinjaLive /Levels /Misc}  
+{L.3.1, Destructibles_as_Points_CameraFacing.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.1.1, Stage 1 Demolition Test}  
+
+{L.3.2, Destructibles_as_Points_WorldAligned.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.2.1, Stage 1 Large scale destructible as Point input}  
+
+{L.3.3, Destructibles_as_SDF_WorldAligned.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.3.1, Stage 1 Large scale destructible as SDF input}  
+
+{L.3.4, DrivingParticlesWithFluidsim.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.4.1, Stage 1 Simple Painter driven Particles}  
+	{S.3.4.2, Stage 2 Sim Velocity driven Particles}  
+	{S.3.4.3, Stage 3 Sim Velocity and Pressure driven Particles}  
+	{S.3.4.4, Stage 4 Sim Velocity and Pressure driven Particles}  
+	{S.3.4.5, Stage 5 Sim Velocity and Pressure driven Particles}  
+	{S.3.4.6, Stage 6 Local Sim Velocity driven Particles}  
+	{S.3.4.7, Stage 7 Local Simple Painter driven Particles}  
+	{S.3.4.8, Stage 8 Local Sim Velocity and Density driven Particles}  
+	{S.3.4.9, Stage 9 Local Sim Velocity and Density driven Particles}  
+	{S.3.4.10, Stage 10 Local Sim Density driven Particles Persystent Strokes}  
+	{S.3.4.11, Stage 11 Local Sim Density driven Particle Mesh Array}  
+
+{L.3.5, Lava_Sparse.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.5.1, Stage 1 World Space Lava Setup}  
+	{S.3.5.2, Stage 2 Local Space Lava Setup}  
+
+{L.3.6, PerformanceTest_Particles.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.6.1, Stage 1 Stress Test - 10K Particles as Input}  
+
+{L.3.7, PerformanceTest_Primitives.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.7.1, Stage 1 Stress test - 200 Primitive Meshes as Point Input}  
+
+{L.3.8, PerformanceTest_SimContainers.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.8.1, Stage 1 Stress test - 49 ninja sim Actors running}  
+
+{L.3.9, PerformanceTest_SimplePainterContainers.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.9.1, Stage 1 Stress test - 64 Simple Painter mode ninja actors running}  
+
+{L.3.10, PerformanceTest_SkeletalMeshes.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.10.1, Stage 1 Stress test - 40 Skeletal Meshes inside the sim area}  
+
+{L.3.11, VolumeDemo_FAKE.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.11.1, Stage 1 Purple Plasma}  
+	{S.3.11.2, Stage 2 Gray Fluff}  
+	{S.3.11.3, Stage 3 Blue Smoke}  
+	{S.3.11.4, Stage 4 Red Smoke}  
+	{S.3.11.5, Stage 5 Floor Pulse}  
+	{S.3.11.6, Stage 6 Plasma Sphere}  
+	{S.3.11.6, Stage 7 Smoke Chamber}  
+
+{L.3.12, VolumeDemo_FVOL_Small.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.12.0, Stage 0 INTRO}  
+	{S.3.12.1, Stage 1 Simple Passive Fog Volume Cylinder}  
+		{SE.3.12.1.1, Setup A Simple Fog Cylinder}  
+		{SE.3.12.1.2, Setup B Fog Cylinder with Volumetric Noise}  
+	{S.3.12.2, Stage 2 Lab}  
+	{S.3.12.3, Stage 3 Shrine}  
+	{S.3.12.4, Stage 4 HollowPuffs}  
+	{S.3.12.5, Stage 5 Trails}  
+	{S.3.12.6, Stage 6 Fog Component in a Character Actor}  
+	{S.3.12.7, Stage 7 Large scale passive fog setups}  
+		{SE.3.12.7.1, Setup A Niagara based fog}  
+		{SE.3.12.7.2, Setup B Box Mesh based Fog}  
+
+{L.3.13, VolumeDemo_HVOL_Medium.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.13.1, Stage 1 Medium Scale Landscape aligned Heterogeneous Volume}  
+
+{L.3.14, VolumeDemo_HVOL_Small.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.14.0, Stage 0 INTRO}  
+	{S.3.14.1, Stage 1 Extruding 2D density to 3D}  
+	{S.3.14.2, Stage 2 Running the sim vs Displaying the sim}  
+	{S.3.14.3, Stage 3 Camera Facing HVOL}  
+	{S.3.14.4, Stage 4 Camera Facing Smoke Setups}  
+		{SE.3.14.4.1, Setup A Camera Facing HVOL Smoke}  
+		{SE.3.14.4.2, Setup B Camera Facing HVOL Firea and Smoke}  
+	{S.3.14.5, Stage 5 Billboard Smoke Columns}  
+		{SE.3.14.5.1, Setup A Rising Smoke}  
+		{SE.3.14.5.2, Setup B Falling Smoke}  
+		{SE.3.14.5.3, Setup C Falling Thin Smoke}  
+	{S.3.14.6, Stage 6 Combining sim with noises for details}  
+		{SE.3.14.6.1, Setup A Noiseless 2D sim}  
+		{SE.3.14.6.2, Setup B Noised 2D sim}  
+		{SE.3.14.6.3, Setup C 3D noising techniques}  
+		{SE.3.14.6.4, Setup D Composite of ABC}  
+	{S.3.14.7, Stage 7 Smoke Pool}  
+	{S.3.14.8, Stage 8 Whirlpool}  
+	{S.3.14.9, Stage 9 Vertically Flipped Whirlpool}  
+	{S.3.14.10, Stage 10 Key Volume Setup Methods}  
+		{SE.3.14.10.1, Setup A External Non-Niagara}  
+		{SE.3.14.10.2, Setup B External Niagara}  
+		{SE.3.14.10.3, Setup C Internal Niagara}  
+	{S.3.14.11, Stage 11 SceneCapture Camera based setups}  
+		{SE.3.14.11.1, Setup A Minimal demo}  
+		{SE.3.14.11.2, Setup B Floor Smoke demo}  
+	{S.3.14.12, Stage 12 Flameball Cross Section Volume}  
+	{S.3.14.13, Stage 13 Pump Cross Section Volume}  
+	{S.3.14.14, Stage 14 Ring Cross Section Volume}  
+
+{L.3.15, VolumeDemo_HVOL_Small_PASSIVE.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.15.0, Stage 0 INTRO}  
+	{S.3.15.1, Stage 1 Extrude and Soften}  
+		{SE.3.15.1.1, Setup A Extrude 2D data into 3D}  
+		{SE.3.15.1.2, Setup B Soften Volume}  
+	{S.3.15.2, Stage 2 Volumetric Noise}  
+	{S.3.15.3, Stage 3 Ambient Lighting and Noise Flow}  
+	{S.3.15.4, Stage 4 Combined RGB input and Height input}  
+	{S.3.15.5, Stage 5 Emissive}  
+	{S.3.15.6, Stage 6 Masking Volume Edges}  
+	{S.3.15.7, Stage 7 Fade by Camera Distance}  
+	{S.3.15.8, Stage 8 Density Texture Panning}  
+	{S.3.15.9, Stage 9 Radial Polar Coordinate Transform}  
+	{S.3.15.10, Stage 10 Landscape Aligned small HVOLs}  
+		{SE.3.15.10.1, Setup A Non-Niagara HVOL Renderer}  
+		{SE.3.15.10.2, Setup B Niagara HVOL Renderer}  
+	{S.3.15.11, Stage 11 Heterogenous Volume as Component}  
+	{S.3.15.12, Stage 12 HVOL vs Multiple Light Sources}  
+	{S.3.15.13, Stage 13 HVOL by Cross Section Simple}  
+	{S.3.15.14, Stage 14 HVOL by Cross Section Mushroom}  
+	{S.3.15.15, Stage 15 Multilayer HVOL by Cross Section}  
+
+{L.3.16, VolumeDemo_SVOL_Medium.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.16.1, Stage 1 Medium Scale Smoke Volume Point Light}   
+	{S.3.16.2, Stage 2 Medium Scale Smoke Volume Directional Light}   
+
+{L.3.17, VolumeDemo_SVOL_Small.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.17.0, Stage 0 INTRO}  
+	{S.3.17.1, Stage 1 Live Component vs Volume Smoke Renderer}  
+	{S.3.17.2, Stage 2 Six modes of using Smoke Volumes}  
+	{S.3.17.3, Stage 3 SVOL as External Renderes vs Internal Renderer}  
+	{S.3.17.4, Stage 4 Live as Actor Component with SVOL as Internal Renderer}  
+	{S.3.17.5, Stage 5 Point Lit SVOL normal vs noisy}  
+	{S.3.17.6, Stage 6 Directionally Lit SVOL}  
+	{S.3.17.7, Stage 7 Smoke Pool Point Lit SVOL vs HVOL compared}  
+		{SE.3.17.7.1, Setup A SVOL smoke pool}  
+		{SE.3.17.7.2, Setup B HVOL smoke pool}  
+	{S.3.17.8, Stage 8 Vortex Point Lit SVOL vs HVOL compared}  
+		{SE.3.17.8.1, Setup A SVOL vortex}  
+		{SE.3.17.8.2, Setup B HVOL vortex}  
+
+{L.3.18, Water_Dense_Rain.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.18.1, Stage 1 Particle based rain ripples on a lake}  
+
+{L.3.19, Water_Dense_vs_Sparse.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.19.1, Stage 1 Dense water setup demo}  
+	{S.3.19.2, Stage 2 Sparse water setup demo}  
+
+{L.3.20, Water_Sparse_DoubleSim_TilingWaves.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.20.1, Stage 1 Composite of two simulations in one Output Material}  
+
+{L.3.21, Water_Sparse_DoubleSim_Vortex.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.21.1, Stage 1 Composite of two simulations in one Output Material}  
+
+{L.3.22, Water_Sparse_Sea_Ship.umap, /Content /FluidNinjaLive /Levels /Misc}  
+	{S.3.22.1, Stage 1 Large Ship on Sea}  
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
+
+
+## 4. Levels Stages and Setups listed with Metadata
+
+
+SYNTAX DEFINITION FOR LEVEL CONTENT LIST ITEMS:
+- `Folder` type list item: `{F.folder number, folder path}`
+- `Level` type list item: `{L.level number, level name, path}`
+- `Stage` type list item: `{S.stage number, stage name}`
+- `Setup` type list item: `{SE.setup number, setup name}`
+- `Metadata` type list item: `{M.number, #description: metadata}`
+
+STRUCTURED LIST OF FOLDERS, LEVELS, STAGES, SETUPS AND METADATA  
+`COUNT: 58 LEVELS, 223 STAGES, 297 SETUPS LISTED`
 
 
 {F.0, /Content /FluidNinjaLive /Levels}
-{L.0.1, Clouds.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.1.1, Stage 1 Fluidsim driven responsive Cloud Setups}
-		{SE.0.1.1.1, Setup 1 SmokePillars CVOL 20km simdriven}
-		{SE.0.1.1.2, Setup 2 Vortex CVOL 20km Simdriven}
-		{SE.0.1.1.3, Setup 3 Impulse CVOL 50km Simdriven}
-		{SE.0.1.1.4, Setup 4 Aurora CVOL 50km Simdriven}
-		{SE.0.1.1.5, Setup 5 Titan CVOL 20km Simdriven LandscapeAligned}
-		{SE.0.1.1.6, Setup 6 User Painted Clouds CVOL 20km Simdriven LandscapeAligned}
-
-{L.0.2, Clouds_PASSIVE.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.2.1, Stage 1 Passive NonSimulated Cloud Setups}
-		{SE.0.2.1.1, Setup 1 Volcano CVOL 10km Passive MultiLayer LandscapeAligned}
-		{SE.0.2.1.2, Setup 2 Volcano CVOL Infinite Passive MultiLayer LandscapeAligned}
-		{SE.0.2.1.3, Setup 3 Mushroom CVOL 10km Passive MultiLayer}
-		{SE.0.2.1.4, Setup 4 Mushroom CVOL Infinite Passive MultiLayer}
-		{SE.0.2.1.5, Setup 5 SandStorm CVOL 80km Passive SingleLayer}
-		{SE.0.2.1.6, Setup 6 Nimbus CVOL Infinite Passive SingleLayer}
-		{SE.0.2.1.7, Setup 7 Stratus CVOL Infinite Passive SingleLayer}
-		{SE.0.2.1.8, Setup 8 Mammatus CVOL Infinite Passive SingleLayer}
-		{SE.0.2.1.9, Setup 9 Tornado CVOL 10km Passive SingleLayer}
-		{SE.0.2.1.10, Setup 10 Cyclone CVOL 20km Passive SingleLayer}
-
-{L.0.3, Fire_Smoke_Explosive.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.3.1, Stage 1 Character FX Torch}
-	{S.0.3.2, Stage 2 Bonfire with Particle Input}
-	{S.0.3.3, Stage 3 Bonfire with Object Pivot Input}
-	{S.0.3.4, Stage 4 Moving Objects on Fire}
-		{SE.0.3.4.1, Setup A Torch}
-		{SE.0.3.4.2, Setup B Bonfire with Multiple LiveComponents}
-		{SE.0.3.4.3, Setup C Flaming Sword}
-		{SE.0.3.4.4, Setup D Fairlight}
-	{S.0.3.5, Stage 5 Bonfire and Volumetric Smoke HVOL}
-	{S.0.3.6, Stage 6 Bonfire and Volumetric Smoke SVOL}
-		{SE.0.3.6.1, Setup A Thin}
-		{SE.0.3.6.2, Setup B Thick}
-	{S.0.3.7, Stage 7 Candles}
-		{SE.0.3.7.1, Setup A Candle Flame}
-		{SE.0.3.7.2, Setup B Candle Smoke Single}
-		{SE.0.3.7.3, Setup C Candle Smoke Multiple}
-	{S.0.3.8, Stage 8 Magic Cauldron}
-	{S.0.3.9, Stage 9 Smoke Pool}
-	{S.0.3.10, Stage 10 Flamethrower Turret}
-	{S.0.3.11, Stage 11 Flaming fist}
-		{SE.0.3.19.1, Setup A Fiery}
-		{SE.0.3.19.2, Setup B Blue Plasma}
-	{S.0.3.12, Stage 12 Burning Man 1}
-	{S.0.3.13, Stage 13 Burning Man 2}
-	{S.0.3.14, Stage 14 Burning Man 3}
-	{S.0.3.15, Stage 15 Smoking Man}
-	{S.0.3.16, Stage 16 Explosive Block}
-	{S.0.3.17, Stage 17 Blue Plasma Explosion}
-	{S.0.3.18, Stage 18 Smoke Piston}
-	{S.0.3.19, Stage 19 Fireball}
-	{S.0.3.20, Stage 20 Hot Wheels Vehicle Setup}
-		{SE.0.3.19.1, Setup A Tyres on Fire and Smoke}
-		{SE.0.3.19.2, Setup B Tyres on Volumetric Smoke}
-		{SE.0.3.19.3, Setup C Tyres on Simple Smoke}
-	{S.0.3.21, Stage 21 Steam Puff}
-
-{L.0.4, Fog_Mist.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.4.1, Stage 1 FVOL Only}
-	{S.0.4.2, Stage 2 HVOL and FVOL Combo}
-
-{L.0.5, Fog_Mist_PASSIVE.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.5.1, Stage 1 FVOL Only}
-	{S.0.5.2, Stage 2 HVOL and FVOL Combo}
-
-{L.0.6, Grass.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.6.1, Stage 1 Sim Driven Foliage}
-		{SE.0.6.1.1, Setup A Wind for Grass}
-		{SE.0.6.1.2, Setup B Harvester Vehicle FX}
-	{S.0.6.2, Stage 2 Painter Driven Foliage}
-
-{L.0.7, Sand.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.7.1, Stage 1 Painter and Sim Combo}
-	{S.0.7.2, Stage 2 Single Simulation}
-
-{L.0.8, Sand_Destructibles.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.8.1, Stage 1 Painter and Sim Combo}
-	{S.0.8.2, Stage 2 Single Simulation}
-	{S.0.8.3, Stage 3 Large Destructible Drop}
-
-{L.0.9, Snow.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.9.1, Stage 1 Painter and Sim Combo}
-	{S.0.9.2, Stage 2 Single Simulation}
-
-{L.0.10, Snow_Minimal.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.10.1, Stage 1 Simple Painter on Landscape}
-
-{L.0.11, Viscous_Blood_Mud.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.11.1, Stage 1 Blood Slippery Marks}
-	{S.0.11.2, Stage 2 Blood Splash}
-	{S.0.11.3, Stage 3 Mud - Local}
-	{S.0.11.4, Stage 4 Mud - World Space}
-	{S.0.11.5, Stage 5 Blood Trickle Simple}
-	{S.0.11.6, Stage 6 Blood Trickle Complex}
-	{S.0.11.7, Stage 7 Blood Bath}
-
-{L.0.12, Water_Dense_Creek1.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.12.1, Stage 1 Simulated Creek}
-
-{L.0.13, Water_Dense_Creek2.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.13.1, Stage 1 Simulated Creek}
-
-{L.0.14, Water_Dense_Lake.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.14.1, Stage 1 Simulated Lake Coastline}
-
-{L.0.15, Water_Dense_Sea.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.15.1, Stage 1 Simulated Sea Coastline}
-
-{L.0.16, Water_Sparse_Lake.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.16.1, Stage 1 Simulated Lake Open Waters}
-
-{L.0.17, Water_Sparse_River.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.17.1, Stage 1 Complex MultiRiver Setup}
-	{S.0.17.2, Stage 2 Local Waterfall Setup}
-
-{L.0.18, Water_Sparse_Rivers_Minimal.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.18.1, Stage 1 Large scale river}
-	{S.0.18.2, Stage 2 Medium scale river}
-	{S.0.18.3, Stage 3 Small scale river - Point interactors}
-	{S.0.18.4, Stage 4 Small scale river - SDF interactors}
-	{S.0.18.5, Stage 5 River with bedrock-collision mask}
-	{S.0.18.6, Stage 6 Crude particle test}
-
-{L.0.19, Water_Sparse_Sea_Minimal.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.19.1, Stage 1 Sea - Quiet Minimal}
-
-{L.0.20, Water_Sparse_Sea_Quiet.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.20.1, Stage 1 Sea - Quiet}
-
-{L.0.21, Water_Sparse_Sea_Stormy.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.21.1, Stage 1 Sea - Stormy}
-
-{L.0.22, Water_Sparse_Sea_Windy.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.22.1, Stage 1 Sea - Windy}
-
-{L.0.23, Water_Sparse_Various.umap, /Content /FluidNinjaLive /Levels}
-	{S.0.23.1, Stage 1 Pool - Sparse}
-	{S.0.23.2, Stage 2 Pool - Dense}
-	{S.0.23.3, Stage 3 Spray Fountain}
-	{S.0.23.4, Stage 4 Cauldron Minimal}
-	{S.0.23.5, Stage 5 Cauldron}
-	{S.0.23.6, Stage 6 Water Tank}
-	{S.0.23.7, Stage 7 Liquid Sphere}
-		{SE.0.23.7.1, Setup A Clear}
-		{SE.0.23.7.2, Setup B Turbulent}
-	{S.0.23.8, Stage 8 Waterfall}
-	{S.0.23.9, Stage 9 Waterfalls Far Background}
-		{SE.0.23.9.1, Setup A White}
-		{SE.0.23.9.2, Setup B Blue}
-	{S.0.23.10, Stage 10 Legacy Setups}
-		{SE.0.23.10.1, Setup A Blood Orb}
-		{SE.0.23.10.2, Setup B Watery Sand Flow}
-
-
-{F.1, /Content /FluidNinjaLive /Levels /Starter}
-{L.1.0, StartingGuide.umap, /Content /FluidNinjaLive /Levels /Starter}
-	{S.1.0.1, Stage 1 Starting Guide}
-
-{L.1.1, Tutorial01_Basics.umap, /Content /FluidNinjaLive /Levels /Starter}
-	{S.1.1.0, Stage 0 Intro}
-	{S.1.1.1, Stage 1 Prerequisites}
-	{S.1.1.2, Stage 2 Key Concepts}
-	{S.1.1.3, Stage 3 What is Ninja?}
-	{S.1.1.4, Stage 4 Interaction: Points}
-	{S.1.1.5, Stage 5 Interaction: Fields}
-	{S.1.1.6, Stage 6 Components of NinjaLive Actor}
-	{S.1.1.7, Stage 7 Transforms}
-		{SE.1.1.7.1, Setup A World Facing - World Space}
-		{SE.1.1.7.2, Setup B World Facing Rotatable - World Space}
-		{SE.1.1.7.3, Setup C World Facing Rotatable - Local Space}
-		{SE.1.1.7.4, Setup D World Facing Rotatable  - Density Local Space - Velocity World Space}
-		{SE.1.1.7.5, Setup E Camera Facing - Density World Space - Velocity World Space}
-		{SE.1.1.7.6, Setup F SimplePainter Local Space}
-		{SE.1.1.7.7, Setup G SimplePainter World Space - Quantizer Off}
-		{SE.1.1.7.8, Setup H SimplePainter World Space - Quantizer On}
-	{S.1.1.8, Stage 8 Surface Alignment and Z-position, Internal Render, External Render}
-	{S.1.1.9, Stage 9 Direct Drive}
-	{S.1.1.10, Stage 10 Output Materials}
-	{S.1.1.11, Stage 11 Output Material Tricks}
-	{S.1.1.12, Stage 12 Modularity: Building Actors From Components}
-
-{L.1.2, Tutorial02_Inputs_Interaction.umap, /Content /FluidNinjaLive /Levels /Starter}
-	{S.1.2.0, Stage 0 INTRO}
-	{S.1.2.1, Stage 1 Density Input from BITMAPS }
-		{SE.1.2.1.1, Setup A Texture}
-		{SE.1.2.1.2, Setup B RenderTarget, Noise}
-		{SE.1.2.1.3, Setup C RenderTarget, SceneCapture}
-	{S.1.2.2, Stage 2 Density and Velocity Input from 2 Bitmaps}
-	{S.1.2.3, Stage 3 Density and Velocity Input from 1 Bitmap}
-	{S.1.2.4, Stage 4 Static Collision Mask from Bitmap}
-	{S.1.2.5, Stage 5 Density and Velocity Input from OBJECTS FIELDS }
-		{SE.1.2.5.1, Setup A Mesh SDF}
-		{SE.1.2.5.2, Setup B Spline}
-		{SE.1.2.5.3, Setup C Landscape}
-		{SE.1.2.5.4, Setup D Destructibles}
-		{SE.1.2.5.5, Setup E Dynamic Collision Mask from Mesh SDF}
-	{S.1.2.6, Stage 6 PARTICLES}
-		{SE.1.2.6.1, Setup A Particles Mapped on a World Facing surface}
-		{SE.1.2.6.2, Setup B Particles Mapped on a Camera Facing surface}
-	{S.1.2.7, Stage 7 DESTRUCTIBLES as Points}
-		{SE.1.2.7.1, Setup A Destructibles Mapped on a World Facing surface}
-		{SE.1.2.7.2, Setup B Destructibles Mapped on a Camera Facing surface}
-	{S.1.2.8, Stage 8 Objects as Points Intro}
-	{S.1.2.9, Stage 9 Objects as Points Using CLASS FILTERS}
-	{S.1.2.10, Stage 10 Objects as Points Using TAGS}
-		{SE.1.2.10.1, Setup A Single Component}
-		{SE.1.2.10.2, Setup B Multiple Components}
-	{S.1.2.11, Stage 11 Combining Class and Tag Filters}
-	{S.1.2.12, Stage 12 Using Class Filters via NinjaLive Component}
-
-{L.1.3, Tutorial03_KeyConceptsForWater.umap, /Content /FluidNinjaLive /Levels /Starter}
-	{S.1.3.0, Stage 0 INTRO}
-	{S.1.3.1, Stage 1 SPARSE vs DENSE SETUPS}
-		{SE.1.3.1.1, Setup A Sparse Fluid Setup}
-		{SE.1.3.1.2, Setup B Dense Fluid Setup}
-		{SE.1.3.1.3, Setup C Sparse Surface Aligned Fluid Setup}
-		{SE.1.3.1.4, Setup D Dense Surface Aligned Fluid Setup}
-		{SE.1.3.1.5, Setup E Sparse Surface Aligned Fluid Setup driving Volumetrics}
-		{SE.1.3.1.6, Setup F Dense Surface Aligned Fluid Setup driving SingleLayerWater}
-	{S.1.3.2, Stage 2 SURFACE ALIGNMENT}
-		{SE.1.3.2.1, Setup A Dense, Height Input NONE}
-		{SE.1.3.2.2, Setup B Dense, Height Input LANDSCAPE}
-		{SE.1.3.2.3, Setup C Dense, Height Input SCENECAPTURE}
-		{SE.1.3.2.4, Setup D Dense, Height Input RVT}
-		{SE.1.3.2.5, Setup E Sparse, FLAT}
-		{SE.1.3.2.6, Setup F Sparse, SPLINE}
-	{S.1.3.3, Stage 3 EXTENDING THE SIM AREA}
-	{S.1.3.4, Stage 4 WAVE GENERATORS}
-
-{L.1.4, Tutorial04_Presets_Spawning_Caching.umap, /Content /FluidNinjaLive /Levels /Starter}
-	{S.1.4.0, Stage 0 INTRO}
-	{S.1.4.1, Stage 1 WRITING AND READING PRESETS IN-EDITOR}
-	{S.1.4.2, Stage 2 SPAWNING A SEA SURFACE HANDLER}
-	{S.1.4.3, Stage 3 SPAWNING A LANDSCAPE SURFACE HANDLER}
-	{S.1.4.4, Stage 4 WRITING AND READING SIM CACHE IN-GAME}
-	{S.1.4.5, Stage 5 CACHING HEIGHT-MAPS}
-
-{L.1.5, Tutorial05_Tricks.umap, /Content /FluidNinjaLive /Levels /Starter}
-	{S.1.5.0, Stage 0 INTRO}
-	{S.1.5.1, Stage 1 Sequencer and Interface Control}
-		{SE.1.5.1.1, Setup A Sequencer Control}
-		{SE.1.5.1.2, Setup B Interface Control Brush Size}
-		{SE.1.5.1.3, Setup C Interface Control Shutdown}
-	{S.1.5.2, Stage 2 Sim Space Wrapping (Tiling)}
-	{S.1.5.3, Stage 3 Painting Motion Trajectories}
-	{S.1.5.4, Stage 4 Scale brush density with Velocity}
-	{S.1.5.5, Stage 5 Inverse Brush}
-	{S.1.5.6, Stage 6 Brush - Velocity only No density}
-	{S.1.5.7, Stage 7 Sim area XY proportions and scaling}
-	{S.1.5.8, Stage 8 Object size to Brush size}
-	{S.1.5.9, Stage 9 Brush persistence and Simulation feedback}
-	{S.1.5.10, Stage 10 Output Materials and Buffer Visualization}
-	{S.1.5.11, Stage 11 Brush position random}
-	{S.1.5.12, Stage 12 Puncture}
-	{S.1.5.13, Stage 13 Custom Visualization Mesh}
-	{S.1.5.14, Stage 14 Simple Painter Mode}
-		{SE.1.5.14.1, Setup A Raw paint buffer}
-		{SE.1.5.14.2, Setup B Groundmarks}
-		{SE.1.5.14.3, Setup C Painter driving Flowmap, World Facing}
-		{SE.1.5.14.4, Setup D Painter driving Flowmap, Camera Facing}
-		{SE.1.5.14.5, Setup E Velocity PaintBuffer injecting Acceleration into a Particle System}
-	{S.1.5.15, Stage 15 Viscous Fluids}
-
-{L.1.6, Tutorial06_SplineBasedRivers.umap, /Content /FluidNinjaLive /Levels /Starter}
-	{S.1.6.0, Stage 0 INTRO}
-	{S.1.6.1, Stage 1 Spline generator}
-	{S.1.6.2, Stage 2 Mapping coordinates, Local vs World}
-		{SE.1.6.2.1, Setup A Local UV}
-		{SE.1.6.2.2, Setup B World UV}
-	{S.1.6.3, Stage 3 Pattern generators in the Output Material}
-		{SE.1.6.3.1, Setup A Flow Detail Map}
-		{SE.1.6.3.2, Setup B Caustics}
-		{SE.1.6.3.3, Setup C Tile Map}
-	{S.1.6.4, Stage 4 Fluid Simulation driven by spline direction}
-		{SE.1.6.4.1, Setup A Directional Field}
-		{SE.1.6.4.2, Setup B Density Buffer advection}
-		{SE.1.6.4.3, Setup C Pressure Buffer advection}
-	{S.1.6.5, Stage 5 Composite of passive and simulated patterns}
-	{S.1.6.6, Stage 6 Masking the simulation with Spline-Landscape intersection}
-
-
-{F.2, /Content /FluidNinjaLive /Levels /CoreOnly}
-{L.2.1, CamfaceTest.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
-	{S.2.1.1, Stage 1 External Visualization Mesh}
-	{S.2.1.2, Stage 2 Internal Visualization Mesh}
-
-{L.2.2, Desert_SimplePainter_Landscape.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
-	{S.2.2.1, Stage 1 Driving Landscape Components with NinjaCore}
-
-{L.2.3, Desert_SimplePainter_Mesh.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
-	{S.2.3.1, Stage 1 In-Editor workflow with NinjaCore}
-
-{L.2.4, Destructibles_as_SDF.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
-	{S.2.4.1, Stage 1 Reading Destructibles as SDF with NinjaCore}
-
-{L.2.5, LandscapeAlignedWater_ProtoVersion.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
-	{S.2.5.1, Stage 1 Landscape aligned water with NinjaCore}
-
-{L.2.6, River.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
-	{S.2.6.1, Stage 1 Driving Spline river with NinjaCore}
-
-
-{F.3, /Content /FluidNinjaLive /Levels /Misc}
-{L.3.1, Destructibles_as_Points_CameraFacing.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.1.1, Stage 1 Demolition Test}
-
-{L.3.2, Destructibles_as_Points_WorldAligned.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.2.1, Stage 1 Large scale destructible as Point input}
-
-{L.3.3, Destructibles_as_SDF_WorldAligned.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.3.1, Stage 1 Large scale destructible as SDF input}
-
-{L.3.4, DrivingParticlesWithFluidsim.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.4.1, Stage 1 Simple Painter driven Particles}
-	{S.3.4.2, Stage 2 Sim Velocity driven Particles}
-	{S.3.4.3, Stage 3 Sim Velocity and Pressure driven Particles}
-	{S.3.4.4, Stage 4 Sim Velocity and Pressure driven Particles}
-	{S.3.4.5, Stage 5 Sim Velocity and Pressure driven Particles}
-	{S.3.4.6, Stage 6 Local Sim Velocity driven Particles}
-	{S.3.4.7, Stage 7 Local Simple Painter driven Particles}
-	{S.3.4.8, Stage 8 Local Sim Velocity and Density driven Particles}
-	{S.3.4.9, Stage 9 Local Sim Velocity and Density driven Particles}
-	{S.3.4.10, Stage 10 Local Sim Density driven Particles Persystent Strokes}
-	{S.3.4.11, Stage 11 Local Sim Density driven Particle Mesh Array}
-
-{L.3.5, Lava_Sparse.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.5.1, Stage 1 World Space Lava Setup}
-	{S.3.5.2, Stage 2 Local Space Lava Setup}
-
-{L.3.6, PerformanceTest_Particles.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.6.1, Stage 1 Stress Test - 10K Particles as Input}
-
-{L.3.7, PerformanceTest_Primitives.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.7.1, Stage 1 Stress test - 200 Primitive Meshes as Point Input}
-
-{L.3.8, PerformanceTest_SimContainers.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.8.1, Stage 1 Stress test - 49 ninja sim Actors running}
-
-{L.3.9, PerformanceTest_SimplePainterContainers.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.9.1, Stage 1 Stress test - 64 Simple Painter mode ninja actors running}
-
-{L.3.10, PerformanceTest_SkeletalMeshes.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.10.1, Stage 1 Stress test - 40 Skeletal Meshes inside the sim area}
-
-{L.3.11, VolumeDemo_FAKE.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.11.1, Stage 1 Purple Plasma}
-	{S.3.11.2, Stage 2 Gray Fluff}
-	{S.3.11.3, Stage 3 Blue Smoke}
-	{S.3.11.4, Stage 4 Red Smoke}
-	{S.3.11.5, Stage 5 Floor Pulse}
-	{S.3.11.6, Stage 6 Plasma Sphere}
-
-{L.3.12, VolumeDemo_FVOL_Small.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.12.0, Stage 0 INTRO}
-	{S.3.12.1, Stage 1 Simple Passive Fog Volume Cylinder}
-		{SE.3.12.1.1, Setup A Simple Fog Cylinder}
-		{SE.3.12.1.2, Setup B Fog Cylinder with Volumetric Noise}
-	{S.3.12.2, Stage 2 Lab}
-	{S.3.12.3, Stage 3 Shrine}
-	{S.3.12.4, Stage 4 HollowPuffs}
-	{S.3.12.5, Stage 5 Trails}
-	{S.3.12.6, Stage 6 Fog Component in a Character Actor}
-	{S.3.12.7, Stage 7 Large scale passive fog setups}
-		{SE.3.12.7.1, Setup A Niagara based fog}
-		{SE.3.12.7.2, Setup B Box Mesh based Fog}
-
-{L.3.13, VolumeDemo_HVOL_Medium.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.13.1, Stage 1 Medium Scale Landscape aligned Heterogeneous Volume}
-
-{L.3.14, VolumeDemo_HVOL_Small.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.14.0, Stage 0 INTRO}
-	{S.3.14.1, Stage 1 Extruding 2D density to 3D}
-	{S.3.14.2, Stage 2 Running the sim vs Displaying the sim}
-	{S.3.14.3, Stage 3 Camera Facing HVOL}
-	{S.3.14.4, Stage 4 Camera Facing Smoke Setups}
-		{SE.3.14.4.1, Setup A Camera Facing HVOL Smoke}
-		{SE.3.14.4.2, Setup B Camera Facing HVOL Firea and Smoke}
-	{S.3.14.5, Stage 5 Billboard Smoke Columns}
-		{SE.3.14.5.1, Setup A Rising Smoke}
-		{SE.3.14.5.2, Setup B Falling Smoke}
-		{SE.3.14.5.3, Setup C Falling Thin Smoke}
-	{S.3.14.6, Stage 6 Combining sim with noises for details}
-		{SE.3.14.6.1, Setup A Noiseless 2D sim}
-		{SE.3.14.6.2, Setup B Noised 2D sim}
-		{SE.3.14.6.3, Setup C 3D noising techniques}
-		{SE.3.14.6.4, Setup D Composite of ABC}
-	{S.3.14.7, Stage 7 Smoke Pool}
-	{S.3.14.8, Stage 8 Whirlpool}
-	{S.3.14.9, Stage 9 Vertically Flipped Whirlpool}
-	{S.3.14.10, Stage 10 Key Volume Setup Methods}
-		{SE.3.14.10.1, Setup A External Non-Niagara}
-		{SE.3.14.10.2, Setup B External Niagara}
-		{SE.3.14.10.3, Setup C Internal Niagara}
-	{S.3.14.11, Stage 11 SceneCapture Camera based setups}
-		{SE.3.14.11.1, Setup A Minimal demo}
-		{SE.3.14.11.2, Setup B Floor Smoke demo}
-	{S.3.14.12, Stage 12 Flameball Cross Section Volume}
-	{S.3.14.13, Stage 13 Pump Cross Section Volume}
-	{S.3.14.14, Stage 14 Ring Cross Section Volume}
-
-{L.3.15, VolumeDemo_HVOL_Small_PASSIVE.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.15.0, Stage 0 INTRO}
-	{S.3.15.1, Stage 1 Extrude and Soften}
-		{SE.3.15.1.1, Setup A Extrude 2D data into 3D}
-		{SE.3.15.1.2, Setup B Soften Volume}
-	{S.3.15.2, Stage 2 Volumetric Noise}
-	{S.3.15.3, Stage 3 Ambient Lighting and Noise Flow}
-	{S.3.15.4, Stage 4 Combined RGB input and Height input}
-	{S.3.15.5, Stage 5 Emissive}
-	{S.3.15.6, Stage 6 Masking Volume Edges}
-	{S.3.15.7, Stage 7 Fade by Camera Distance}
-	{S.3.15.8, Stage 8 Density Texture Panning}
-	{S.3.15.9, Stage 9 Radial Polar Coordinate Transform}
-	{S.3.15.10, Stage 10 Landscape Aligned small HVOLs}
-		{SE.3.15.10.1, Setup A Non-Niagara HVOL Renderer}
-		{SE.3.15.10.2, Setup B Niagara HVOL Renderer}
-	{S.3.15.11, Stage 11 Heterogenous Volume as Component}
-	{S.3.15.12, Stage 12 HVOL vs Multiple Light Sources}
-	{S.3.15.13, Stage 13 HVOL by Cross Section Simple}
-	{S.3.15.14, Stage 14 HVOL by Cross Section Mushroom}
-	{S.3.15.15, Stage 15 Multilayer HVOL by Cross Section}
-
-{L.3.16, VolumeDemo_SVOL_Medium.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.16.1, Stage 1 Medium Scale Smoke Volume Point Light} 
-	{S.3.16.2, Stage 2 Medium Scale Smoke Volume Directional Light} 
-
-{L.3.17, VolumeDemo_SVOL_Small.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.17.0, Stage 0 INTRO}
-	{S.3.17.1, Stage 1 Live Component vs Volume Smoke Renderer}
-	{S.3.17.2, Stage 2 Six modes of using Smoke Volumes}
-	{S.3.17.3, Stage 3 SVOL as External Renderes vs Internal Renderer}
-	{S.3.17.4, Stage 4 Live as Actor Component with SVOL as Internal Renderer}
-	{S.3.17.5, Stage 5 Point Lit SVOL normal vs noisy}
-	{S.3.17.6, Stage 6 Directionally Lit SVOL}
-	{S.3.17.7, Stage 7 Smoke Pool Point Lit SVOL vs HVOL compared}
-		{SE.3.17.7.1, Setup A SVOL smoke pool}
-		{SE.3.17.7.2, Setup B HVOL smoke pool}
-	{S.3.17.8, Stage 8 Vortex Point Lit SVOL vs HVOL compared}
-		{SE.3.17.8.1, Setup A SVOL vortex}
-		{SE.3.17.8.2, Setup B HVOL vortex}
-
-{L.3.18, Water_Dense_Rain.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.18.1, Stage 1 Particle based rain ripples on a lake}
-
-{L.3.19, Water_Dense_vs_Sparse.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.19.1, Stage 1 Dense water setup demo}
-	{S.3.19.2, Stage 2 Sparse water setup demo}
-
-{L.3.20, Water_Sparse_DoubleSim_TilingWaves.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.20.1, Stage 1 Composite of two simulations in one Output Material}
-
-{L.3.21, Water_Sparse_DoubleSim_Vortex.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.21.1, Stage 1 Composite of two simulations in one Output Material}
-
-{L.3.22, Water_Sparse_Sea_Ship.umap, /Content /FluidNinjaLive /Levels /Misc}
-	{S.3.22.1, Stage 1 Large Ship on Sea}
-
-
-
-
-
-
-
-
-
-
-
-
-\------------------------------------------------------------------------------------------------------------------------------
-
-
-### CHAPTER 4: LEVELS, STAGES AND SETUPS LISTED WITH METADATA
-
-
-SYNTAX DEFINITION FOR LEVEL CONTENT LIST ITEMS:
-- "Folder" type list item: {F.folder number, folder path}
-- "Level" type list item: {L.level number, level name, path}
-- "Stage" type list item: {S.stage number, stage name}
-- "Setup" type list item: {SE.setup number, setup name}
-- "Metadata" type list item: {M.number, #description: metadata}
-
-STRUCTURED LIST OF FOLDERS, LEVELS, STAGES, SETUPS AND METADATA
-COUNT: 57 LEVELS, 222 STAGES, 296 SETUPS LISTED
-
-
-{F.0, /Content /FluidNinjaLive /Levels}
-#### {L.0.1, Clouds.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.1, Clouds.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.1.1, Stage 1 Fluidsim driven responsive Cloud Setups}
 {M.0.1.1, #Description: 
@@ -701,7 +716,7 @@ PRESS THE 1-6 KEYS ON THE KEYBOARD TO CHAGE VOLUME SETUP (IN-GAME)  and  OBSERVA
 		{SE.0.1.1.5, Setup 5 Titan CVOL 20km Simdriven LandscapeAligned}
 		{SE.0.1.1.6, Setup 6 User Painted Clouds CVOL 20km Simdriven LandscapeAligned}
 
-#### {L.0.2, Clouds_PASSIVE.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.2, Clouds_PASSIVE.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.2.1, Stage 1 Passive NonSimulated Cloud Setups}
 {M.0.2.1, #Description:
@@ -741,7 +756,7 @@ MORE:
 		{SE.0.2.1.10, Setup 10 Cyclone CVOL 20km Passive SingleLayer}
 		{M.0.2.1.10, #Description: SingleLayer, Uses cross-sections to create 3D density}
 
-#### {L.0.3, Fire_Smoke_Explosive.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.3, Fire_Smoke_Explosive.umap, /Content /FluidNinjaLive /Levels}
 
 {M.0.3, #Description: 
 Most setups on this level are CAMERA FACING
@@ -791,7 +806,7 @@ Such setups are "camera facing".
 		{SE.0.3.19.3, Setup C Tyres on Simple Smoke}
 	{S.0.3.21, Stage 21 Steam Puff}
 
-#### {L.0.4, Fog_Mist.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.4, Fog_Mist.umap, /Content /FluidNinjaLive /Levels}
 
 {M.0.4, #Description: FLUIDSIM DRIVEN, LANDSCAPE ALIGNED VOLUMES}
 	{S.0.4.1, Stage 1 FVOL Only}
@@ -799,7 +814,7 @@ Such setups are "camera facing".
 	{S.0.4.2, Stage 2 HVOL and FVOL Combo}
 	{M.0.4.2, #Description: 32 meters simulated heterogeneous volume core, HVOL, a 200 meters passive fog volume, FVOL}
 
-#### {L.0.5, Fog_Mist_PASSIVE.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.5, Fog_Mist_PASSIVE.umap, /Content /FluidNinjaLive /Levels}
 
 {M.0.5, #Description: PASSIVE, LANDSCAPE ALIGNED VOLUMES}
 	{S.0.5.1, Stage 1 FVOL Only}
@@ -827,7 +842,7 @@ Learn more about Fog Volumes by visiting this level:
 32m passive Heterogeneous Volume, HVOL, extended with a 200m passive Fog Volume, FVOL
 }
 
-#### {L.0.6, Grass.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.6, Grass.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.6.1, Stage 1 Sim Driven Foliage}
 		{SE.0.6.1.1, Setup A Wind for Grass}
@@ -851,7 +866,7 @@ but raw sim buffers and sim POS / EXTENTS data too.
 		{M.0.6.1.2, #Description: ColdSurface Flow + Jet Exhaust, these two Ninja Actors are not related to the grass setup}
 	{S.0.6.2, Stage 2 Painter Driven Foliage}
 
-#### {L.0.7, Sand.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.7, Sand.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.7.1, Stage 1 Painter and Sim Combo}
 {M.0.7.1, #Description:
@@ -865,13 +880,13 @@ but raw sim buffers and sim POS / EXTENTS data too.
 2. Landscape Utility forwards data and params from ninja to the Landscape Material
 }
 
-#### {L.0.8, Sand_Destructibles.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.8, Sand_Destructibles.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.8.1, Stage 1 Painter and Sim Combo}
 {S.0.8.2, Stage 2 Single Simulation}
 {S.0.8.3, Stage 3 Large Destructible Drop}
 
-#### {L.0.9, Snow.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.9, Snow.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.9.1, Stage 1 Painter and Sim Combo}
 {M.0.9.1, #Description:
@@ -885,7 +900,7 @@ but raw sim buffers and sim POS / EXTENTS data too.
 2. Landscape Utility forwards data and params from ninja to the Landscape Material
 }
 
-#### {L.0.10, Snow_Minimal.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.10, Snow_Minimal.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.10.1, Stage 1 Simple Painter on Landscape}
 {M.0.10.1, #Description:
@@ -907,7 +922,7 @@ Landscapes are special: they can not be assigned with a material during game-tim
 Workaround: we assign the needed material to the Landscape manually, In-Editor and sending dynamic parameters (eg.: sim pos) to the Material in-game, using the Landscape Utility.
 }
 
-#### {L.0.11, Viscous_Blood_Mud.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.11, Viscous_Blood_Mud.umap, /Content /FluidNinjaLive /Levels}
 
 {M.0.11, #Description:
 Viscous Fluids
@@ -965,10 +980,11 @@ TIP: if you set "VelocityFeedback" back to default (0.99), while keeping Density
 	{M.0.11.6, #Description: SURFACE ALIGNMENT, this setup uses a height distorted Plane-Mesh to align the fluid with the surface. Alternative solution: DECAL mapping the fluid onto surfaces.}
 	{S.0.11.7, Stage 7 Blood Bath}
 
-#### {L.0.12, Water_Dense_Creek1.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.12, Water_Dense_Creek1.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.12.1, Stage 1 Simulated Creek}
 {M.0.12.1, #Description: Sim area position fixed/locked (not attached to pawn)
+Water meshing on this level: 4 high detail meshes planes manually placed
 Dense type water setup  (water is surface aligned, climbs on the coast and objects)
 /LiveComponent /LiveSimulation /DensityAccumulation > 1
 
@@ -981,10 +997,11 @@ Initial Sim CACHE
 /LiveComponent /LiveInputFields /Cache
 }
 
-#### {L.0.13, Water_Dense_Creek2.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.13, Water_Dense_Creek2.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.13.1, Stage 1 Simulated Creek}
 {M.0.13.1, #Description: Sim area position fixed/locked (not attached to pawn)
+Water meshing on this level is managed by: SurfaceAlignedMeshes Utility
 Dense type water setup  (water is surface aligned, climbs on the coast and objects)
 /LiveComponent /LiveSimulation /DensityAccumulation > 1
 
@@ -1015,7 +1032,7 @@ We have a SceneCaptureCamera set up, looking down the rocks, writing the elevati
 NOTE: the dam-object downstream is handled as a COLLISION MASK, hence: it could be dynamic despite the capture being static
 }
 
-#### {L.0.14, Water_Dense_Lake.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.14, Water_Dense_Lake.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.14.1, Stage 1 Simulated Lake Coastline}
 {M.0.14.1, #Description: Sim area position fixed/locked (not attached to pawn)
@@ -1034,7 +1051,7 @@ Try various Output Materials:  press 0-2 in-game!
 /LiveComponent /LiveOutputMaterials /SecondaryOutputMaterialSelected
 }
 
-#### {L.0.15, Water_Dense_Sea.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.15, Water_Dense_Sea.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.15.1, Stage 1 Simulated Sea Coastline}
 {M.0.15.1, #Description: Sim area position fixed/locked (not attached to pawn)
@@ -1053,7 +1070,7 @@ Try various Output Materials:  press 0-2 in-game!
 LiveComponent /LiveOutputMaterials /SecondaryOutputMaterialSelected
 }
 
-#### {L.0.16, Water_Sparse_Lake.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.16, Water_Sparse_Lake.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.16.1, Stage 1 Simulated Lake Open Waters}
 {M.0.16.1, #Description: 
@@ -1080,7 +1097,7 @@ Try various Output Materials:  press 0-2 in-game!
 /LiveComponent /LiveOutputMaterials /SecondaryOutputMaterialSelected
 }
 
-#### {L.0.17, Water_Sparse_River.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.17, Water_Sparse_River.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.17.1, Stage 1 Complex MultiRiver Setup}
 {M.0.17.1, #Description: 
@@ -1105,7 +1122,7 @@ This level features a complex setup:
 }
 {S.0.17.2, Stage 2 Local Waterfall Setup}
 
-#### {L.0.18, Water_Sparse_Rivers_Minimal.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.18, Water_Sparse_Rivers_Minimal.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.18.1, Stage 1 Large scale river}
 {M.0.18.1, #Description: SplineMesh based river, controlled via DirectDrive, Landscape Component based terrain, controlled via Landscape Util}
@@ -1123,7 +1140,7 @@ All other stages use empty sim + positive density-brush combo. Key param:
 	{M.0.18.5, #Description: Simulation on this stage combines realtime collision (pawn, movable rocks) with texture based collision masking (bedrocks). Key param: /LiveComponent /LiveInputFields /Bitmaps /CollisionMask}
 	{S.0.18.6, Stage 6 Crude particle test}
 
-#### {L.0.19, Water_Sparse_Sea_Minimal.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.19, Water_Sparse_Sea_Minimal.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.19.1, Stage 1 Sea - Quiet Minimal}
 {M.0.19.1, #Description: 
@@ -1143,19 +1160,19 @@ HeightField is enabled only to handle interactions at waterline:
 /LiveComponent /LiveInputFields /HeightFields /ClampHeightLowerValues
 /LiveComponent /LiveInputFields /HeightFields /ClampingValue
 }
-#### {L.0.20, Water_Sparse_Sea_Quiet.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.20, Water_Sparse_Sea_Quiet.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.20.1, Stage 1 Sea - Quiet}
 
-#### {L.0.21, Water_Sparse_Sea_Stormy.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.21, Water_Sparse_Sea_Stormy.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.21.1, Stage 1 Sea - Stormy}
 
-#### {L.0.22, Water_Sparse_Sea_Windy.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.22, Water_Sparse_Sea_Windy.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.22.1, Stage 1 Sea - Windy}
 
-#### {L.0.23, Water_Sparse_Various.umap, /Content /FluidNinjaLive /Levels}
+ {L.0.23, Water_Sparse_Various.umap, /Content /FluidNinjaLive /Levels}
 
 {S.0.23.1, Stage 1 Pool - Sparse}
 {S.0.23.2, Stage 2 Pool - Dense}
@@ -1174,6 +1191,33 @@ HeightField is enabled only to handle interactions at waterline:
 	{SE.0.23.10.1, Setup A Blood Orb}
 	{SE.0.23.10.2, Setup B Watery Sand Flow}
 
+
+ {L.0.24, Water_Sparse_Swamp.umap, /Content /FluidNinjaLive /Levels}
+
+{S.0.24.1, Stage 1 Simulated Swamp and Muddy Coastline}
+{M.0.24.1, #Description: 
+SPARSE type water setup
+/LiveComponent /LiveSimulation /DensityAccumulation = 1
+
+Advantage of using a SPARSE setup:
+- Simulated patterns (eg. whitwater) are more detailed, compared to a Dense setup
+
+Negative consequences of using a SPARSE setup:
+- Water is NOT surface aligned (lives on a flat plane)
+- Water can not climb on the coast or rocks
+- SIM Wave generator doesn't work  (only PASSIVE waves, generated by Output Material /TileMap)
+
+Mesh SDF used as Density input:
+/LiveComponent /LiveInputFields /MeshFields /EnableMeshDistanceFieldReader = True
+/LiveComponent /LiveInputFields /MeshFields /UseAsDensitySource = True
+
+RAIN Mini Setup:
+1. Enable: SET Activation /AutoActivate = TRUE  --- in both Niagara Rain Emitters!
+2. Parent both emitters to the Pawn!
+3. Select NinjaLive_Area_Water Actor /LiveComponent - SET LiveCore /ExtentsXYZ /Z part = 2
+4. Select ExponentialheightFog Actor - and SET Fog Density = 0.05
+
+}
 
 
 
@@ -1198,7 +1242,7 @@ HeightField is enabled only to handle interactions at waterline:
 {F.1, /Content /FluidNinjaLive /Levels /Starter}
 
 
-#### {L.1.0, StartingGuide.umap, /Content /FluidNinjaLive /Levels /Starter}
+ {L.1.0, StartingGuide.umap, /Content /FluidNinjaLive /Levels /Starter}
 
 {S.1.0.1, Stage 1 Starting Guide}
 {M.1.0.1, #Description: 
@@ -1216,9 +1260,9 @@ Tutorial06_SplineBasedRivers, Spline-based rivers - Large scale, non-surface ali
 Volumetrics: See "VolumeDemo" Levels in the "Misc" folder - four volume types, different usage: FVOL, HVOL, SVOL, CVOL
 
 LEARNING MATERIALS:
-1. Tooltips: Detailed information on all params - use the Mouse Pointer to access Tooltips!
+1. Manual: drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa
+2. Tooltips: Detailed information on all params - use the Mouse Pointer to access Tooltips!
 Param descriptor text file: drive.google.com/file/d/1FedZwfW3iE1OgJr_Ye551TgaSLjqVUdj
-2. Manual: drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa (under construction!)
 3. Annotations: in Niagara Systems and Blueprints comments describe how the given system works.
 
 Welcome!
@@ -1251,7 +1295,7 @@ Official Project Page: fab.com/listings/80fcf53e-49f7-4635-a71c-ba81280c6618
 
 
 
-#### {L.1.1, Tutorial01_Basics.umap, /Content /FluidNinjaLive /Levels /Starter}
+ {L.1.1, Tutorial01_Basics.umap, /Content /FluidNinjaLive /Levels /Starter}
 
 {S.1.1.0, Stage 0 Intro}
 {M.1.1.0, #Description: STARTING WITH NINJA
@@ -1302,7 +1346,7 @@ DO NOT use "Simulate" Mode - Make sure "Selected Viewport" Mode is used
 
 C. LEARNING RESOURCES
 - Starting Guide: /Content/FluidNinjaLive/Levels/_Starter/_StartingGuide.umap
-- Manual: drive.google.com/file/d/1I4dglPjeXLcNkSGxGok8sQCy59qgYcF9
+- Manual: https://drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa
 - Tooltips: at the Actor and Component Details Panel
 - Project Homepage: fab.com/listings/80fcf53e-49f7-4635-a71c-ba81280c6618
 - Tutorial Vids: not yet available - coming to:    youtube.com/@AndrasKetzer
@@ -1379,8 +1423,8 @@ Based on the method of tracking, we distingish 3 object-types:
 A and B are managed by Ninja Core - C is managed by the blueprint that wraps the Core (NinjaLive Actor)
 KEY FACT:  to track a given object,  BOTH ninja and the tracked object should be prepared.
 
-A. Interaction with Destrucibles: drive.google.com/file/d/1R_ORy-APBXsK-9w-U0W0GHSvEbdw8ofg
-B. Interaction with Particles: drive.google.com/file/d/1xHUirZpq0iRMx9_DThIpviWREt62QaI0
+A. Interaction with Destrucibles: Manual, Chapter 10
+B. Interaction with Particles: Manual, Chapter 5.6
 C. Interaction with Primitives & SkeletalMeshes: 2 methods:    OBJECT CLASS based or TAG based
 \-----------
 OBJECT CLASS based interaction: (ninja setup, object setup)
@@ -1458,7 +1502,7 @@ On the ninja side, we set a switch: /LiveComponent /LiveInputFields /HeightField
 On the object side: nothing to do - landscapes automatically expose height, if queried
 
 D. Destructible chunks generate SDF. This could be used to reconstruct chunk shape and velocity.
-See this text file to learn: drive.google.com/file/d/1R_ORy-APBXsK-9w-U0W0GHSvEbdw8ofg
+See this text file to learn: Manual, Chapter 10
 
 \-----------
 READING FIELDS - PROS AND CONS
@@ -1508,8 +1552,7 @@ ACTIVATION vs MOVIE RENDER QUEUE
 Cinematic Camera is usually not recognized as "player" / could not trigger Activation Volume.
 We better switch OFF Proximity based Activation completely before recording a sequence!
 
-Also, see LIVE-1 Manual Chapter 23:  Sequencer and MovieRenderQueue
-LIVE-2 Sequencer and MovieRenderQueue text: https://drive.google.com/file/d/1idy566GQdO9vldMv5ju6oJFx9S6UGwGe
+See Manual Chapter 13: Cinematics - with Sequencer and MovieRenderQueue
 
 \-----------
 InteractionVolume Size  vs  Sim Extents
@@ -1931,7 +1974,7 @@ Mist: Internal Volume Renderer
 
 
 
-#### {L.1.2, Tutorial02_Inputs_Interaction.umap, /Content /FluidNinjaLive /Levels /Starter}
+ {L.1.2, Tutorial02_Inputs_Interaction.umap, /Content /FluidNinjaLive /Levels /Starter}
 
 {S.1.2.0, Stage 0 INTRO}
 {M.1.2.0, #Description:  SIMULATION INPUTS and INTERACTION
@@ -2035,7 +2078,7 @@ Destructible Chunks as SDF (Technically: Geometry Collection)
 Destructible chunks generate distance field. This could be used to reconstruct chunk SHAPE and velocity.
 Ideal for stamping marks on surfaces - and generate surface aligned volumes.
 (See the included "Sand_Destructibles" level / SETUP-3)
-Destructible tut raw text: drive.google.com/file/d/1R_ORy-APBXsK-9w-U0W0GHSvEbdw8ofg
+Learn more at Manual Chapter 10, Destructibles
 See STAGE 7 for Destructible Chunks as Point input!
 }
 		{SE.1.2.5.5, Setup E Dynamic Collision Mask from Mesh SDF}
@@ -2054,7 +2097,7 @@ Reading particle position and velocity through DATA CHANNELS:
 On the particle side: a "Write to DataChannel" module should be added to the Emitter stack.
 
 Learn more here: SETTING UP A PARTICLE EMITTER AS LIVE-2 SIMULATION INPUT
-URL: drive.google.com/file/d/1xHUirZpq0iRMx9_DThIpviWREt62QaI0
+Manual, Chapter 5.6
 }
 		{SE.1.2.6.1, Setup A Particles Mapped on a World Facing surface}
 		{SE.1.2.6.2, Setup B Particles Mapped on a Camera Facing surface}
@@ -2217,7 +2260,7 @@ NinjaLive Component /LiveInputPoints /InteractionWithOwner /InteractionInclusive
 
 
 
-#### {L.1.3, Tutorial03_KeyConceptsForWater.umap, /Content /FluidNinjaLive /Levels /Starter}
+ {L.1.3, Tutorial03_KeyConceptsForWater.umap, /Content /FluidNinjaLive /Levels /Starter}
 
 {S.1.3.0, Stage 0 INTRO}
 {M.1.3.0, #Description:  KEY CONCEPTS
@@ -2232,7 +2275,7 @@ NinjaLive Component /LiveInputPoints /InteractionWithOwner /InteractionInclusive
 3      EXTENDING THE SIM AREA
 4      WAVE GENERATORS
 
-Text: 		drive.google.com/file/d/1EmvshC2BcgM6XIZxl1uEaid00mqY8uwB
+Text: 		Manual Chapter 6, Key Concepts for Water
 Early video: 	youtube.com/watch?v=O57K5Aog7Hs
 			(the video has not been made specifically for this level)
 }
@@ -2542,7 +2585,7 @@ Learn more about passive patterns at:
 
 
 
-#### {L.1.4, Tutorial04_Presets_Spawning_Caching.umap, /Content /FluidNinjaLive /Levels /Starter}
+ {L.1.4, Tutorial04_Presets_Spawning_Caching.umap, /Content /FluidNinjaLive /Levels /Starter}
 
 {S.1.4.0, Stage 0 INTRO}
 {M.1.4.0,#Description: 
@@ -2557,7 +2600,7 @@ Save and Load sim state via presets, Spawning, Starting the sim from a cached fr
 5.  CACHING HEIGHT-MAPS
 
 PRESETS & SPAWNING, DETAILED DESCRIPTION IN A TEXT FILE:
-https://drive.google.com/file/d/1xAROYlpT1XcwP0BAigrXdBCqVWFHDtMk
+Manual Chapter 7
 }
 
 {S.1.4.1, Stage 1 WRITING AND READING PRESETS IN-EDITOR}
@@ -2574,10 +2617,10 @@ Transfer the params from the "Water Tank" setup  to a new default setup, using a
 - Look up the editor UI button: /LiveComponent /LiveEditorTools /PresetWrite
 - Press the PresetWrite button
 
-We are done. System state TEMPORARILY saved to a preset. To PERMANANTLY store the saved params: right-click on the preset file in Content Browser and chose "Save" from the menu.
+We are done. System state TEMPORARILY saved to a preset. To PERMANENTLY store the saved params: right-click on the preset file in Content Browser and chose "Save" from the menu.
 
-2. drag a new, default ninja Actor onto the level, from the Content Browser
-    (Ninja Actor is located in the project ROOT: Content /FluidNinjaLive)
+2. drag a new, default ninja onto the level, from the Content Browser
+    (Live Actor is located in the project ROOT:  /Content /FluidNinjaLive /NinjaLive.uasset)
 
 3. we are loading preset data to the new, default ninja
 - On the opened Level, select the ninja candidate for system-state loading
@@ -2725,7 +2768,7 @@ LOADING THE BUFFERS:
 
 
 
-#### {L.1.5, Tutorial05_Tricks.umap, /Content /FluidNinjaLive /Levels /Starter}
+ {L.1.5, Tutorial05_Tricks.umap, /Content /FluidNinjaLive /Levels /Starter}
 
 {S.1.5.0, Stage 0 INTRO}
 {M.1.5.0, #Description:
@@ -2752,8 +2795,7 @@ Lower values mean less delay between updates (higher update frequency)!
 		{M.1.5.1.1, #Description: 
 Sequencer Control
 
-Tutorial text  -  Sequencer and MovieRenderQueue:
-https://drive.google.com/file/d/1idy566GQdO9vldMv5ju6oJFx9S6UGwGe
+Tutorial text  -  Manual Chapter 13 - Sequencer and MovieRenderQueue:
 
 The Sequence Controller in this setup is adjusting the "GlobalBrushSize" parameter in NinjaLiveComponent.
 
@@ -2794,7 +2836,17 @@ For example: pawn is causing ripples in water when running, but does not interac
 {S.1.5.5, Stage 5 Inverse Brush}
 {M.1.5.5, #Description: 
 Intended use: negative brush density ERASES positive density coming from other input sources (eg.: a bitmap)
+Key Param:
 /LiveComponent /LiveInputFields /InvertFieldAndPointDensity = 1
+
+Define Texture:
+/LiveComponent /LiveInputFields /Bitmaps /VelocityDensityFieldFromTexture
+
+Setups in the ninja project, using inverse brush method:
+- Fog_Mist.umap
+- Water_Sparse_Swamp.umap
+- Water_Sparse_River.umap / Setup 1 - Actor: NinjaLive_ClearWater
+- Water_Sparse_Rivers_Minimal.umap / Stage 3
 }
 
 {S.1.5.6, Stage 6 Brush - Velocity only No density}
@@ -2826,13 +2878,12 @@ Instead of rotating it 90', re-set the proportions!
 
 SCALING, EXAMPLE
 Say, we'd like to double the simulation size on the X axis
-1. Select NinjaLive Component
-2. Find LiveCore param group at Component Details
-3. Double the X component of "ExtentsXYZ" param
-4. Double the "Resolution X" param
-5. Select Ninja Actor
-6. Find LiveInteraction param group at Actor Details
-7. Double the X component of "InteractionVolumeSize" input field
+1. Select `Live Component` - and locate the Component Details Panel
+2. Double the X component of `/LiveComponent /LiveCore /ExtentsXYS` param
+3. Double the value of `/LiveComponent /LiveCore /ResolutionX` param
+4. Go back to `Live Actor` Details Panel (from the Component Details Panel)
+6. Find `LiveInteraction` param group at Actor Details
+7. Double the X component of `InteractionVolumeSize` input field
 }
 
 {S.1.5.8, Stage 8 Object size to Brush size}
@@ -2967,7 +3018,7 @@ Key params:
 
 
 
-#### {L.1.6, Tutorial06_SplineBasedRivers.umap, /Content /FluidNinjaLive /Levels /Starter}
+ {L.1.6, Tutorial06_SplineBasedRivers.umap, /Content /FluidNinjaLive /Levels /Starter}
 
 {S.1.6.0, Stage 0 INTRO}
 {M.1.6.0, #Description: 
@@ -3121,7 +3172,7 @@ KEY PARAMS:
 {F.2, /Content /FluidNinjaLive /Levels /CoreOnly}
 {M.2, #Description:  These Levels ares demonstrating how to use NinjaLive CORE Niagara System in Standalone Mode - without the wrapper Live Component.}
 
-#### {L.2.1, CamfaceTest.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
+ {L.2.1, CamfaceTest.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
 
 {S.2.1.1, Stage 1 External Visualization Mesh}
 {M.2.1.1, #Description:  
@@ -3132,12 +3183,12 @@ Using an external Visualization Mesh
 {S.2.1.2, Stage 2 Internal Visualization Mesh}
 {M.2.1.1, #Description: Using the Built-in VisualizationMesh}
 
-#### {L.2.2, Desert_SimplePainter_Landscape.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
+ {L.2.2, Desert_SimplePainter_Landscape.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
 
 {S.2.2.1, Stage 1 Driving Landscape Components with NinjaCore}
 {M.2.2.1, #Description:  Sending Sim position data to ALL landscape-tile-DynaMats, using the  "DriveExternalSystemsWithSimData" Utility.}
 
-#### {L.2.3, Desert_SimplePainter_Mesh.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
+ {L.2.3, Desert_SimplePainter_Mesh.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
 
 {S.2.3.1, Stage 1 In-Editor workflow with NinjaCore}
 {M.2.3.1, #Description:  Enforcing IN-EDITOR workflow using a component:
@@ -3145,21 +3196,21 @@ Using an external Visualization Mesh
 - Press "Editor Mode" button at Actor Details /Default
 - Once ninja is running in-editor: try to move objects}
 
-#### {L.2.4, Destructibles_as_SDF.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
+ {L.2.4, Destructibles_as_SDF.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
 
 {S.2.4.1, Stage 1 Reading Destructibles as SDF with NinjaCore}
 
-#### {L.2.5, LandscapeAlignedWater_ProtoVersion.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
+ {L.2.5, LandscapeAlignedWater_ProtoVersion.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
 
 {S.2.5.1, Stage 1 Landscape aligned water with NinjaCore}
 
-#### {L.2.6, River.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
+ {L.2.6, River.umap, /Content /FluidNinjaLive /Levels /CoreOnly}
 
 {S.2.6.1, Stage 1 Driving Spline river with NinjaCore}
 
 {F.3, /Content /FluidNinjaLive /Levels /Misc}
 
-#### {L.3.1, Destructibles_as_Points_CameraFacing.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.1, Destructibles_as_Points_CameraFacing.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.1.1, Stage 1 Demolition Test}
 {M.3.1.1, #Description: we can read CHAOS data two ways: (1) as points, (2) as distance field (SDF)
@@ -3167,19 +3218,19 @@ In this scene, we are using method-1 (points)
 Ninja Actor 1: AIRBORNE SMOKE, Input: POINTS, Orientation: Camera Aligned (Camera Facing, dynamically rotated)
 Ninja Actor 2: GROUND SMOKE, Input: POINTS, Orientation: World Aligned (World Facing, fixed rotation)}
 
-#### {L.3.2, Destructibles_as_Points_WorldAligned.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.2, Destructibles_as_Points_WorldAligned.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.2.1, Stage 1 Large scale destructible as Point input}
 {M.3.2.1, #Description: we can read CHAOS data two ways: (1) as points, (2) as distance field (SDF)
 In this scene, we are using method-1 (points)}
 
-#### {L.3.3, Destructibles_as_SDF_WorldAligned.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.3, Destructibles_as_SDF_WorldAligned.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.3.1, Stage 1 Large scale destructible as SDF input}
 {M.3.3.1, #Description: we can read CHAOS data two ways: (1) as points, (2) as distance field (SDF)
 In this scene, we are using method-2 (SDF)}
 
-#### {L.3.4, DrivingParticlesWithFluidsim.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.4, DrivingParticlesWithFluidsim.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {M.3.4, #Description: The Niagara systems on this level serve as proof-of-concept: Niagara could be driven by externally generated, real time fluidsim data. All systems are using a 2D grid setup: particle position is used as UV to map them with Fluidsim data, received from NinjaLive by the Texture Sample Niagara Module.}
 
@@ -3228,7 +3279,7 @@ via "Scale Color" modules, Velocity is used to control particle Acceleration}
 {S.3.4.11, Stage 11 Local Sim Density driven Particle Mesh Array}
 {M.3.4.11, #Description: Only NinjaLive Density data is used (no velocity) to drive Mesh Particle VERTICAL SCALE}
 
-#### {L.3.5, Lava_Sparse.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.5, Lava_Sparse.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.5.1, Stage 1 World Space Lava Setup}
 {M.3.5.1, #Description: Using TWO sim containers, combined
@@ -3239,27 +3290,27 @@ Lava Surface Material is combining the two sim outputs: for the TILED pattern, w
 {S.3.5.2, Stage 2 Local Space Lava Setup}
 {M.3.5.2, #Description:  On this stage, 2 sim containers are used: (A) calculating lava flow, (B) calculating steam flow}
 
-#### {L.3.6, PerformanceTest_Particles.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.6, PerformanceTest_Particles.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.6.1, Stage 1 Stress Test - 10K Particles as Input}
 
-#### {L.3.7, PerformanceTest_Primitives.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.7, PerformanceTest_Primitives.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.7.1, Stage 1 Stress test - 200 Primitive Meshes as Point Input}
 
-#### {L.3.8, PerformanceTest_SimContainers.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.8, PerformanceTest_SimContainers.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.8.1, Stage 1 Stress test - 49 ninja sim Actors running}
 
-#### {L.3.9, PerformanceTest_SimplePainterContainers.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.9, PerformanceTest_SimplePainterContainers.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.9.1, Stage 1 Stress test - 64 Simple Painter mode ninja actors running}
 
-#### {L.3.10, PerformanceTest_SkeletalMeshes.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.10, PerformanceTest_SkeletalMeshes.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.10.1, Stage 1 Stress test - 40 Skeletal Meshes inside the sim area}
 
-#### {L.3.11, VolumeDemo_FAKE.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.11, VolumeDemo_FAKE.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {M.3.11, #Description: This level showcases legacy setups from the "pre volumetrics" times.
 All tricks performed in the Output Material: 
@@ -3275,9 +3326,10 @@ Key Params:
 	{S.3.11.4, Stage 4 Red Smoke}
 	{S.3.11.5, Stage 5 Floor Pulse}
 	{S.3.11.6, Stage 6 Plasma Sphere}
+	{S.3.11.6, Stage 7 Smoke Chamber}
 
 
-#### {L.3.12, VolumeDemo_FVOL_Small.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.12, VolumeDemo_FVOL_Small.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {M.3.12, #Description: FOG VOLUMES, FVOL
 On this level:
@@ -3346,7 +3398,7 @@ Texture: this system is using a simple, static 2D texture as input - defined by 
 {SE.3.12.7.2, Setup B Box Mesh based Fog}
 {M.3.12.7.2, #Description: Volume Bounds: defined by a simple BOX StaticMesh, with an a Volumetric Fog Material applied.}
 
-#### {L.3.13, VolumeDemo_HVOL_Medium.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.13, VolumeDemo_HVOL_Medium.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.13.1, Stage 1 Medium Scale Landscape aligned Heterogeneous Volume}
 {M.3.13.1, #Description: Landscape aligned Heterogeneous Volume
@@ -3381,7 +3433,7 @@ Using the RVT DI method:
 
 
 
-#### {L.3.14, VolumeDemo_HVOL_Small.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.14, VolumeDemo_HVOL_Small.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.14.0, Stage 0 INTRO}
 {M.3.14.0, #Description: SMALL SIZE, FLUIDSIM DRIVEN HETEROGENEOUS VOLUMES
@@ -3610,7 +3662,7 @@ ORIGINAL NAME: STAGE CR-3
 
 
 
-#### {L.3.15, VolumeDemo_HVOL_Small_PASSIVE.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.15, VolumeDemo_HVOL_Small_PASSIVE.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.15.0, Stage 0 INTRO}
 {M.3.15.0, #Description:
@@ -3841,7 +3893,7 @@ ORIGINAL STAGE NAME: STAGE CR-3
 
 
 
-#### {L.3.16, VolumeDemo_SVOL_Medium.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.16, VolumeDemo_SVOL_Medium.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {M.3.16, #Description:	
 SmokeVolume area could extend beyond the sim covered area. The external areas are covered with noise-patterns, generated via SmokeVolume Material (see Noise options).
@@ -3866,7 +3918,7 @@ SmokeVolume Material is accessible at:
 
 
 
-#### {L.3.17, VolumeDemo_SVOL_Small.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.17, VolumeDemo_SVOL_Small.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.17.0, Stage 0 INTRO}
 {M.3.17.0, #Description: Smoke Volumes, SVOL
@@ -3901,7 +3953,7 @@ There are six Volmetric Smoke Material Instance States. States could be switched
 
 
 
-#### {L.3.18, Water_Dense_Rain.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.18, Water_Dense_Rain.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.18.1, Stage 1 Particle based rain ripples on a lake}
 {M.3.18.1, #Description: 
@@ -3919,7 +3971,7 @@ To influence how density ("water") accumulates on SDF surfaces:
 /LiveComponent /LiveInputFields /HeightFields /FluidStability /FluidRepelBySDF
 }
 
-#### {L.3.19, Water_Dense_vs_Sparse.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.19, Water_Dense_vs_Sparse.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.19.1, Stage 1 Dense water setup demo}
 {M.3.19.1, #Description: 
@@ -3939,7 +3991,7 @@ No elevation data at all - SDF contours used as Collision Mask
 /LiveComponent /LiveInputFields /MeshFields /UseAsCollisionMask = True
 }
 
-#### {L.3.20, Water_Sparse_DoubleSim_TilingWaves.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.20, Water_Sparse_DoubleSim_TilingWaves.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.20.1, Stage 1 Composite of two simulations in one Output Material}
 {M.3.20.1, #Description: 
@@ -3961,7 +4013,7 @@ Compare 3 Output Materials: (A) no tiles, (B) static tiles and (C) simulated til
 /LiveComponent /LiveOutputMaterials /PrimaryOutputMaterialSelected: INDEX 0, 1, 2
 }
 
-#### {L.3.21, Water_Sparse_DoubleSim_Vortex.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.21, Water_Sparse_DoubleSim_Vortex.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.21.1, Stage 1 Composite of two simulations in one Output Material}
 {M.3.21.1, #Description: 
@@ -3984,7 +4036,7 @@ Note2: there is an additional VolumeFog placed on Level ("VolumeFog_Mesh_DrivenB
 The VolumeFog Output Material is reading noise textures - the result is non-interactive.
 }
 
-#### {L.3.22, Water_Sparse_Sea_Ship.umap, /Content /FluidNinjaLive /Levels /Misc}
+ {L.3.22, Water_Sparse_Sea_Ship.umap, /Content /FluidNinjaLive /Levels /Misc}
 
 {S.3.22.1, Stage 1 Large Ship on Sea}
 {M.3.22.1, #Description: 

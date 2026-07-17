@@ -1,9 +1,9 @@
 ---
 doc_type: DESCRIPTOR
 title: "NinjaLive v2 Params Descriptor"
-date: 2026-05-30
+date: 2026-07-16
 source_url: "https://drive.google.com/file/d/1FedZwfW3iE1OgJr_Ye551TgaSLjqVUdj"
-doc_revision: "1.85"
+doc_revision: "1.86"
 version_min: null
 version_max: null
 media_urls: []
@@ -13,45 +13,49 @@ media_urls: []
 PARAMETERS OF THE FLUIDNINJA LIVE-2 ARCHITECTURE
 
 
-Text file version: 1.85
-Last modified: 30 May 2026
+**Updated:** 16 July 2026  
 
 
-Permanent Link to [this text file](https://drive.google.com/file/d/1FedZwfW3iE1OgJr_Ye551TgaSLjqVUdj)
-This text file is referenced by the FluidNinja LIVE-2 [Manual](https://drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa)
-
-
-\------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
 
 
 FACTS ABOUT THE SYNTAX OF THIS TEXT FILE:
 
 
-- This file uses MarkDown syntax. It could be viewed as simple text. Opening it with an MD viewer is recommended for visual clarity.
+- This file uses MarkDown syntax. It could be viewed as simple text. Opening it with an [MD viewer](https://markpad.dev) is recommended for visual clarity.
 - Parameter names are "telling names": not just a unique ID for a variable, but a brief reference to functionality.
 - Curly Braces {} are used exclusively for parameter descriptors. The first brace signs descriptor start, the second signs descriptor end.
-- Synonyms used in the text: sim = simulation, param = parameter = variable, bool = flag = switch = bool flag = bool switch, buffer = temporary data storage, ninja = fluidninja = fluidninja live = ninjalive = live, solver = pressure solver, dynamic output material instances = MIDs, HVOL = HVolume = Heterogeneous Volume, FVOL = FVolume = Fog Volume, SVOL = SVolume = Smoke Volume, velo = velocity
+- Synonyms used in the text: sim = simulation, param = parameter = variable, bool = flag = switch = bool flag = bool switch, buffer = temporary data storage, ninja = fluidninja = fluidninja live = ninjalive = live, solver = pressure solver, dynamic output material instances = MIDs, HVOL = HVolume = Heterogeneous Volume, FVOL = FVolume = Fog Volume, SVOL = SVolume = Smoke Volume, velo = velocity, util = utility, dev = developer
 
 
-\------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+
+## Table of Contents
+
+1. <a href="#1-introduction-to-parameters">Introduction to Parameters</a>
+2. <a href="#2-livecomponent-param-groups">LiveComponent Param Groups</a>
+3. <a href="#3-livecomponent-param-groups-with-param-names">LiveComponent Param Groups with Param Names</a>
+4. <a href="#4-livecomponent-param-groups-with-param-names-and-metadata">LiveComponent Param Groups with Param Names and Metadata</a>
+5. <a href="#5-liveactor-paramr-groups-with-param-names">LiveActor Param Groups with Param Names</a>
+6. <a href="#6-liveactor-paramr-groups-with-param-names-and-metadata">LiveActor Param Groups with Param Names and Metadata</a>
+7. <a href="#7-livecore-special-params">LiveCore Special Params</a>
 
 
-CONTENTS OF THIS TEXT FILE:
+---
+
+**EXTERNAL RESOURCES:**  
+- [Parameter Descriptor](https://drive.google.com/file/d/1FedZwfW3iE1OgJr_Ye551TgaSLjqVUdj), all Parameters of Live Component and Live Actor - with description.
+- [Level Content Descriptor](https://drive.google.com/file/d/15d3QdfleD1jDw8LJ3YQEGpAP-89b9bKa), Levels, Stages and Setups in the ninja project - with on-level texts.  
+- [Manual](https://drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa) for FluidNinja LIVE-2
+
+The above text files are using MarkDown syntax. 
+Recommended MarkDown Viewer: [MarkPad](https://markpad.dev)  
 
 
-CHAPTER 1: INTRODUCTION TO PARAMETERS
-CHAPTER 2: NINJALIVE COMPONENT PARAMETER GROUPS
-CHAPTER 3: NINJALIVE COMPONENT PARAMETER GROUPS WITH PARAMETER NAMES
-CHAPTER 4: NINJALIVE COMPONENT PARAMETER GROUPS WITH PARAMETER NAMES AND METADATA
-CHAPTER 5: NINJALIVE ACTOR PARAMETER GROUPS WITH PARAMETER NAMES
-CHAPTER 6: NINJALIVE ACTOR PARAMETER GROUPS WITH PARAMETER NAMES AND METADATA
-CHAPTER 7: NINJALIVE CORE SPECIAL PARAMETERS
+---------------------------------------------------------------------------------------
 
 
-\------------------------------------------------------------------------------------------------------------------------------
-
-
-### CHAPTER 1: INTRODUCTION TO PARAMETERS
+## 1. Introduction to Parameters
 
 
 FluidNinja LIVE-2 is a general purpose visual effect system for Unreal Engine. The LIVE-2 architecture is built on three wrapped layers: *NinjaLiveCore Niagara System*, wrapped by *NinjaLive Component*, optionally wrapped by *NinjaLive Actor*.
@@ -61,25 +65,27 @@ Depending on the use case - e.g. sand or water or smoke - the layered architectu
 
 
 - Niagara Core parameters are controlled by the wrapper component, we do not access them directly
-- Most control parameters reside in Live Component: 321 parameters and 8 Editor Functions
+- Most control parameters reside in Live Component: 323 parameters and 8 Editor Functions
 - Using Live Actor is optional, with 24 control parameters
 
 
-\------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 
-### CHAPTER 2: NINJALIVE COMPONENT PARAMETER GROUPS
+## 2. LiveComponent Param Groups
 
 
-The below parameter groups appear on the NinjaLive Component Details Panel and in the structure of Preset files.
-NOTE: the top-down order of parameter groups intuitively resembles the data flow: SETTINGS - INPUT - SIMULATION - OUTPUT
+The below parameter groups appear on the NinjaLive Component Details Panel and in the structure of Preset files. Note: the top-down order of param groups intuitively resembles the data flow: Input, Simulation, Output
 
 
 SYNTAX DEFINITION FOR GROUP LIST ITEMS:
-"Group" type list item: {G.group number, group name}
+`Group` type list item: `{G.group number, group name}`
 
+---
 
-LIST OF THE MAIN PARAMETER GROUPS
+LIST OF THE MAIN PARAMETER GROUPS  
 COUNT: 11 GROUPS LISTED
 
 
@@ -96,9 +102,10 @@ COUNT: 11 GROUPS LISTED
 - {G.11, LiveLegacy}
 
 
+---
 
 
-STRUCTURED LIST OF ALL PARAMETER GROUPS
+STRUCTURED LIST OF ALL PARAMETER GROUPS  
 COUNT: 51 GROUPS LISTED
 
 
@@ -168,42 +175,44 @@ COUNT: 51 GROUPS LISTED
 
 
 
-\------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 
-### CHAPTER 3: NINJALIVE COMPONENT PARAMETER GROUPS WITH PARAMETER NAMES
+## 3. LiveComponent Param Groups with Param Names
 
 
-The below parameter groups and parameters appear on the NinjaLive Component Details Panel and in the structure of Preset files.
-NOTE: the top-down order of parameter groups intuitively resembles the data flow: SETTINGS - INPUT - SIMULATION - OUTPUT
-
+The below parameter groups appear on the NinjaLive Component Details Panel and in the structure of Preset files. Note: the top-down order of param groups intuitively resembles the data flow: Input, Simulation, Output
 
 SYNTAX DEFINITION FOR COMPONENT PARAMETER LIST ITEMS:
-- "Group" type list item: {G.group number, group name}
-- "Parameter" type list item: {P.parameter number, parameter name, parameter type, default value}
+- `Group` type list item: 
+`{G.group number, group name}`
+- `Parameter` type list item: 
+`{P.parameter number, parameter name, parameter type, default value}`
 
 
-STRUCTURED LIST OF PARAMETER GROUPS WITH PARAMETER NAMES
-COUNT: 321 PARAMETERS AND 8 EDITOR FUNCTIONS LISTED IN 51 GROUPS
+STRUCTURED LIST OF PARAMETER GROUPS WITH PARAMETER NAMES  
+COUNT: 323 PARAMETERS AND 8 EDITOR FUNCTIONS LISTED IN 51 GROUPS
 
 
 - **{G.1, LiveCore}**
-- {G.1.0, Root}
-- {P.1.0.1, InitSystemStateFromPreset, BOOL, 0}
-- {P.1.0.2, Preset, DATA ASSET, -}
-- {P.1.0.3, DisableComponent, BOOL, 0}
-- {P.1.0.4, ResolutionX, INT, 256}
-- {P.1.0.5, ResolutionY, INT, 256}
-- {P.1.0.6, ExtentsXYZ, VEC3,(5,5,1)}
-- {P.1.0.7, ExtentsFromInteractionVolume, BOOL, 0}
-- {P.1.0.8, ShowExtents, BOOL, 0}
-- {P.1.0.9, SimplePainterMode, BOOL, 0}
-- {P.1.0.10, CameraFacing, BOOL, 0}
-- {P.1.0.11, CamFaceBillboard, BOOL, 0}
-- {P.1.0.12, SimSpeed, FLOAT, 1}
-- {P.1.0.13, IgnoreSystemRotation, BOOL, 1}
-- {P.1.0.14, UseUnrealNativeTick, BOOL, 1}
-- {P.1.0.15, FlushBuffersOnReinit, BOOL, 0}
+  - {G.1.0, Root}
+  - {P.1.0.1, InitSystemStateFromPreset, BOOL, 0}
+  - {P.1.0.2, Preset, DATA ASSET, -}
+  - {P.1.0.3, DisableComponent, BOOL, 0}
+  - {P.1.0.4, ResolutionX, INT, 256}
+  - {P.1.0.5, ResolutionY, INT, 256}
+  - {P.1.0.6, ExtentsXYZ, VEC3,(5,5,1)}
+  - {P.1.0.7, ExtentsFromInteractionVolume, BOOL, 0}
+  - {P.1.0.8, ShowExtents, BOOL, 0}
+  - {P.1.0.9, SimplePainterMode, BOOL, 0}
+  - {P.1.0.10, CameraFacing, BOOL, 0}
+  - {P.1.0.11, CamFaceBillboard, BOOL, 0}
+  - {P.1.0.12, SimSpeed, FLOAT, 1}
+  - {P.1.0.13, IgnoreSystemRotation, BOOL, 1}
+  - {P.1.0.14, UseUnrealNativeTick, BOOL, 1}
+  - {P.1.0.15, FlushBuffersOnReinit, BOOL, 0}
 
 - **{G.1.1, Performance}**
   - {P.1.1.1, PauseSimWhenNotVisible, BOOL, 1}
@@ -301,6 +310,7 @@ COUNT: 321 PARAMETERS AND 8 EDITOR FUNCTIONS LISTED IN 51 GROUPS
       - {P.3.1.1.5, DensityTxtOffsetY, FLOAT, 0}
       - {P.3.1.1.6, DensityTxtRandomOffset, FLOAT, 0}
       - {P.3.1.1.7, DensityTxtScale, FLOAT, 1}
+      - {P.3.1.1.8, VelocityDensityInputRenderTarget, RENDERTARGET, -}
 
     - **{G.3.1.2, VelocityFieldFromTexture}**
       - {P.3.1.2.1, VelocityOnlyInputTexture, TEXTURE,-}
@@ -308,6 +318,7 @@ COUNT: 321 PARAMETERS AND 8 EDITOR FUNCTIONS LISTED IN 51 GROUPS
       - {P.3.1.2.3, VeloInputOffsetSpeed, FLOAT, 0}
       - {P.3.1.2.4, VeloInputTile, FLOAT, 0}
       - {P.3.1.2.5, VeloRotate, FLOAT, 0}
+      - {P.3.1.2.6, VelocityOnlyInputRenderTarget, RENDERTARGET, -}
 
     - **{G.3.1.3, CollisionMaskFromTexture}**
       - {P.3.1.3.1, CollisionMaskTexture, TEXTURE, -}
@@ -655,21 +666,24 @@ COUNT: 321 PARAMETERS AND 8 EDITOR FUNCTIONS LISTED IN 51 GROUPS
 
 
 
-\------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 
-### CHAPTER 4: NINJALIVE COMPONENT PARAMETER GROUPS WITH PARAMETER NAMES AND METADATA
+## 4. LiveComponent Param Groups with Param Names and Metadata
 
 
-The below parameter groups and parameters appear on the NinjaLive Component Details Panel and in the structure of Preset files.
-NOTE: the top-down order of parameter groups intuitively resembles the data flow: SETTINGS - INPUT - SIMULATION - OUTPUT
-
+The below parameter groups appear on the NinjaLive Component Details Panel and in the structure of Preset files. Note: the top-down order of param groups intuitively resembles the data flow: Input, Simulation, Output
 
 SYNTAX DEFINITION FOR COMPONENT PARAMETER LIST ITEMS:
 
-- "Group" type list item: {G.group number, group name}
-- "Parameter" type list item: {P.parameter number, parameter name, parameter type, default value, usage type}
-- "Parameter Metadata" type list item: {M.parameter number, #metadata category: metadata}
+- `Group` type list item: 
+`{G.group number, group name}`
+- `Parameter` type list item: 
+`{P.parameter number, parameter name, parameter type, default value, usage type}`
+- `Parameter Metadata` type list item: 
+`{M.parameter number, #metadata category: metadata}`
 
 
 PARAMETER USAGE TYPES:
@@ -687,9 +701,10 @@ PARAMETER METADATA CATEGORY TYPES:
 - #Comment: arbitrary information
 - #Nesting: the parameter's hierarchical nesting in Live Component parameter groups
 
+---
 
-LIST OF PARAMETER GROUPS WITH PARAMETER NAMES AND METADATA
-COUNT: 321 PARAMETERS AND 8 EDITOR FUNCTIONS LISTED IN 51 GROUPS
+LIST OF PARAMETER GROUPS WITH PARAMETER NAMES AND METADATA  
+COUNT: 323 PARAMETERS AND 8 EDITOR FUNCTIONS LISTED IN 51 GROUPS
 
 
 {G.1, LiveCore}
@@ -1659,6 +1674,18 @@ and would like to avoid visual similarity, we should employ this randomizer.
 Scaling the Bitmap input.
 }
 
+{P.3.1.1.8, VelocityDensityInputRenderTarget, RENDERTARGET, - , BPONLY}
+{M.3.1.1.8, #Nesting: /LiveComponent /LiveInputFields /Bitmaps /VelocityDensityFieldFromTexture}
+{M.3.1.1.8, #Description: 
+RenderTargets can be used as sim density and sim velocity input. On this input, by default, only DENSITY is used, 
+and ninja looks for density data on the bitmap RED channel. IF TryToReadVelocityFromRGChannels = True, 
+VELOCITY is also being read on the RED and GREEN channels, and DENSITY on the BLUE channel. 
+
+NOTE: the bitmap based density input, by default, is "anchored" to World Space. In case we want the bitmap to MOVE together 
+with the simulation area (use Local Space), we need to set this variable: /LiveCore /WorldSpaceOffset /QuantizerStepSize = No SimBuffer Offset. 
+In order to make the bitmap input ROTATE together with the sim area we need to set /LiveCore /IgnoreSystemRotation = True.
+}
+
 
 {G.3.1.2, VelocityFieldFromTexture}
 
@@ -1705,6 +1732,16 @@ Scaling the Bitmap input.
 {M.3.1.2.5, #Description: 
 Rotating the original velocity vectors, coming from the bitmap. The parameter is using the 0-1 range, 
 this is mapped to a 0-360 degree vector rotation.
+}
+
+{P.3.1.2.6, VelocityOnlyInputRenderTarget, RENDERTARGET, - , BPONLY}
+{M.3.1.2.6, #Nesting: /LiveComponent /LiveInputFields /Bitmaps /VelocityFieldFromTexture}
+{M.3.1.2.6, #Description: 
+RenderTargets can be used as sim velocity input. On this input, by default, only VELOCITY is used, and ninja looks for 
+velocity on the RED and GREEN channels. NOTE: the bitmap based velocity input, by default, is "anchored" to World Space. 
+In case we want the bitmap to MOVE together with the simulation area (use Local Space), 
+we need to set this variable /LiveCore /WorldSpaceOffset /QuantizerStepSize = No SimBuffer Offset. 
+In order to make the bitmap input ROTATE together with the sim area we need to set /LiveCore /IgnoreSystemRotation = True.
 }
 
 
@@ -4479,23 +4516,26 @@ The frequency of sampling ninja fluid height buffer per second.
 
 
 
-\------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 
-### CHAPTER 5: NINJALIVE ACTOR PARAMETER GROUPS WITH PARAMETER NAMES
+## 5. LiveActor Param Groups with Param Names
 
 
 The below parameter groups and parameters appear on the NinjaLive Actor Details Panel and in the structure of Preset files.
-NOTE: the top-down order of parameter groups intuitively resembles the data flow: SETTINGS - INPUT - SIMULATION - OUTPUT
-
 
 SYNTAX DEFINITION FOR ACTOR PARAMETER LIST ITEMS:
 
-- "Group" type list item: {GA.Group number, group name}
-- "Parameter" type list item: {PA.Parameter number, parameter name, parameter type, default value}
+- `Group` type list item: 
+`{GA.Group number, group name}`
+- `Parameter` type list item: 
+`{PA.Parameter number, parameter name, parameter type, default value}`
 
+---
 
-STRUCTURED LIST OF PARAMETER GROUPS WITH PARAMETER NAMES
+STRUCTURED LIST OF PARAMETER GROUPS WITH PARAMETER NAMES  
 COUNT: 24 PARAMETERS LISTED IN 3 GROUPS
 
 
@@ -4538,21 +4578,25 @@ COUNT: 24 PARAMETERS LISTED IN 3 GROUPS
 
 
 
-\------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 
-### CHAPTER 6: NINJALIVE ACTOR PARAMETER GROUPS WITH PARAMETER NAMES AND METADATA
+## 6. LiveActor Param Groups with Param Names and Metadata
 
 
 The below parameter groups and parameters appear on the NinjaLive Actor Details Panel and in the structure of Preset files.
-NOTE: the top-down order of parameter groups intuitively resembles the data flow: SETTINGS - INPUT - SIMULATION - OUTPUT
 
 
 SYNTAX DEFINITION FOR ACTOR PARAMETER LIST ITEMS:
 
-- "Group" type list item: {GA.Group number, group name}
-- "Parameter" type list item: {PA.Parameter number, parameter name, parameter type, default value}
-- "Parameter Metadata" type list item: {MA.Parameter number, #metadata category: metadata}
+- `Group` type list item: 
+`{GA.Group number, group name}`
+- `Parameter` type list item: 
+`{PA.Parameter number, parameter name, parameter type, default value}`
+- `Parameter Metadata` type list item: 
+`{MA.Parameter number, #metadata category: metadata}`
 
 
 PARAMETER METADATA CATEGORY TYPES:
@@ -4561,8 +4605,9 @@ PARAMETER METADATA CATEGORY TYPES:
 - #Comment: arbitrary information
 - #Nesting: the parameter's hierarchical nesting in Live Actor parameter groups
 
+---
 
-LIST OF PARAMETER GROUPS WITH PARAMETER NAMES AND METADATA
+LIST OF PARAMETER GROUPS WITH PARAMETER NAMES AND METADATA  
 COUNT: 24 PARAMETERS LISTED IN 3 GROUPS
 
 
@@ -4819,17 +4864,19 @@ on a given name. Using this switch, we could force ninja to track ALL bones with
 
 
 
-\------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 
-### CHAPTER 7: NINJALIVE CORE SPECIAL PARAMETERS
+## 7. LiveCore Special Params
 
 
-Most LIVE-2 functions are packed into a Core Niagara System. User Parameters of the Core are controlled by the wrapper blueprint, we do not access them directly. While the wrapper successfully manages hundreds of simple Niagara User Parameters, there are FIVE komplex DATA INTERFACE structures in Niagara Core, that are (A) NOT exposed to blueprints and (B) tend to randomly lose input-field information on specific Unreal Editor operations. The data loss seems to be an Unreal Engine bug.
+Most LIVE-2 functions are packed into a Core Niagara System. User Parameters of the Core are controlled by the wrapper Live Component, we do not access them directly. While the wrapper successfully manages hundreds of simple Niagara User Parameters, there are FIVE komplex DATA INTERFACE structures in Niagara Core, that are (A) NOT exposed to blueprints and (B) tend to randomly lose input-field information on specific Unreal Editor operations. The data loss seems to be an Unreal Engine bug.
 
 
 *The nature of data loss:*
-The common aspect of the FIVE DATA INTERFACE structures: they are all komplex "user.parameters" that embed an other simple "user.parameter". The embedded user.parameter is typically an OBJECT, serving as INPUT for the data interface. For example, the "Spline" Data Interface needs a "SplineMesh Actor" Object as input. The wrapper (NinjaLive Component) collects the needed data (like a "SplineMesh Actor") and feeds this data into the OBJECT User.Parameter - then, the data interface uses this Object as input. Problem comes, when the Data Interface FORGETS the referenced input Object User Parameter, the input field resets to default "none", and we have to manually re-pick the Object User.Param again. Good news: data loss happens rarely and IN-EDITOR only. IN-GAME processes and packaged builds are not concerned.
+The common aspect of the FIVE DATA INTERFACE structures: they are all komplex "user.parameters" that embed an other simple "user.parameter". The embedded user.parameter is typically an OBJECT, serving as INPUT for the data interface. For example, the "Spline" Data Interface needs a "SplineMesh Actor" Object as input. The wrapper (Live Component) collects the needed data (like a "SplineMesh Actor") and feeds this data into the OBJECT User.Parameter - then, the data interface uses this Object as input. Problem comes, when the Data Interface FORGETS the referenced input Object User Parameter, the input field resets to default "none", and we have to manually re-pick the Object User.Param again. Good news: data loss happens rarely and IN-EDITOR only. IN-GAME processes and packaged builds are not concerned.
 
 
 *Editor operations that occasionally cause data loss:*
@@ -4846,17 +4893,13 @@ The common aspect of the FIVE DATA INTERFACE structures: they are all komplex "u
 - see this [screenshot](https://drive.google.com/file/d/1rAcAMiS2pY-VJa3RuahtWD3M-OlFZL5C)
 
 
-All params of Niagara Core are located under:
-*NinjaLive Component /User Parameters /DEBUG ONLY /...*
+All params of Niagara Core are located under this structure:
+/LiveComponent /UserParameters /DebugOnly /...
 
 
 **1. Fixing SPLINE input:**
 This is a Niagara Only User Parameter: not exposed to blueprints - but accessible at LiveComponent Details Panel, at:
 /LiveComponent /User Parameters /DebugOnly /LiveInputFields /SplineFields /Spline DATAINTERFACE
-
-WARNING: this is a complex Data Interface type User Parameter - referencing an other, "input object" type User Parameter. 
-As a result of an Unreal Bug, the Spline Data Interface tends to forget the referenced "input object" User Parameter when 
-we copy-paste setups. As a result, ninja can not access input objects and sample spline-data. 
 
 FIX: look up the Spline DATAINTERFACE at User Parameters,
 SET Spline User Parameter = User.SplineMeshActor OBJECT, 
@@ -4868,10 +4911,7 @@ SET Num LUT Steps = 4096}
 This is a Niagara Only User Parameter: not exposed to blueprints - but accessible at LiveComponent Details Panel, at:
 /LiveComponent /User Parameters /DebugOnly /LiveInputFields /Destructibles /GeometryCollection DATAINTERFACE
 
-WARNING: this is a complex Data Interface type User Parameter - referencing an other, "input object" type User Parameter. 
-As a result of an Unreal Bug, the GeometryCollection Data Interface tends to forget the referenced "input object" User Parameter when we copy-paste setups. As a result, ninja can not access input objects and sample GeometryCollection data. 
-
-FIX: look up the Spline DATAINTERFACE at User Parameters,
+FIX: look up the GeometryCollection DATAINTERFACE at User Parameters,
 SET Geometry Collection User Parameter = User.GeometryCollectionActor OBJECT
 
 
@@ -4879,13 +4919,10 @@ SET Geometry Collection User Parameter = User.GeometryCollectionActor OBJECT
 The Landscape Data Interface automatically picks input landscapes - it is not prone to the input object data loss bug.
 Known issues with Landscape DI: 
 
-(A) in Large World Coordinate (LWC) range (outside the 10x10 kilometers area around the world-origin) 
+In Large World Coordinate (LWC) range (outside the 10x10 kilometers area around the world-origin) 
 the Landscape auto-detect does not always work. Solution: we need to MANUALLY pick a landscape actor, under User Parameters. 
 SET Source Mode = Source
-SET Source Landscape = arbitrary ACTOR from the actual level
-
-(B) Landscape DI randomly returns NULL: rarely, there are frames when no landscape surface data is returned. 
-Solution: ninja automatically uses PREVIOUS FRAME data when Landscape DI fails.
+SET Source Landscape = (user defined ACTOR from the actual level)
 
 
 **4. Fixing RUNTIME VIRTUAL TEXTURE  height input:**
@@ -4898,13 +4935,12 @@ SET Texture User Parameter = User.RVTAsset OBJECT
 
 **5. Fixing DESTRUCTIBLES as point input:**
 Good news: the Chaos Destructibles Data Interface automatically picks input points - it is not prone to the input object data loss bug.
-But... there is AN OTHER setting that occasionally gets erased. There are three EVENT TYPES that could be used as Point Data Source: "trailing",  "breaking" and "collision". The Data Inerface defaults to "trailing"... but there are cases when we want to generate input with "collision" data. In this case, we need to manually edit param inputs.
+But... there is AN OTHER setting that occasionally gets erased. There are three EVENT TYPES that could be used as Point Data Source: "trailing",  "breaking" and "collision". The Data Interface defaults to "trailing"... but there are cases when we want to generate input with "collision" data. In this case, we need to manually edit param inputs.
 
 This is a Niagara Only User Parameter: not exposed to blueprints - but accessible at LiveComponent Details Panel, at:
 /Live Component /User Parameters /DebugOnly /LiveInputPoints /Destructibles /TrackedDestructiblesChaos DATAINTERFACE. 
 
 This parameter can be used to define the EVENT TYPE Chaos Data Interface uses to receive Destructible Chunk position data. 
-
 Event Types are "Trailing", "Collision" and "Breaking" - and we can find similarly named "Data Sources" at the interface. 
 Data Source: Collision Data, Breaking Data, Trailing Data
 
