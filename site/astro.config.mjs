@@ -68,7 +68,6 @@ export default defineConfig({
             { slug: 'parameters/index' },
             { slug: 'descriptors/ninjalive2-params' },
             { slug: 'descriptors/ninjalive2-content' },
-            { slug: 'descriptors/ninjalive2-limitations' },
           ],
         },
         {
