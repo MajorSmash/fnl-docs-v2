@@ -43,6 +43,24 @@ async function markdownFiles(directory) {
   return files;
 }
 
+async function allFiles(directory) {
+  let entries;
+  try {
+    entries = await readdir(directory, { withFileTypes: true });
+  } catch (error) {
+    if (error?.code === 'ENOENT') return [];
+    throw error;
+  }
+
+  const files = [];
+  for (const entry of entries) {
+    const entryPath = path.join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...(await allFiles(entryPath)));
+    else if (entry.isFile()) files.push(entryPath);
+  }
+  return files;
+}
+
 function frontmatterScalar(markdown, field, sourcePath) {
   const frontmatter = markdown.match(/^\uFEFF?---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n|$)/)?.[1];
   if (frontmatter === undefined) {
@@ -148,6 +166,25 @@ export async function verifyCorpusProvenance(repositoryRoot) {
       }
     } catch (error) {
       failures.push(error instanceof Error ? error.message : String(error));
+    }
+  }
+
+  // Site-layer set-topics content can SHADOW a guarded root source: Astro's
+  // glob loader only warns on duplicate documentIds, so a committed
+  // site/src/content/docs/set-topics/<slug>.mdx replaces the guarded page
+  // body without changing the built route set — route parity and source
+  // provenance both still pass. Only the whitelisted section index may live
+  // in the site-layer directory; every set-topic page body must come from a
+  // guarded root set-topics/ source.
+  const siteContentSetTopics = path.join(root, 'site', 'src', 'content', 'docs', 'set-topics');
+  const allowedSiteContent = new Set(['index.mdx']);
+  for (const file of await allFiles(siteContentSetTopics)) {
+    const withinSection = path.relative(siteContentSetTopics, file).replaceAll('\\', '/');
+    if (!allowedSiteContent.has(withinSection)) {
+      const relative = path.relative(root, file).replaceAll('\\', '/');
+      failures.push(
+        `${relative}: site-layer set-topics content is forbidden (only ${[...allowedSiteContent].join(', ')} is whitelisted) — set-topic pages must come from guarded root set-topics/ sources`,
+      );
     }
   }
 

@@ -30,8 +30,7 @@ jobs:
       - name: Log build and deployment snapshot
         run: echo "::notice title=Deployment snapshot::Building and deploying commit ${GITHUB_SHA}"
 
-      - name: Reject stale push snapshots
-        if: github.event_name != 'workflow_dispatch'
+      - name: Reject stale snapshots
         shell: bash
         run: |
           current_main="$(git ls-remote --exit-code origin refs/heads/main | awk '{print $1}')"

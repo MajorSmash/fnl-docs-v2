@@ -99,6 +99,25 @@ test('provenance guard fails a synthetic legacy-channel fixture in a temporary c
   });
 });
 
+test('provenance guard rejects site-layer set-topics content beyond the whitelisted index', async () => {
+  await temporaryDirectory('fnlkb-provenance-shadow-', async (root) => {
+    await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
+    const siteSection = path.join(root, 'site', 'src', 'content', 'docs', 'set-topics');
+    await mkdir(siteSection, { recursive: true });
+    await writeFile(path.join(siteSection, 'index.mdx'), '# Section index\n');
+    await writeFile(path.join(siteSection, 'valid.mdx'), '# Shadowing body\n');
+
+    await assert.rejects(
+      verifyCorpusProvenance(root),
+      /valid\.mdx: site-layer set-topics content is forbidden/,
+    );
+
+    await rm(path.join(siteSection, 'valid.mdx'));
+    const result = await verifyCorpusProvenance(root);
+    assert.equal(result.checkedFiles, 1);
+  });
+});
+
 test('provenance guard rejects flywheel-only public-discussion pages and an empty section', async () => {
   await temporaryDirectory('fnlkb-provenance-public-', async (root) => {
     await writeSetTopic(root, 'public-discussion.md', LIVE2_CHANNEL_IDS.publicDiscussion);
