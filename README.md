@@ -197,7 +197,16 @@ pnpm run verify:search
 
 A push to `main` runs [the GitHub Pages workflow](.github/workflows/deploy-pages.yml),
 which tests, type-checks, builds, rejects broken internal links, verifies the
-Pagefind corpus, and deploys `site/dist`.
+set-topic source provenance and Pagefind corpus, and deploys `site/dist`. The
+workflow prints the exact commit SHA it will build and deploy near the start of
+the job.
+
+> [!WARNING]
+> **Do not use “Re-run jobs” on an old deployment run as a recovery action.**
+> GitHub re-runs that run's original commit snapshot, not the current `main`, so
+> an old contaminated or otherwise obsolete tree can be rebuilt and published.
+> Recover by running this workflow with **workflow_dispatch on `main`**, or by
+> making a fresh push to `main`.
 
 ### GitHub Pages after ownership transfer
 
