@@ -1,6 +1,7 @@
 ---
 import { getEntry } from 'astro:content';
 import { sitePath } from '../lib/site-path.mjs';
+import { manualChaptersFromHeadings } from '../lib/manual-navigation.mjs';
 
 const manual = await getEntry('docs', 'manual/ninjalive2-manual');
 const headings = (manual?.rendered?.metadata?.headings ?? []) as Array<{
@@ -8,23 +9,17 @@ const headings = (manual?.rendered?.metadata?.headings ?? []) as Array<{
   slug: string;
   text: string;
 }>;
-const manualTitle = String(manual?.data.title ?? '').trim().toLocaleLowerCase();
-const chapters = headings.filter(
-  (heading) =>
-    heading.depth === 2 &&
-    heading.text.trim().toLocaleLowerCase() !== 'contents' &&
-    heading.text.trim().toLocaleLowerCase() !== manualTitle,
-);
+const chapters = manualChaptersFromHeadings(headings);
 ---
 
 {
   chapters.length ? (
     <ol class="chapter-grid not-content">
-      {chapters.map((heading) => (
+      {chapters.map((chapter) => (
         <li>
-          <a href={`${sitePath('manual/ninjalive2-manual/') }#${heading.slug}`}>
-            <span>{heading.text.match(/^\d+/)?.[0] ?? '•'}</span>
-            {heading.text.replace(/^\d+\.\s*/, '')}
+          <a href={`${sitePath('manual/ninjalive2-manual/') }#${chapter.slug}`}>
+            <span>{chapter.number}</span>
+            {chapter.title}
           </a>
         </li>
       ))}

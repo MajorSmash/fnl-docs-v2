@@ -1,8 +1,10 @@
 import sitemap from '@astrojs/sitemap';
-import { unified } from '@astrojs/markdown-remark';
+import { createMarkdownProcessor, unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
+import { readFile } from 'node:fs/promises';
 
+import { manualSidebarFromHeadings } from './src/lib/manual-navigation.mjs';
 import rehypeDocumentEnhancements from './src/plugins/rehype-document-enhancements.mjs';
 import remarkDocumentHeadings from './src/plugins/remark-document-headings.mjs';
 
@@ -14,6 +16,12 @@ function normalizeBase(value) {
 const base = normalizeBase(process.env.BASE_PATH ?? '/fnl-docs-v2');
 const site = process.env.SITE_URL ?? 'https://example.invalid';
 const ogImage = new URL(`${base || ''}/og.png`, site).href;
+const manualSource = await readFile(new URL('../manual/ninjalive2_manual.md', import.meta.url), 'utf8');
+const manualRenderer = await createMarkdownProcessor({
+  remarkPlugins: [remarkDocumentHeadings],
+});
+const manualHeadings = (await manualRenderer.render(manualSource)).metadata.headings;
+const manualSidebar = manualSidebarFromHeadings(manualHeadings);
 
 export default defineConfig({
   site,
@@ -31,6 +39,7 @@ export default defineConfig({
       customCss: ['./src/styles/custom.css'],
       components: {
         PageTitle: './src/components/PageTitle.astro',
+        Sidebar: './src/components/Sidebar.astro',
       },
       head: [
         { tag: 'meta', attrs: { name: 'color-scheme', content: 'dark light' } },
@@ -57,31 +66,22 @@ export default defineConfig({
         ],
       },
       sidebar: [
-        { label: 'Start here', items: [{ slug: 'index' }] },
+        ...manualSidebar,
         {
-          label: 'Manual',
-          items: [{ slug: 'manual/index' }, { slug: 'manual/ninjalive2-manual' }],
-        },
-        {
-          label: 'Parameters',
+          label: 'Reference & community',
+          collapsed: true,
           items: [
+            { slug: 'manual/index', label: 'Manual chapter index' },
             { slug: 'parameters/index' },
             { slug: 'descriptors/ninjalive2-params' },
             { slug: 'descriptors/ninjalive2-content' },
+            { slug: 'releases/index' },
+            { autogenerate: { directory: 'releases', collapsed: true } },
+            { slug: 'set-topics/index' },
+            { autogenerate: { directory: 'set-topics', collapsed: true } },
+            { slug: 'support/index' },
+            { autogenerate: { directory: 'support', collapsed: true } },
           ],
-        },
-        {
-          label: 'Releases',
-          items: [{ slug: 'releases/index' }, { autogenerate: { directory: 'releases' } }],
-        },
-        {
-          label: 'Set Topics',
-          collapsed: true,
-          items: [{ slug: 'set-topics/index' }, { autogenerate: { directory: 'set-topics' } }],
-        },
-        {
-          label: 'Support Q&A',
-          items: [{ slug: 'support/index' }, { autogenerate: { directory: 'support' } }],
         },
       ],
     }),
