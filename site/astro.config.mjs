@@ -36,6 +36,10 @@ export default defineConfig({
         'Canonical FluidNinja LIVE 2 manual, parameter references, release notes, set topics, and approved support answers.',
       pagefind: true,
       credits: true,
+      // The WP-5D left sidebar already provides chapter/subsection fragment
+      // navigation; the right "On this page" ToC duplicated it (Conductor
+      // call, 2026-07-18).
+      tableOfContents: false,
       customCss: ['./src/styles/custom.css'],
       components: {
         PageTitle: './src/components/PageTitle.astro',
