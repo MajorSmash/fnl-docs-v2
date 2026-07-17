@@ -30,6 +30,16 @@ jobs:
       - name: Log build and deployment snapshot
         run: echo "::notice title=Deployment snapshot::Building and deploying commit ${GITHUB_SHA}"
 
+      - name: Reject stale push snapshots
+        if: github.event_name != 'workflow_dispatch'
+        shell: bash
+        run: |
+          current_main="$(git ls-remote --exit-code origin refs/heads/main | awk '{print $1}')"
+          if [[ "$GITHUB_SHA" != "$current_main" ]]; then
+            echo "::error title=Stale deployment snapshot::Refusing to deploy ${GITHUB_SHA}; current origin/main is ${current_main}. Start a fresh run on main."
+            exit 1
+          fi
+
       - name: Set up pnpm
         uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
         with:

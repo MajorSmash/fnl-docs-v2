@@ -44,7 +44,7 @@ async function markdownFiles(directory) {
 }
 
 function frontmatterScalar(markdown, field, sourcePath) {
-  const frontmatter = markdown.match(/^---\s*\r?\n([\s\S]*?)\r?\n---\s*(?:\r?\n|$)/)?.[1];
+  const frontmatter = markdown.match(/^\uFEFF?---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n|$)/)?.[1];
   if (frontmatter === undefined) {
     throw new Error(`${sourcePath}: missing YAML frontmatter`);
   }
@@ -93,19 +93,45 @@ export function sourceChannelId(sourceUrl, sourcePath = 'set-topic source') {
   return segments[2];
 }
 
+export function setTopicRouteFromSource(relativePath) {
+  const normalized = relativePath.replaceAll('\\', '/');
+  if (!normalized.startsWith('set-topics/') || !/\.md$/i.test(normalized)) {
+    throw new Error(`${relativePath}: not a set-topics Markdown source path`);
+  }
+
+  // Mirrors documentId() in site/src/content.config.ts without importing the
+  // Astro/TypeScript config into this dependency-free CI guard.
+  const documentId = normalized
+    .replace(/\.md$/i, '')
+    .split('/')
+    .map((part) => part.replaceAll('_', '-'))
+    .join('/');
+  return `/${documentId}/`;
+}
+
 export async function verifyCorpusProvenance(repositoryRoot) {
   const root = path.resolve(repositoryRoot);
   const setTopicsRoot = path.join(root, 'set-topics');
   const files = (await markdownFiles(setTopicsRoot)).sort();
   if (files.length === 0) {
     throw new Error(
-      `Corpus provenance failed: no built set-topic source files found under ${setTopicsRoot}`,
+      `Corpus provenance failed: no set-topic source files found under ${setTopicsRoot}`,
     );
   }
 
   const failures = [];
+  const sourceRoutes = [];
+  const routeOwners = new Map();
   for (const file of files) {
     const relative = path.relative(root, file).replaceAll('\\', '/');
+    const route = setTopicRouteFromSource(relative);
+    sourceRoutes.push(route);
+    const previousOwner = routeOwners.get(route);
+    if (previousOwner) {
+      failures.push(`${relative}: route ${route} duplicates set-topic source ${previousOwner}`);
+    } else {
+      routeOwners.set(route, relative);
+    }
     try {
       const markdown = await readFile(file, 'utf8');
       const sourceUrl = frontmatterScalar(markdown, 'source_url', relative);
@@ -129,7 +155,7 @@ export async function verifyCorpusProvenance(repositoryRoot) {
     throw new Error(`Corpus provenance failed:\n- ${failures.join('\n- ')}`);
   }
 
-  return { checkedFiles: files.length };
+  return { checkedFiles: files.length, sourceRoutes };
 }
 
 async function main() {
@@ -137,7 +163,7 @@ async function main() {
   const repositoryRoot = path.resolve(process.argv[2] ?? defaultRoot);
   const { checkedFiles } = await verifyCorpusProvenance(repositoryRoot);
   console.log(
-    `PASS corpus provenance: ${checkedFiles} built set-topic source file(s) use admitted LIVE2 channels.`,
+    `PASS corpus provenance: ${checkedFiles} set-topic source file(s) use admitted LIVE2 channels.`,
   );
 }
 

@@ -199,7 +199,8 @@ A push to `main` runs [the GitHub Pages workflow](.github/workflows/deploy-pages
 which tests, type-checks, builds, rejects broken internal links, verifies the
 set-topic source provenance and Pagefind corpus, and deploys `site/dist`. The
 workflow prints the exact commit SHA it will build and deploy near the start of
-the job.
+the job. For push-triggered runs, it also compares that SHA with the current
+`origin/main` head and refuses to deploy a stale snapshot.
 
 > [!WARNING]
 > **Do not use “Re-run jobs” on an old deployment run as a recovery action.**

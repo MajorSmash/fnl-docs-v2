@@ -5,6 +5,8 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
+import { verifyCorpusProvenance } from './verify-corpus-provenance.mjs';
+
 const contentTypes = {
   '.css': 'text/css; charset=utf-8',
   '.html': 'text/html; charset=utf-8',
@@ -141,6 +143,37 @@ export function assertIndexedPageCount(indexablePageCount, pagefindPageCount) {
   }
 }
 
+export const SET_TOPIC_ROUTE_WHITELIST = new Set(['/set-topics/']);
+
+export function assertSetTopicRouteParity(sourceRoutes, builtPages) {
+  const guardedRoutes = new Set(sourceRoutes);
+  const builtRoutes = new Set(
+    builtPages
+      .map((page) => page.route)
+      .filter(
+        (route) =>
+          route.startsWith('/set-topics/') && !SET_TOPIC_ROUTE_WHITELIST.has(route),
+      ),
+  );
+  const missingBuiltRoutes = [...guardedRoutes].filter((route) => !builtRoutes.has(route)).sort();
+  const unguardedBuiltRoutes = [...builtRoutes].filter((route) => !guardedRoutes.has(route)).sort();
+
+  if (missingBuiltRoutes.length > 0 || unguardedBuiltRoutes.length > 0) {
+    const details = [];
+    if (missingBuiltRoutes.length > 0) {
+      details.push(
+        `guarded set-topic source route(s) missing from build:\n- ${missingBuiltRoutes.join('\n- ')}`,
+      );
+    }
+    if (unguardedBuiltRoutes.length > 0) {
+      details.push(
+        `built set-topic route(s) without guarded corpus sources:\n- ${unguardedBuiltRoutes.join('\n- ')}`,
+      );
+    }
+    throw new Error(`Set-topic source/build parity failed:\n${details.join('\n')}`);
+  }
+}
+
 function canonicalRoute(value) {
   let route = value.replace(/\/{2,}/g, '/');
   if (route.endsWith('/index.html')) route = route.slice(0, -'index.html'.length);
@@ -191,13 +224,16 @@ async function closeServer(server) {
   );
 }
 
-export async function verifySearch(distDirectory, configuredBase) {
+export async function verifySearch(distDirectory, configuredBase, repositoryRoot) {
   const dist = path.resolve(distDirectory);
   const pagefindDir = path.join(dist, 'pagefind');
   const pagefindModule = path.join(pagefindDir, 'pagefind.js');
   await access(pagefindModule);
 
   const corpus = await inspectBuiltCorpus(dist);
+  const defaultRepositoryRoot = fileURLToPath(new URL('../../', import.meta.url));
+  const provenance = await verifyCorpusProvenance(repositoryRoot ?? defaultRepositoryRoot);
+  assertSetTopicRouteParity(provenance.sourceRoutes, corpus.pages);
   const pagefindPageCount = await readPagefindPageCount(pagefindDir);
   assertIndexedPageCount(corpus.indexablePageCount, pagefindPageCount);
 
@@ -243,6 +279,9 @@ export async function verifySearch(distDirectory, configuredBase) {
   console.log(
     `PASS Pagefind count: ${pagefindPageCount}/${corpus.indexablePageCount} indexable built pages ` +
       `(${corpus.builtPageCount} HTML pages total).`,
+  );
+  console.log(
+    `PASS set-topic parity: ${provenance.checkedFiles} guarded source route(s) match the build.`,
   );
   console.log(`Pagefind API verified against ${path.relative(process.cwd(), pagefindDir)}.`);
   return corpus;
