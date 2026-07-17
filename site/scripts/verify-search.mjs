@@ -13,12 +13,18 @@ await access(pagefindModule);
 const configuredBase = String(process.env.BASE_PATH ?? '/fnl-docs-v2')
   .replace(/^\/+|\/+$/g, '');
 const base = configuredBase ? `/${configuredBase}/` : '/';
+// Every query term below is verified present in BOTH the manual and at least
+// one active set-topic. This list is coupled to corpus curation by design
+// (the deploy must fail rather than ship a search index that cannot find
+// core content) — but when curation changes the corpus, THIS LIST is what
+// needs updating, not the corpus. It last broke on 2026-07-17 when the v1
+// purge removed the set-topics behind four of the five original queries.
 const queries = [
-  { query: 'water meshes', expected: ['/manual/', '/set-topics/'] },
   { query: 'volumetrics', expected: ['/manual/', '/set-topics/'] },
-  { query: 'simulation resolution', expected: ['/manual/', '/set-topics/'] },
-  { query: 'movie render queue', expected: ['/manual/', '/set-topics/'] },
-  { query: 'volume fog', expected: ['/manual/', '/set-topics/'] },
+  { query: 'terrain', expected: ['/manual/', '/set-topics/'] },
+  { query: 'preset', expected: ['/manual/', '/set-topics/'] },
+  { query: 'beta', expected: ['/manual/', '/set-topics/'] },
+  { query: 'documentation', expected: ['/manual/', '/set-topics/'] },
 ];
 
 const contentTypes = {
