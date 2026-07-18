@@ -28,10 +28,19 @@ export default defineConfig({
   base,
   output: 'static',
   trailingSlash: 'always',
+  redirects: {
+    '/': `${base}/manual/ninjalive2-manual/`,
+  },
   integrations: [
     sitemap(),
     starlight({
       title: 'FluidNinja LIVE 2 Docs',
+      logo: {
+        src: './src/assets/fluidninja-live-2-logo.png',
+        alt: 'FluidNinja LIVE 2',
+        replacesTitle: true,
+      },
+      favicon: '/favicon.png',
       description:
         'Canonical FluidNinja LIVE 2 manual, parameter references, release notes, set topics, and approved support answers.',
       pagefind: true,
@@ -45,9 +54,11 @@ export default defineConfig({
         PageTitle: './src/components/PageTitle.astro',
         Pagination: './src/components/Pagination.astro',
         Sidebar: './src/components/Sidebar.astro',
+        ThemeProvider: './src/components/ThemeProvider.astro',
+        ThemeSelect: './src/components/ThemeSelect.astro',
       },
       head: [
-        { tag: 'meta', attrs: { name: 'color-scheme', content: 'dark light' } },
+        { tag: 'meta', attrs: { name: 'color-scheme', content: 'dark' } },
         { tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
         { tag: 'meta', attrs: { property: 'og:image', content: ogImage } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
@@ -73,19 +84,36 @@ export default defineConfig({
       sidebar: [
         ...manualSidebar,
         {
-          label: 'Reference & community',
+          label: 'Parameters',
           collapsed: true,
           items: [
-            { slug: 'manual/index', label: 'Manual chapter index' },
             { slug: 'parameters/index' },
             { slug: 'descriptors/ninjalive2-params' },
             { slug: 'descriptors/ninjalive2-content' },
-            { slug: 'releases/index' },
-            { autogenerate: { directory: 'releases', collapsed: true } },
+          ],
+        },
+        {
+          label: 'Set Topics',
+          collapsed: true,
+          items: [
             { slug: 'set-topics/index' },
             { autogenerate: { directory: 'set-topics', collapsed: true } },
+          ],
+        },
+        {
+          label: 'Q&A / Support',
+          collapsed: true,
+          items: [
             { slug: 'support/index' },
             { autogenerate: { directory: 'support', collapsed: true } },
+          ],
+        },
+        {
+          label: 'Releases',
+          collapsed: true,
+          items: [
+            { slug: 'releases/index' },
+            { autogenerate: { directory: 'releases', collapsed: true } },
           ],
         },
       ],
