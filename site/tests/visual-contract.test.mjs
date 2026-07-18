@@ -13,7 +13,7 @@ async function pngDimensions(url) {
 
 test('WP-5F brand and reading-density contract remains explicit', () => {
   assert.match(css, /--fnl-red:\s*#d82f35/i);
-  assert.match(css, /--fnl-link:\s*#7898bd/i);
+  assert.match(css, /--fnl-link:\s*#6080a8/i);
   assert.match(css, /--sl-line-height:\s*1\.55/);
   assert.match(css, /--sl-content-width:\s*54rem/);
   assert.match(css, /body\s*{[^}]*background:\s*var\(--sl-color-bg\)/s);
