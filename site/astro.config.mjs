@@ -87,9 +87,7 @@ export default defineConfig({
           label: 'Parameters',
           collapsed: true,
           items: [
-            { slug: 'parameters/index' },
-            { slug: 'descriptors/ninjalive2-params' },
-            { slug: 'descriptors/ninjalive2-content' },
+            { label: 'Parameter reference', slug: 'parameters/index' },
           ],
         },
         {

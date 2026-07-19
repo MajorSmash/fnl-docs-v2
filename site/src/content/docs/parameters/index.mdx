@@ -1,17 +1,15 @@
 ---
-title: Parameters & descriptors
-description: Canonical parameter, content, and limitations references for FluidNinja LIVE 2.
+title: Parameter reference
+description: Browse and search FluidNinja LIVE 2 component and actor parameters.
 sidebar:
   hidden: true
 ---
 
-import DescriptorIndex from '../../../components/DescriptorIndex.astro';
+import ParameterReference from '../../../components/ParameterReference.astro';
+import { sitePath } from '../../../lib/site-path.mjs';
 
-Use these references when you need exact parameter names, project content locations, or a precise statement of current limitations.
+Browse the parameters exposed by NinjaLive Component and NinjaLive Actor. Filter by a parameter name or words from its description, or jump straight to a group; every parameter heading is a permanent deep link.
 
-The descriptor grammar is preserved in source and presented here as structured, scannable list items:
+<ParameterReference />
 
-- `{G.}` identifies a parameter group.
-- `{P.}` identifies an individual parameter and its metadata.
-
-<DescriptorIndex />
+The <a href={sitePath('descriptors/ninjalive2-content/')}>content descriptor</a> remains available in its canonical machine-oriented form. Its folder/level/stage/setup hierarchy is a different grammar from parameter declarations, so it is not interpreted by this parameter parser.

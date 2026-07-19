@@ -1,0 +1,289 @@
+---
+import descriptorSource from '../../../descriptors/ninjalive2_params.md?raw';
+import {
+  formatDescriptorBuildSummary,
+  parseParameterDescriptor,
+} from '../lib/parameter-descriptor.mjs';
+import { parameterSearchText } from '../lib/parameter-filter.mjs';
+import { sitePath } from '../lib/site-path.mjs';
+
+type Parameter = {
+  anchor: string;
+  comments: string[];
+  default: string;
+  description: string;
+  group: string;
+  id: string;
+  legacyNames: string[];
+  metadata: Record<string, string[]>;
+  name: string;
+  niagaraNames: string[];
+  sourceKind: string;
+  type: string;
+  usage: string;
+};
+
+type ParameterReference = {
+  categories: Array<{
+    anchor: string;
+    label: string;
+    parameters: Parameter[];
+    scope: string;
+  }>;
+  counts: {
+    actorParameters: number;
+    componentParameters: number;
+    editorFunctions: number;
+    fallbackRecords: number;
+    totalParameters: number;
+  };
+  fallbacks: Array<{ kind?: string; raw: string; reason: string; scope?: string }>;
+  warnings: string[];
+};
+
+const reference = parseParameterDescriptor(descriptorSource) as ParameterReference;
+
+console.info(formatDescriptorBuildSummary(reference));
+for (const warning of reference.warnings) console.warn(`[parameters] ${warning}`);
+for (const fallback of reference.fallbacks) {
+  const excerpt = fallback.raw.split('\n', 1)[0].slice(0, 180);
+  console.warn(
+    `[parameters] Raw fallback (${fallback.scope ?? 'unknown scope'}, ` +
+      `${fallback.kind ?? 'unknown kind'}): ${fallback.reason}; ${excerpt}`,
+  );
+}
+
+const usageLabels: Record<string, string> = {
+  BPONLY: 'Blueprint only',
+  'BP-NIA': 'Blueprint + Niagara',
+  NIAGARAONLY: 'Niagara only',
+};
+
+function useful(values: unknown): string[] {
+  if (!Array.isArray(values)) return [];
+  return values.filter(
+    (value): value is string => typeof value === 'string' && value.length > 0 && value !== '-',
+  );
+}
+---
+
+<div class="parameter-reference not-content" data-parameter-reference>
+  <div class="parameter-summary" aria-label="Parameter reference summary">
+    <span><strong>{reference.counts.componentParameters}</strong> component parameters</span>
+    <span><strong>{reference.counts.editorFunctions}</strong> editor functions</span>
+    <span><strong>{reference.counts.actorParameters}</strong> actor parameters</span>
+    <a href={sitePath('descriptors/ninjalive2-params/')}>View raw descriptor</a>
+  </div>
+
+  <label class="parameter-search" for="parameter-filter">
+    <span>Find a parameter by name or description</span>
+    <input
+      id="parameter-filter"
+      type="search"
+      inputmode="search"
+      placeholder="Try ResolutionX, pressure solver, camera facing…"
+      autocomplete="off"
+      aria-describedby="parameter-count"
+    />
+  </label>
+  <div class="parameter-filter-status">
+    <p id="parameter-count" class="parameter-count" aria-live="polite">
+      {reference.counts.totalParameters} parameters shown
+    </p>
+    <button class="parameter-clear" type="button" hidden>Clear filter</button>
+  </div>
+
+  <nav class="parameter-groups" aria-label="Parameter groups">
+    <p>Jump to a group</p>
+    <ul>
+      {
+        reference.categories.map((category) => (
+          <li data-group-link={category.anchor}>
+            <a href={`#${category.anchor}`}>
+              <span>{category.label}</span>
+              <small>{category.scope === 'Live Actor' ? 'Actor' : category.parameters.length}</small>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="parameter-groups-empty" hidden>
+    No parameters match this filter. Try part of a name or a broader term.
+  </div>
+
+  {
+    reference.categories.map((category) => (
+      <section
+        class="parameter-group"
+        id={category.anchor}
+        data-parameter-group={category.anchor}
+      >
+        <header>
+          <div>
+            <span class="eyebrow">{category.scope}</span>
+            <h2>{category.label}</h2>
+          </div>
+          <span>{category.parameters.length} entries</span>
+        </header>
+
+        <div class="parameter-list">
+          {category.parameters.map((parameter) => {
+            const comments = useful(parameter.comments);
+            const niagaraNames = useful(parameter.niagaraNames);
+            const legacyNames = useful(parameter.legacyNames);
+            const extraMetadata = Object.entries(parameter.metadata).filter(
+              ([key, values]) =>
+                !['comment', 'description', 'legacyname', 'nesting', 'niagaraname'].includes(key) &&
+                useful(values).length,
+            );
+            const hasDetails = Boolean(
+              comments.length || niagaraNames.length || legacyNames.length || extraMetadata.length,
+            );
+
+            return (
+              <article
+                class="parameter-card"
+                id={parameter.anchor}
+                data-parameter-card
+                data-group={category.anchor}
+                data-parameter-search={parameterSearchText(parameter.name, parameter.description)}
+              >
+                <header class="parameter-card-heading">
+                  <div>
+                    <span class="parameter-id">{parameter.sourceKind}.{parameter.id}</span>
+                    <h3>{parameter.name}</h3>
+                  </div>
+                  <a
+                    class="parameter-anchor"
+                    href={`#${parameter.anchor}`}
+                    aria-label={`Link to ${parameter.name}`}
+                    title={`Link to ${parameter.name}`}
+                  >
+                    #
+                  </a>
+                </header>
+
+                <dl class="parameter-facts">
+                  <div>
+                    <dt>Type</dt>
+                    <dd>{parameter.type}</dd>
+                  </div>
+                  <div>
+                    <dt>Default</dt>
+                    <dd>{parameter.default}</dd>
+                  </div>
+                  <div>
+                    <dt>Available in</dt>
+                    <dd>{usageLabels[parameter.usage] ?? parameter.usage}</dd>
+                  </div>
+                  <div>
+                    <dt>Group</dt>
+                    <dd>{parameter.group}</dd>
+                  </div>
+                </dl>
+
+                <p class="parameter-description">{parameter.description}</p>
+
+                {hasDetails && (
+                  <details class="parameter-details">
+                    <summary>Names, values, and notes</summary>
+                    <dl>
+                      {comments.length > 0 && (
+                        <div>
+                          <dt>{parameter.type.includes('ENUM') ? 'Values / notes' : 'Notes'}</dt>
+                          {comments.map((value) => <dd>{value}</dd>)}
+                        </div>
+                      )}
+                      {niagaraNames.length > 0 && (
+                        <div>
+                          <dt>Niagara name</dt>
+                          {niagaraNames.map((value) => <dd><code>{value}</code></dd>)}
+                        </div>
+                      )}
+                      {legacyNames.length > 0 && (
+                        <div>
+                          <dt>Legacy name</dt>
+                          {legacyNames.map((value) => <dd><code>{value}</code></dd>)}
+                        </div>
+                      )}
+                      {extraMetadata.map(([key, values]) => (
+                        <div>
+                          <dt>{key}</dt>
+                          {useful(values).map((value) => <dd>{value}</dd>)}
+                        </div>
+                      ))}
+                    </dl>
+                  </details>
+                )}
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    ))
+  }
+
+  {
+    reference.fallbacks.length > 0 && (
+      <section class="parameter-fallbacks" id="unparsed-parameter-records">
+        <h2>Raw fallback records</h2>
+        <p>
+          These {reference.fallbacks.length} descriptor records could not be interpreted safely. They
+          are shown verbatim instead of being dropped.
+        </p>
+        {reference.fallbacks.map((fallback) => (
+          <article>
+            <strong>{fallback.reason}</strong>
+            <pre>{fallback.raw}</pre>
+          </article>
+        ))}
+      </section>
+    )
+  }
+</div>
+
+<script>
+  import { matchesParameterSearch } from '../lib/parameter-filter.mjs';
+
+  const root = document.querySelector<HTMLElement>('[data-parameter-reference]');
+  const input = root?.querySelector<HTMLInputElement>('#parameter-filter');
+  const count = root?.querySelector<HTMLElement>('#parameter-count');
+  const clear = root?.querySelector<HTMLButtonElement>('.parameter-clear');
+  const empty = root?.querySelector<HTMLElement>('.parameter-groups-empty');
+  const cards = [...(root?.querySelectorAll<HTMLElement>('[data-parameter-card]') ?? [])];
+  const groups = [...(root?.querySelectorAll<HTMLElement>('[data-parameter-group]') ?? [])];
+  const groupLinks = [...(root?.querySelectorAll<HTMLElement>('[data-group-link]') ?? [])];
+
+  function applyFilter() {
+    const query = input?.value.trim().toLocaleLowerCase() ?? '';
+    let visible = 0;
+
+    for (const card of cards) {
+      const show = matchesParameterSearch(card.dataset.parameterSearch, query);
+      card.hidden = !show;
+      if (show) visible += 1;
+    }
+
+    for (const group of groups) {
+      const groupVisible = group.querySelector('[data-parameter-card]:not([hidden])') != null;
+      group.hidden = !groupVisible;
+      const anchor = group.dataset.parameterGroup;
+      const link = groupLinks.find((item) => item.dataset.groupLink === anchor);
+      if (link) link.hidden = !groupVisible;
+    }
+
+    if (count) count.textContent = `${visible} ${visible === 1 ? 'parameter' : 'parameters'} shown`;
+    if (clear) clear.hidden = !query;
+    if (empty) empty.hidden = visible !== 0;
+  }
+
+  input?.addEventListener('input', applyFilter);
+  clear?.addEventListener('click', () => {
+    if (!input) return;
+    input.value = '';
+    applyFilter();
+    input.focus();
+  });
+</script>
