@@ -1,9 +1,9 @@
 ---
 doc_type: MANUAL
 title: "FluidNinja LIVE-2 Manual"
-date: 2026-07-17
+date: 2026-07-19
 source_url: "https://drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa"
-doc_revision: "2.01"
+doc_revision: "2.02"
 version_min: null
 version_max: null
 media_urls: []
@@ -11,7 +11,7 @@ media_urls: []
 
 # FLUIDNINJA LIVE-2 MANUAL
 
-**Updated:** 17 July 2026  
+**Updated:** 19 July 2026  
 This document uses MarkDown syntax - opening it with an [MD viewer](https://markpad.dev) results formatted text.
 
 ---
@@ -23,7 +23,7 @@ Following three years of development, FluidNinja LIVE-2 is about to be released 
 - A Playable LIVE-2 [Demo Build](https://fluidninja.itch.io/fluidninja-live-2-demo) is also available  
 - The Project Homepage at [FAB](https://www.fab.com/listings/80fcf53e-49f7-4635-a71c-ba81280c6618) is distributing LIVE-1, until LIVE-2 is officially released. 
 Learn more about the transition at <a href="#15-live-1-vs-live-2">Chapter 15</a>
-- Support: andras.ketzer@gmail.com  
+- Support: andras.ketzer@gmail.com
 
 ---------------------------------------------------------------------------------------
 
@@ -1781,7 +1781,7 @@ Example asset in the ninja project:
       - on the Details Panel, set the "Write to Datachannel" bool flag to TRUE
 
 3. the "Write to DataChannel" module is active, with OPTIONS on the Detail Panel UI
-      - allocation count: set any number > 0 (e.g. 1000)
+      - allocation count: set any value > 0 (e.g. 1000)
       - set the "Visible to CPU systems" and "Visible to GPU systems" flags to TRUE
       - set the "Channel" field to `NinjaDataChannel1`
 
@@ -2822,7 +2822,7 @@ KEY PARAMS:
 **Accessing Chaos Destructibles with Fluidninja LIVE-2**
 
 In this Chapter:
-- 10.1 <a href="#101-intro">Intro</a>
+- 10.1 <a href="#101-chaos-intro">Chaos Intro</a>
 - 10.2 <a href="#102-included-examples">Included examples</a>
 - 10.3 <a href="#103-methods">Methods</a>
 - 10.4 <a href="#104-setting-up-method-1">Setting up Method 1</a>
@@ -2833,7 +2833,7 @@ In this Chapter:
 
 ---
 
-### 10.1 Intro
+### 10.1 Chaos Intro
 
 Chaos is Unreal's dedicated system for cached and dynamic simulations for soft & rigid bodies. In this document, we are discussing dynamic rigid body simulations exclusively / ignoring cached simulations and soft body simulations.
 
@@ -3244,38 +3244,161 @@ See the `XDistanceFade` parameter-group in the VolumeSmoke Material Instance, wi
 
 ## 12. Performance
 
-**Performance and Optimization**
+**Performance and Optimization - Intro**
 
-Ninja is using a Niagara based 2D simulation Core to drive 3D visualization systems. Core performance is optimal: a 2K sim with multiple inputs (Particles on Data Channels, Mesh SDF and Landscape elevation samplers) costs 1.2 millisec per frame on a **RTX3080**. See this [Profiler Screenshot](https://ibb.co/pjKVVTRY). A 256px sim with single input (bitmap) costs 0.023 millisec per frame.
-*(For comparison: running our game on 60 FPS means a 16.7 ms frame budget)*
+Ninja is a scalable: it could be set up to run on low end hardware - or deliver komplex setups on the high end - or render Cinematic shots in 4K.
 
-By carefully picking visualization methods, we could run multiple simulation containers above 250 FPS on a **GTX1070** - see this [Performance Test Video](https://youtu.be/HZv1mp5kNmM?si=V1y9iYwsT7VbeCrf) on YouTube, showcasing 12 different scenes.
+Fact: while running a lightweight niagara based 2D simulation core, we are driving heavy 3D visualization systems with the sim data. As a rule of thumb, it is mostly the *visualization*, that determines overall performance. 
 
-The same demo levels - without specific low-end optimization - run between 30-60 FPS on a **SteamDeck** - see this [Screener](https://youtu.be/kCFgcbTYWpI?si=IZZhLMEY7q2ROYpf) on YouTube.
+**Example 1**: a camera facing smoke setup on `RTX 3080`
+- Running a 512 x 512 smoke simulation for a bonfire takes only `0.2 ms per frame`
+- Rendering the sim output using an 512 x 512 x 128 Heterogeneous Volume with self shadows consumes `2 ms per frame` (see [video snippet](https://youtu.be/QuCO66Tv8zw?t=72)). 
+- We can greatly reduce the visualization cost of our smoke vfx by mapping the sim on a camera facing plane with translucent material (instead of using volumetrics). Four sim instances are running with `300 FPS` on a `GTX 1070` (see [video snippet](https://youtu.be/HZv1mp5kNmM?t=98)).
 
-On the other hand, there are visualization methods that surely tank performance: 
-- *Single-Layer-Water* based komplex Surface Materials
-- Volumetric Materials with self shadow, like *Heterogeneous Volumes* and *Cloud Volumes*
+**Example 2**: a surface aligned water setup on `RTX 3080`
+- Running a 2048 x 2048 water simulation for a creek takes `1.2 ms per frame` (see [Profiler Screenshot](https://ibb.co/pjKVVTRY))
+- Rendering the sim output using a highly tessellated procedural mesh grid, mapped with a Material that utilizes a heavy Single Layer Water shader with all HQ features on (like caustics advection) + GPU particles for whitewater `consumes 3 ms per frame` (see [video snippet](https://youtu.be/QuCO66Tv8zw?t=258)).
+- We can greatly reduce the visualization cost of our water vfx by lowering mesh tessellation, switching of HQ features in the Output Material, and disabling particles. We are running with `120 FPS` on a `GTX 1070` (see [video snippet](https://youtu.be/HZv1mp5kNmM?t=253)).
 
-RTX 2060 and RTX 3060 cards seem to perform particularly bad with these settings. In most ninja-related performance tests, RTX2080 vastly outperformed RTX3060 - at some tests, even GTX1070 performed better. Mid term goal: investigate performance bottlenecks for 60's cards.
+*For comparison: running our game on 60 FPS means a 16.7 ms frame budget.*
 
 ---
 
-**In this Chapter:**
-- 12.0 <a href="#12-performance">Intro</a>
-- 12.1 <a href="#121-optimization-params">Optimization Params</a>
-- 12.2 <a href="#122-data-pipeline">Data Pipeline</a>
-- 12.3 <a href="#123-stress-test-levels">Stress Test Levels</a>
-- 12.4 <a href="#124-distance-based-modes">Distance Based Modes</a>
-- 12.5 <a href="#125-project-settings">Project Settings</a>
+**In this Chapter**:
+- 12.0 <a href="#12-performance">Performance and Optimization - Intro</a>
+- 12.1 <a href="#121-test-it-yourself">Test it Yourself</a>
+- 12.2 <a href="#122-layers-of-optimization">Levels of Optimization</a>
+- 12.3 <a href="#123-lod-related-params">LOD related params</a>
+- 12.4 <a href="#124-performance-params">Performance Params</a>
+- 12.5 <a href="#125-ninja-data-pipeline">Ninja Data Pipeline</a>
+- 12.6 <a href="#126-setup-elements">Setup Elements</a>
+- 12.7 <a href="#127-project-settings">Project Settings</a>
 
 <a href="#table-of-contents">Back to the Table of Contents</a>
 
+---
+
+### 12.1 Test it Yourself
+
+**A. Standalone Benchmarking Builds**
+
+Here comes two pre-compiled, playable build with benchmarking functions!
+(1) Download ZIP, (2) run the included EXE, (3) select a level using the top-left menu, (4) click on the small "B" button on the lower right - *"B" stands for for "benchmark"*.
+- Get **[LOW-END BUILD](https://fluidninja.itch.io/fluidninja-live-2-low-end-demo)** for `GTX 1050 - 1070, RTX 2050-2060, RTX 3050-3060`
+- Get **[HIGH-END BUILD](https://fluidninja.itch.io/fluidninja-live-2-demo)** for `RTX 2070 - 2090, RTX 3070 and all cards above`
+
+Hardware ranking: running the low-end demo on various hardware gave surprising results. A desktop `GTX 1070` overperformed laptop `RTX 3050Ti` on all test levels by 10-25%. Also, a desktop `RTX 2080` massively overperformed a desktop `RTX 3060`. Based on these results, the `RTX 3050 - 3060` class definitely falls into the low-end category.
+
+---
+
+**B. Stress Test Levels**
+
+Five stress test levels included to the project, in this folder:
+`/Content/FluidNinjaLive/Levels/Misc`
+
+Input Stress:
+- 10K Particles: `PerformanceTest_Particles.umap`
+- 200 Primitives: `PerformanceTest_Primitives.umap`
+- 20 Skeletal Meshes: `PerformanceTest_SkeletalMeshes.umap`
+
+Multiple Sim Actors Stress:
+- 49 Fluidsim mode Live Actor: `PerformanceTest_SimContainers.umap`
+- 65 Simple Painter mode Live Actor: `PerformanceTest_SimplePainterContainers.umap`
+
+
+---
+
+### 12.2 Layers of Optimization
+
+We distinguish three layers of performance optimization:
+
+1. Low level optimization: tweaking specific parameters of LiveComponent, additional systems and Output Material Instances. We do this to adjust input data throughput, simulation quality and material shader complexity for a given setup.
+*e.g. lowering sim resolution, reducing the number of tracked points, forcing more agressive LOD on the external system responsible for water meshing, switching off caustics advection in the Output Material*
+
+2. Medium level optimization: defining the number of ninja instances and external systems that participate in a given setup.
+*e.g. we have a sandy shoreline with reeds. Water, sand and foliage - all responsive. We give priority to water, remove footprint handler and switch to passive foliage*
+
+
+3. High level optimization: adjusting Project Settings.  
+*e.g. anti-aliasing method, lumen and nanite usage, shader model*  
+
+*In the next subchapters, we are discussing optimization with this hierarchy in mind, advancing from low-level params towards high level settings.*
+
+
 ---------------------------------------------------------------------------------------
 
-### 12.1 Optimization Params
+### 12.3 LOD related params
+**Distance and visibility based quality reduction methods**
 
-Variables for performance adjustment are located at this parameter group:
+`Category: low level optimization`
+
+Activating systems by player proximity and reducing visual quality by distance is a good idea in general. LOD ("level of detail") methods are available in Live Actor, Live Component and in external systems.
+
+---
+**NINJA INTERNAL LOD**
+
+1. `Live Actor`: **pause simulation** when player is outside the Activation Volume.
+Activation Volume is a box volume with user defined size, triggering a sleep / wake function.
+Ideal for effects that are not player attached / anchored to a fixed location on level.
+`/LiveActor /LiveActivation`
+
+        SimActivatedByPawnProximity, BOOL, 0
+        ShowActivationVolumeInEditor, BOOL, 0
+        ActivationVolumeSize, VEC3, (50,50,50)
+        ActivatorProximityCheckFrequency, FLOAT, 0.1
+        ActivatorType, ENUM, 2
+        Activator, ACTOR
+
+2. `Live Component`: **pause simulation** when simulation is out of player camera sight.
+Triggering sleep / wake if the player is not looking at the simulation. Ideal for small scale local effects - like a torch mounted on a wall - paused if the player looks away or the effect is behind an object.
+`/LiveComponent /LiveCore /Performance`
+
+        PauseSimWhenNotVisible, BOOL, 0
+
+3. `Live Component`: gradually reduce the number of simulation cycles with distance.
+E.g. the game runs on 60 FPS, and ninja is running in 10 frame per sec cycles.
+Param group: `/LiveComponent /LiveCore /Performance`
+
+        LOD-ReduceSamplingFPS, BOOL, 0
+        LOD-NearBound, FLOAT, 2000
+        LOD-FarBound, FLOAT, 5000
+        LOD-Steps INT, 5
+        LOD-CheckFrequency, FLOAT, 0.5
+
+Each param comes with a detailed description: available as **ToolTip** on the Actor and Component Details Panel UI - and as raw text in the [**Parameter Descriptor**](https://drive.google.com/file/d/1FedZwfW3iE1OgJr_Ye551TgaSLjqVUdj) - have a look to learn more!
+.
+**WARNING:** 
+Distance based sim quality reductors should be SWITCHED OFF when using ninja for **Rendered Cinematics**! Learn more at `Chapter 13, Point 2, MRQ Warnings`.
+
+---
+**EXTERNAL SYSTEMS LOD**
+
+4. `Surface Aligned Meshes` is an external Niagara System for ninja, made to mass spawn mesh instances. See dedicated manual section: `Chapter 2, Point 8`
+`Asset path: /Content /FluidNinjaLive /OutputNiagara /SurfaceAlignedMeshes.uasset`
+   - Typical usage: generating a large continuous water surface by spawning uniform plane-meshes along a grid
+   - Alternative usage: generating landscape aligned foliage by randomizing template geometry on a terrain surface
+   
+   Key feature: we can adjust how sensitively the Niagara GPU Mesh Renderer switches between LOD levels, based on Camera-Mesh distance. LOD is evaluated for each Mesh separately (e.g. water surface mesh tiles closer to the camera are rendered with higher tessellation). We have four choices (0-3) - by using higher values we can enforce more agressive geometry reduction. IMPORTANT! This param greatly impacts performance:
+`Actor Details Panel /User Parameters /LODsensitivity = 0-3`
+
+5. Niagara Systems generally support distance based activation. The three most important external rendering systems for ninja could be modified to use this feature - by default, we do NOT use it. The involved external systems:
+   - `Surface Aligned Meshes`
+   - `Surface Aligned Volumes`
+   - `Surface Aligned Particles`
+
+   The generic niagara LOD feature is NOT exposed on the "User Parameters" interface. To access it, we need to open a system in Niagara Editor, selecting the blue `Overview Node` and at the `Details` Panel, under the `System Properties` Param Group, look up `Effect Type` input field. The available LOD-preset files in the ninja project are located in this folder: 
+   `/Content /FluidNinjaLive /OutputNiagara /Assets /LOD`
+   - Pro: we can generally define distance based activation
+   - Con: each instance of the given system obeys the same LOD rule (we can not set level-specific values)
+
+
+---------------------------------------------------------------------------------------
+
+### 12.4 Performance params
+
+`Category: low level optimization`
+
+In `Live Component`, there is a dedicated Parameter Group for quality related params:
 `/LiveComponent /LiveCore /Performance`
 
 Param List:
@@ -3298,19 +3421,32 @@ Param List:
       LOD-Steps INT, 5
       LOD-CheckFrequency, FLOAT, 0.5
 
-Each param comes with a detailed description: available as **ToolTip** on the Actor and Component Details Panel UI - and as raw text in the [**Parameter Descriptor**](https://drive.google.com/file/d/1FedZwfW3iE1OgJr_Ye551TgaSLjqVUdj) - have a look!
+Each param comes with a detailed description: available as **ToolTip** on the Actor and Component Details Panel UI - and as raw text in the [**Parameter Descriptor**](https://drive.google.com/file/d/1FedZwfW3iE1OgJr_Ye551TgaSLjqVUdj) - have a look to learn more!
 
-Additionally, simulation RESOLUTION has a great impact on performance:
+**Dedicatedly listing the three most important performance-related params:**
+
+1. Simulation RESOLUTION param has the greatest impact on core performance:
 `/LiveComponent /LiveCore /ResolutionX` and `ResolutionY`
+
+2. Field Buffer Resolution is critical: ninja samples Mesh SDFs using this resolution. By default, we are using `Resolution(X,Y) / 4` - a scaledown factor of four. Key param:  
+`/LiveComponent /LiveCore /Performance /FieldBufferDownScaleFactor = 4`
+Using no scaledown (`FieldBufferDownScaleFactor = 1`) is a critical performance hit, recommended for cinematic usage only.
+
+3. Paint Buffer Resolution is important. By default, we are using `Resolution(X,Y) / 2` - a scaledown factor of two. Key param:  
+`/LiveComponent /LiveCore /Performance /PaintBufferDownScaleFactor = 2`
+.
+Note: IF `SimplePainterMode = True`, ninja uses full resolution Paint Buffer (no scaledown).
 
 
 ---------------------------------------------------------------------------------------
 
-### 12.2 Data Pipeline
+### 12.5 Ninja Data Pipeline
+
+`Category: low level optimization`
 
 Let us evaluate ninja performance by looking separately at three stages of the data processing pipeline: (1) input data collection - (2) simulation - (3) output data visualization
 
-INPUT: POINTS
+A. INPUT: POINTS
 
 - Reading points through `Data Channels` has the highest throughput - up until the 1K range performance hit is low, 10K being the upper limit of realtime usage. On the included demo levels, we use GPU Particle Emitters to write Data Channels (see `Chapter 5, Point 6`). In this case, both writing and reading is on the GPU, ideal.
 - Reading Destructible Chunk position also happens on the GPU by the Niagara `Chaos DI`, working in the 10-500 points range is safe.
@@ -3319,8 +3455,11 @@ INPUT: POINTS
 Point data processing is double hashed: 
 First pass: filter for points inside the sim area (XY) and vertically, within interaction zone (Z). The second pass is processing points on hash grid with user defined subdivision (default = 16 x 16). Once done, we forward the grouped point data to the point-painter module: each painter-grid cell gets a list of the nearby points (points in the same hash cell) and processes only these points.
 
+Releted params in this param group: `/LiveComponent /LiveCore /Performance `
+See: `Chapter 12, Point 4`
+
 .
-INPUT: FIELDS
+B. INPUT: FIELDS
 
 Ninja can read multiple field types (Mesh SDF and Destructible SDF, Spline Direction, Terrain HeightField) - each type is sampled on the GPU, using the resolution defined at `/LiveComponent /LiveCore /ResolutionX` and `ResolutionY`.
 
@@ -3329,13 +3468,17 @@ KEY PARAM: `/LiveComponent /LiveCore /Performance /FieldBufferDownScaleFactor = 
 Using higher field sampling resolution is recommended mainly for *Cinematic* usage.
 E.g. FieldBufferDownScaleFactor = 1 means, field sampling happens at sim resolution.
 
-.
-SIMULATION and DATA PROCESSING
-
-Ninja is performing internal data processing via `NinjaLiveCore.uasset` using Niagara Grid 2D structures, data flow on the GPU is parallel for each grid cell, managed by Modules on various Simulation Stages. Certain Stages could be excluded from the Data Pipeline via Static Switches - for example: If `EnableHeightFields = False`, the simulation stage with Landscape and RVT samplers is off. `SimplePainterMode = True` is shutting down the whole simulation pipeline, keeping only the input data collection, hashing and painter modules. As a result, Live Core could be optimized for certain usecase - eg.: this Simple Painter setup is running with 280 FPS on GTX1070 [video capture](https://youtu.be/HZv1mp5kNmM?list=PLVCUepYV6TvNWRtiJw6jFH0OS-d68mbmG&t=214) - and we have stable 60 FPS on a SteamDeck [video capture](https://youtu.be/kCFgcbTYWpI?list=PLVCUepYV6TvNWRtiJw6jFH0OS-d68mbmG&t=123).
+Occasionally, the data collection part could be heavy, too. For example: using a Destructible mesh with 1000 chunks as SDF input is definitely not ideal for low-end usage (see [video snippet](https://youtu.be/mmzsTMLquGE?t=1)). On the other hand, we can read 100 mesh chunks or 1K particles without a hiccup.
 
 .
-OUTPUT DATA VISUALIZATION
+C. SIMULATION and DATA PROCESSING
+
+Ninja is performing internal data processing via `NinjaLiveCore.uasset` using Niagara Grid 2D structures, data flow on the GPU is parallel for each grid cell, managed by Modules on various Simulation Stages. Certain Stages could be excluded from the Data Pipeline via Static Switches - for example: If `EnableHeightFields = False`, the simulation stage with Landscape and RVT samplers is off. `SimplePainterMode = True` is shutting down the whole simulation pipeline, keeping only the input data collection, hashing and painter modules. As a result, Live Core could be optimized for certain usecase - eg.: this Simple Painter setup is running with 280 FPS on `GTX 1070`, see [video capture](https://youtu.be/HZv1mp5kNmM?list=PLVCUepYV6TvNWRtiJw6jFH0OS-d68mbmG&t=214) - and we have stable 60 FPS on a `SteamDeck` see [video capture](https://youtu.be/kCFgcbTYWpI?list=PLVCUepYV6TvNWRtiJw6jFH0OS-d68mbmG&t=123).
+
+
+---
+
+D. OUTPUT DATA VISUALIZATION
 
 In general, we can say: while input and sim data processing can be crunched down to optimal levels easily - output is a hard nut to crack - and in some cases, it could consume 10x more resources than any other parts of the pipeline.
 
@@ -3343,16 +3486,17 @@ There are visualization methods that surely tank performance:
 - *Single-Layer-Water* based komplex Surface Materials
 - Volumetric Materials with self shadow, like *Heterogeneous Volumes* and *Cloud Volumes*
 
-RTX 2060 and RTX 3060 cards seem to perform particularly bad with these settings. In most ninja-related performance tests, RTX2080 vastly outperformed RTX3060 - at some tests, even GTX1070 performed better. Mid term goal: investigate performance bottlenecks for 60's cards.
+RTX 2060 and RTX 3060 cards seem to perform particularly bad with these settings. In most ninja-related performance tests, RTX2080 vastly outperformed RTX3060 - at some tests, even GTX1070 performed better.
 
-.
-**Suggestions to reduce output data processing load:**
+
+**SUGGESTIONS TO REDUCE OUTPUT DATA PROCESSING LOAD:**
 
 - ninja SingleLayerWater Output Material Instances could look really nice, when ADVECTION is turned on both for Flow Details maps - and for Caustics patterns. Switching off caustics advection and flow detail maps reduces the load
 - alternatively, we could switch off SLW shader domain usage entirely, and use Opaque, Default Lit surfaces, instead
 - for volumetric materials: switching off 3D NOISE and noise advection is a good idea in general 
 - reducing volume resolution is also a logical step
-- while Heterogenous Volumes (HVOL) and Cloud Volumes (CVOL) are heavy, using Fog Volumes (FVOL) without self shadows is highly optimal - see this [video snippet](https://youtu.be/HZv1mp5kNmM?list=PLVCUepYV6TvNWRtiJw6jFH0OS-d68mbmG&t=151) showing landscape aligned FVOL running 200 FPS on GTX1070 --------------------------------------------------------------------------------------- same scene running 45 FPS on SteamDeck: [video](https://youtu.be/kCFgcbTYWpI?list=PLVCUepYV6TvNWRtiJw6jFH0OS-d68mbmG&t=79)
+- while Heterogenous Volumes (HVOL) and Cloud Volumes (CVOL) are heavy, using Fog Volumes (FVOL) without self shadows is highly optimal - see this [video snippet](https://youtu.be/HZv1mp5kNmM?list=PLVCUepYV6TvNWRtiJw6jFH0OS-d68mbmG&t=151) showing landscape aligned FVOL running 200 FPS on GTX1070 same scene running 45 FPS on SteamDeck: [video](https://youtu.be/kCFgcbTYWpI?list=PLVCUepYV6TvNWRtiJw6jFH0OS-d68mbmG&t=79)
+- IMPORTANT: `Chapter 2, Point 14` specifically lists **console variables** (CVARs) to adjust the visualization quality of native Unreal Volumes - e.g. sampling factors, shadow settings
 - besides the native unreal volume types (HVOL, CVOL, FVOL) ninja also features a custom volume type, labeled as "Smoke Volume" SVOL, demonstrated on this level:
 `/Content/FluidNinjaLive/Levels/Misc/VolumeDemo_SVOL_Small.umap`
 Unlike native unreal volumes: SVOL supports **UNLIT MODE** - which runs really fast on low end machines too!
@@ -3362,96 +3506,66 @@ Unlike native unreal volumes: SVOL supports **UNLIT MODE** - which runs really f
 
 ---------------------------------------------------------------------------------------
 
-### 12.3 Stress Test Levels
+### 12.6 Setup Elements
 
-Five stress test levels included to the project, in this folder:
-`/Content/FluidNinjaLive/Levels/Misc`
+`Category: medium level optimization`
 
-Input Stress:
-- 10K Particles: `PerformanceTest_Particles.umap`
-- 200 Primitives: `PerformanceTest_Primitives.umap`
-- 20 Skeletal Meshes: `PerformanceTest_SkeletalMeshes.umap`
+Defining the number of ninja instances and external systems that participate in a given setup is a tradeoff situation. Visual complexity vs performance.
 
-Multiple Sim Actors Stress:
-- 49 Fluidsim mode Live Actor: `PerformanceTest_SimContainers.umap`
-- 65 Simple Painter mode Live Actor: `PerformanceTest_SimplePainterContainers.umap`
+For example: we have a sandy shoreline with reeds. Water, sand and foliage - all responsive.  
+`/Content /FluidNinjaLive /Levels /Water_Dense_Lake.umap`
+
+We are using two ninja sim actors: the first one handling the water interactions - plus providing velocity information for the foliage material to make the reeds bend by pressure waves. A second ninja is running in Simple Painter Mode (fluidsim off) to generate footprints and groundmarks in the coastal hands - using the external `Landscape Utility` to access the Landscape Components.
+
+Our setup is running fine on `RTX 2080` - but we are not happy with `RTX 3060` performance. Apart from optimizing by param-tweaking (eg.: reducing Simple Painter resolution), we can decide to give priority to water and remove the footprint handler entirely, also switching to passive foliage.
+
+The same principle applies to all ninja setups: on the demo levels, we are trying to max out visual complexity - and there is plenty of room for optimization by removing setup elements that do not contribute enough to the overall impression.
 
 
 ---------------------------------------------------------------------------------------
-### 12.4 Distance Based Modes
 
-Keeping nearby containers detailed - and gradually reduce detail and sampling frequency as the player is distancing is a good idea in general. Related ninja features:
+### 12.7 Project Settings
 
-1. Pause simulation - when player is outside Activation Volume
-`/LiveActor /LiveActivation`
+`Category: high level optimization`
 
-        SimActivatedByPawnProximity, BOOL, 0
-        ShowActivationVolumeInEditor, BOOL, 0
-        ActivationVolumeSize, VEC3, (50,50,50)
-        ActivatorProximityCheckFrequency, FLOAT, 0.1
-        ActivatorType, ENUM, 2
-        Activator, ACTOR
+Unreal Engine 5 came with heavy features: Lumen and Nanite (together with their pre-required RHI, DX12) eat half of the available performance. While, sometimes, these features make a scene visually stand out... this is not the case with the ninja demo levels. 
 
-2. Pause simulation - when out of sight:
-`/LiveComponent /LiveCore /Performance`
+**A specific example on `RTX 3080`, WIN11, UE 5.6:**
+Level: `/Content/FluidNinjaLive/Levels/Water_Sparse_Sea_Stormy.umap`
+Video Capture from the Level: [YouTube Link](https://youtu.be/QuCO66Tv8zw?t=384) - recorded with the below "**Config 3**"
 
-        PauseSimWhenNotVisible, BOOL, 0
+- **Config 1**:  TSR antialias, DX12, Lumen GI., Lumen Reflections, Nanite = `70 FPS`
+- **Config 2**:  TSR antialias, DX12, Lumen GI., Lumen Reflections = `95 FPS`
+- **Config 3**:  TAA antialias, DX11, ScreenSpace GI, ScreenSpace Reflections = `210 FPS`
 
-3. Reduce the number of simulation cycles with distance:
-`/LiveComponent /LiveCore /Performance`
-
-        LOD-ReduceSamplingFPS, BOOL, 0
-        LOD-NearBound, FLOAT, 2000
-        LOD-FarBound, FLOAT, 5000
-        LOD-Steps INT, 5
-        LOD-CheckFrequency, FLOAT, 0.5
-
-Each param comes with a detailed description: available as **ToolTip** on the Actor and Component Details Panel UI - and as raw text in the [**Parameter Descriptor**](https://drive.google.com/file/d/1FedZwfW3iE1OgJr_Ye551TgaSLjqVUdj) - have a look!
-.
-**WARNING:** 
-distance based quality reductors should be SWITCHED OFF when using ninja for Rendered Cinematics!
-
----
-
-### 12.5 Project Settings
-
-Unreal Engine 5 came with heavy features: Lumen and Nanite - together with their pre-required RHI, DX12 - eat half of the available performance. While, sometimes, these features make a scene visually stand out... this is not the case with the ninja demo levels. 
-
-**A specific example on RTX 3080, WIN11, UE 5.6:**
-- Level: `/Content/FluidNinjaLive/Levels/Water_Sparse_Sea_Stormy.umap`
-- Video Capture from the Level: [YouTube Link](https://youtu.be/QuCO66Tv8zw?t=384) - recorded with the below "**Config 3**"
-
-**Config 1**:  TSR antialias, DX12, Lumen Global Illumination, Lumen Reflections, Nanite = `70 FPS`
-**Config 2**:  TSR antialias, DX12, Lumen Global Illumination, Lumen Reflections = `95 FPS`
-**Config 3**:  TAA antialias, DX11, ScreenSpace Global Illumination, ScreenSpace Reflections = `210 FPS`
-
-On the ninja stormy sea level, THERE ARE NO OBVIOUS VISIBLE DIFFERENCES between the above configs. 
+On the ninja stormy sea level, THERE ARE NO OBVIOUS VISIBLE DIFFERENCES between the above configs, apart from the FPS. 
 .
 In order to have the best **PIE** (Play In Editor) performance, the ninja project is using these settings:
 
-1. `/Project Settings /Engine  /Rendering /Anti-Aliasing Method: default = TSR`
-Mod: TAA
+1. `/Project Settings /Engine  /Rendering /Anti-Aliasing Method: default = TAA`  
+UE default: TSR  
 Performance Gain: ~25%
 
-2. `/Project Settings /Platforms /Windows /Default RHI: default = DirectX12`
-Mod: DirectX11
-/D3D Targeted Shader Formats  ---------------------------------------------------------------------------------------> SM5  (SM6 = FALSE)
+2. `/Project Settings /Platforms /Windows /Default RHI: default = DirectX11`  
+UE default: DirectX12  
+
+3. `/D3D Targeted Shader Formats: SM5`  
+UE default: SM6  
 Performance Gain: ~25%
 
-3. `/Project Settings /Engine  /Rendering  /Dynamic Global Illumination Method = Lumen`
-Mod: switch off Lumen
+4. `/Project Settings /Engine  /Rendering  /Dynamic Global Illumination Method = Lumen OFF`
+UE default: Lumen ON  
 Performance Gain: ~30%
 
-4. `/Project Settins /Engine /Rendering /Reflection Method = Lumen Reflections`
-Mod: ScreenSpace
+5. `/Project Settins /Engine /Rendering /Reflection Method = ScreenSpace`
+UE default: Lumen Reflections
 Performance Gain: ~15%
 
-5. Switching off NANITE also means 10-25% performance gain.
+6. Switching off `NANITE` also means 10-25% performance gain.
 
-6. There is a specific Unreal rendering param, that determines the *weight of current Frame's contribution to the history*: **TemporalAACurrentFrameWeight**
+7. There is a specific Unreal rendering param, that determines the *weight of current Frame's contribution to the history*: **TemporalAACurrentFrameWeight**
 Unreal default is `0.04` - resulting in smudgy, blurred surfaces with high frequency texture-space changes. We can enforce more crispy /less smudgy visuals using a console variable (CVAR): `r.TemporalAACurrentFrameWeight 0.25`
 On the ninja levels, the `Pawn and Camera Utility Actor` is set to execute the above command, and change the UE default Temporal Weight.
-
 
 ---------------------------------------------------------------------------------------
 
@@ -3460,13 +3574,13 @@ On the ninja levels, the `Pawn and Camera Utility Actor` is set to execute the a
 
 ## 13. Cinematics
 
-**Sequencer and Movie Render Queue** - FluidNinja LIVE-2 supports both
+FluidNinja LIVE-2 supports both **Sequencer and Movie Render Queue**
   - the simulation responds to Sequencer driven objects
   - all ninja parameters can be animated by Sequencer
   - ninja output can be rendered via Movie Render Queue
 
-
-FluidNinja LIVE-2 [Render Test with Movie Render Queue](https://youtu.be/PtACHMVukyo)
+Use case: [War Robots Frontiers Cinematics](https://www.artstation.com/artwork/YG4yGY)
+Test render with [Movie Render Queue](https://youtu.be/PtACHMVukyo)
 Sequencer and MRQ panels [Screencapture](https://drive.google.com/file/d/1fcTWi8n7xAk821rerqGmlWNNjNfdqfJ9)
 
 ---
@@ -3488,7 +3602,9 @@ Sequencer and MRQ panels [Screencapture](https://drive.google.com/file/d/1fcTWi8
 
 **(A)** Sequencer driven objects interact with ninja *exactly the same way* as non-sequencer driven objects. See this tutorial level displaying all types of interaction: 
 `/Content /FluidNinjaLive /Levels /Starter /Tutorial02_Inputs_Interaction.umap`
-.
+
+---
+
 **(B)** All ninja parameters can be animated with Sequencer.
 **Key**: we need to EXPOSE the parameters to Sequencer (by default: not exposed). 
 .
@@ -3520,7 +3636,8 @@ IMPORTANT: there is a KEY ninja parameter, determining the frequency at wich Liv
 Example setup: 
 `/Content /FluidNinjaLive /Levels /Starter /Tutorial05_Tricks.umap /STAGE 1A`
 
-.
+---
+
 **(C)** Animating parameters of External Systems, like Materials and Niagara happens the standard Unreal way. See related tutorials by EPIC, search for keywords like "unreal engine animating dynamic material instances with sequencer".
 
 
@@ -3655,9 +3772,8 @@ Contents of this Chapter:
 - 14.4 <a href="#144-spawning">Live Actor - Spawning Objects inside the Interaction Volume</a>
 - 14.5 <a href="#145-interaction-volume">Live Actor Interaction Volume vs Live Component Interaction Volume</a>
 - 14.6 <a href="#146-bug---niagara-data-loss">Bug - data loss on the Niagara Systems User Parameter input</a>
-      - Problems with ninja external systems
-      - Problems with ninja core
 - 14.7 <a href="#147-bug---destructibles">Bug - Chaos Destructible Geometry Collections Memory Leak</a>
+- 14.8 <a href="#148-buoyancy">Buoyancy not supported</a>
 
 <a href="#table-of-contents">Back to the Table of Contents</a>
 
@@ -3967,6 +4083,19 @@ A. Official Bug report with specific technical description
 B. The fixed GeometryCollection DI as a COMPILED plugin (UE 5.6 - 5.8), should be added to the local UnrealEngine Plugin Folder
 C. A step-by-step guide with screenshots, explaining how to apply the fix
 
+---
+
+### 14.8 Buoyancy
+
+LIVE v2.0 does **NOT** support buoyancy. The feature might be implemanted in later versions. 
+
+- What we have: using the already existing functions, we can collect points (Actor Locations) on the CPU, send it to Ninja Core on the GPU, sample fluid surface height (altitude) at the listed points and send back the height data to the CPU using Data Channels.
+
+- What we don't have: the collected data points (Actor Locations) lose their identity when sent to the GPU - the simulation core receives a list of position-data entries, with no information on the Actors. In order to assign the returned height data to specific Actors, we need to define an ID for each point at the beginning of the data pipeline, and keep it all the way, until the data is sent back to CPU.
+
+Alternative solutions, until we don't have real buoyancy:
+- Making particles water-surface aligned is easy - they run on the GPU. And Mesh particles totally look like objects... See [example video snippet](https://youtu.be/QuCO66Tv8zw?t=233) .
+- In case we have a FLAT water surface, we could set up a PhysicsBody, with a Z-constraint (it can not move vertically) -- this object moves "on the surface" like it is floating.
 
 ---------------------------------------------------------------------------------------
 
@@ -3975,23 +4104,33 @@ C. A step-by-step guide with screenshots, explaining how to apply the fix
 
 ## 15. LIVE-1 vs LIVE-2
 
-**LICENSING**: 
+**Licensing**: 
 - LIVE-2 is an upgrade to LIVE-1, accessible for LIVE-1 license holders
 
+---
 
-**TRANSITION ON FAB**:
+**Transition On FAB**:
 - The Project Homepage at [FAB](https://www.fab.com/listings/80fcf53e-49f7-4635-a71c-ba81280c6618) is going to host both LIVE-1 and LIVE-2:  
-  - IF users select UE 5.4 or lower as their UE version at download, they get LIVE-1
-  - IF users select UE 5.6 or higher as their UE version at download, they get LIVE-2
+  - IF we select UE 5.5 or lower as our UE version at download - we get LIVE-1
+  - IF we select UE 5.6 or higher as our UE version at download - we get LIVE-2
 - Until LIVE-2 is officially released, only LIVE-1 is available at FAB, while LIVE-2 BETA could be accessed at the [Community Server](https://discord.gg/rgEtwua2tu) with a LIVE-1 license.
 
-**SUPPORTED UE VERSIONS**:
-- LIVE-2: lowest supported Unreal Engine version is UE 5.6
-- Initial LIVE-2 version: v2.0.0.56 for UE 5.6, also working under UE 5.7 - 5.8
-- LIVE-1: lowest supported Unreal Engine version is UE 4.26
-- Latest LIVE-1 version: v1.9.54 for UE 5.4, also working under UE 5.5 - 5.8
-- All earlier LIVE versions remain available at FAB: the full UE4 and UE5 spectrum is covered
+---
 
+**Supported Unreal Engine Versions**:
+- LIVE-2: lowest supported Unreal Engine version is UE 5.6
+- Initial LIVE-2 version: v2.0.0.56 for UE 5.6, also compatible with UE 5.7 - 5.8
+- LIVE-1: lowest supported Unreal Engine version is UE 4.26
+- Latest LIVE-1 version: v1.9.54 for UE 5.4, also compatible with UE 5.5 - 5.8
+- All earlier LIVE versions remain available at FAB, so the full UE4 - UE5 spectrum is covered
+
+---
+
+**Supported Hardware Platforms**:
+
+LIVE-1 was gradually tested under various hardware through the years, including Android, Oculus VR Gears, the Playstation and Xbox platforms, Linux and IOS.
+
+LIVE-2 is being released with Win64 as the only supported environment - where we already have various compiled [builds](https://fluidninja.itch.io/fluidninja-live-2-demo) that serve as a proof: LIVE-2 could be included into a packaged game. Later on, more hardware types will be added to the list of supported platforms.
 
 ---
 
@@ -4128,7 +4267,7 @@ So, here is a list with a few examples of known ninja usage:
 
 *Indie releases:* Awaysis, Rytma, Crete, Covenant, Mandragora, SuperSimmer, TunnelBoatTerror, TrenchTales
 .
-*Cinematic usage* is almost impossible to track. Still: *Fortnite* Cinematics should be mentioned! And a nice recent example: *War Robots Frontiers*
+*Cinematic usage* is almost impossible to track. Still: *Fortnite* Cinematics should be mentioned! And a nice recent example: [War Robots Frontiers](https://www.artstation.com/artwork/YG4yGY)
 
 <a href="#table-of-contents">Back to the Table of Contents</a>
 
@@ -4139,7 +4278,7 @@ So, here is a list with a few examples of known ninja usage:
 
 ## 17. Machine Learning
 
-The Manual plus the Content and Parameter descriptor files (linked under `Table of Contents, External Resources`) are suitable to feed Machine Learning Systems. Intended usage: LLMs trained with the data could answer questions and help users implement various setups. Using the MCP interface introduced in Unreal Engine 5.8, agentic AI might be able to practically use ninja and build setups. We are actively testing this possibility - with plans to deploy an "answerbot" to the Community Server and a Plugin that facilitates MCP driven ninja usage.
+The Manual plus the Content and Parameter descriptor files (linked under `Table of Contents, External Resources`) are suitable to feed Machine Learning Systems. Intended usage: LLMs trained with the data could answer questions and make it easier implement various setups. Using the MCP interface introduced in Unreal Engine 5.8, agentic AI might be able to practically use ninja and build setups. We are actively testing this possibility - with plans to deploy an "answerbot" to the Community Server and a Plugin that facilitates MCP driven ninja usage.
 
 ---------------------------------------------------------------------------------------
 
