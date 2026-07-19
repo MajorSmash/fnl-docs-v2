@@ -7,25 +7,25 @@
   --sl-color-gray-2: #b7b7bb;
   --sl-color-gray-3: #85858a;
   --sl-color-gray-4: #555559;
-  --sl-color-gray-5: #2b2b2e;
-  --sl-color-gray-6: #111113;
-  --sl-color-black: #080809;
-  --sl-color-bg: #080809;
-  --sl-color-bg-nav: #0e0e10;
-  --sl-color-bg-sidebar: #0b0b0d;
-  --sl-color-bg-inline-code: #171719;
+  --sl-color-gray-5: #3d4047;
+  --sl-color-gray-6: #2a2c31;
+  --sl-color-black: #1e2024;
+  --sl-color-bg: #202226;
+  --sl-color-bg-nav: #25272c;
+  --sl-color-bg-sidebar: #23252a;
+  --sl-color-bg-inline-code: #2c2f35;
   --sl-color-text: #c5c5c8;
   --sl-color-text-accent: #ffb9bb;
-  --sl-color-hairline: #202024;
-  --sl-color-hairline-light: #2b2b2e;
-  --sl-color-hairline-shade: #18181b;
+  --sl-color-hairline: #393c43;
+  --sl-color-hairline-light: #454850;
+  --sl-color-hairline-shade: #32353b;
   --sl-line-height: 1.55;
   --sl-content-gap-y: 0.72rem;
   --sl-sidebar-width: 17.5rem;
   --sl-content-width: 54rem;
   --fnl-red: #d82f35;
-  --fnl-link: #6080a8;
-  --fnl-link-hover: #83a3c6;
+  --fnl-link: #5a74a6;
+  --fnl-link-hover: #7890bf;
 }
 
 body {
@@ -57,6 +57,7 @@ body {
 
 .sl-markdown-content a:not(.sl-anchor-link) {
   color: var(--fnl-link);
+  font-weight: 600;
   text-decoration: none;
 }
 

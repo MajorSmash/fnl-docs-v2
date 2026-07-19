@@ -11,9 +11,19 @@ async function pngDimensions(url) {
   return { width: png.readUInt32BE(16), height: png.readUInt32BE(20) };
 }
 
+function relativeLuminance(hex) {
+  const channels = hex.match(/[\da-f]{2}/gi).map((value) => Number.parseInt(value, 16) / 255);
+  const linear = channels.map((value) =>
+    value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4,
+  );
+  return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+}
+
 test('WP-5F brand and reading-density contract remains explicit', () => {
   assert.match(css, /--fnl-red:\s*#d82f35/i);
-  assert.match(css, /--fnl-link:\s*#6080a8/i);
+  assert.match(css, /--sl-color-bg:\s*#202226/i);
+  assert.match(css, /--fnl-link:\s*#5a74a6/i);
+  assert.ok(relativeLuminance('#5a74a6') < relativeLuminance('#6080a8'));
   assert.match(css, /--sl-line-height:\s*1\.55/);
   assert.match(css, /--sl-content-width:\s*54rem/);
   assert.match(css, /body\s*{[^}]*background:\s*var\(--sl-color-bg\)/s);
@@ -22,6 +32,7 @@ test('WP-5F brand and reading-density contract remains explicit', () => {
 
 test('WP-5F jumpers and text code blocks do not underline, scroll, or clip words', () => {
   assert.match(css, /\.sl-markdown-content a:not\(\.sl-anchor-link\)[^{]*{[^}]*text-decoration:\s*none/s);
+  assert.match(css, /\.sl-markdown-content a:not\(\.sl-anchor-link\)[^{]*{[^}]*font-weight:\s*600/s);
   assert.match(css, /white-space:\s*pre-wrap/);
   assert.match(css, /overflow-wrap:\s*anywhere/);
   assert.match(css, /overflow-x:\s*clip/);
@@ -43,7 +54,12 @@ test('WP-5F root route, brand assets, dark mode, and IA order are pinned', () =>
 });
 
 test('WP-5F official logo derivatives exist at deployment dimensions', async () => {
-  await access(new URL('../src/assets/fluidninja-live-2-logo.png', import.meta.url));
+  const logo = new URL('../src/assets/fluidninja-live-2-logo.png', import.meta.url);
+  await access(logo);
+  assert.deepEqual(await pngDimensions(logo), {
+    width: 1720,
+    height: 1720,
+  });
   assert.deepEqual(await pngDimensions(new URL('../public/favicon.png', import.meta.url)), {
     width: 64,
     height: 64,
