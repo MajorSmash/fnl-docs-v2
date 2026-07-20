@@ -9,10 +9,10 @@
   --sl-color-gray-4: #555559;
   --sl-color-gray-5: #3d4047;
   --sl-color-gray-6: #2a2c31;
-  --sl-color-black: #1e2024;
-  --sl-color-bg: #202226;
-  --sl-color-bg-nav: #25272c;
-  --sl-color-bg-sidebar: #23252a;
+  --sl-color-black: #14161a;
+  --sl-color-bg: #16181c;
+  --sl-color-bg-nav: #1a1c21;
+  --sl-color-bg-sidebar: #181a1f;
   --sl-color-bg-inline-code: #2c2f35;
   --sl-color-text: #c5c5c8;
   --sl-color-text-accent: #ffb9bb;
@@ -21,11 +21,11 @@
   --sl-color-hairline-shade: #32353b;
   --sl-line-height: 1.55;
   --sl-content-gap-y: 0.72rem;
-  --sl-sidebar-width: 17.5rem;
+  --sl-sidebar-width: 20rem;
   --sl-content-width: 54rem;
   --fnl-red: #d82f35;
-  --fnl-link: #5a74a6;
-  --fnl-link-hover: #7890bf;
+  --fnl-link: #4477c2;
+  --fnl-link-hover: #6696dc;
 }
 
 body {
@@ -35,10 +35,6 @@ body {
 .header,
 .sidebar-pane {
   box-shadow: none;
-}
-
-.site-title img {
-  height: 3rem;
 }
 
 .sidebar-content .large {
@@ -109,9 +105,33 @@ body {
   margin-top: 1rem;
 }
 
-@media (min-width: 72rem) {
+@media (min-width: 50rem) {
   :root {
-    --sl-content-margin-inline: 1.25rem auto;
+    --sl-nav-height: 0rem;
+    --sl-content-margin-inline: 4.5rem auto;
+  }
+
+  header.header {
+    height: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  .fnl-header {
+    position: fixed;
+    z-index: var(--sl-z-index-navbar);
+    inset-block-start: 0.85rem;
+    inset-inline-start: var(--sl-sidebar-pad-x);
+    width: calc(var(--sl-sidebar-width) - 2 * var(--sl-sidebar-pad-x));
+  }
+
+  .sidebar-content {
+    padding-top: 4.25rem;
+  }
+
+  .sl-container {
+    margin-inline: 4.5rem auto;
   }
 }
 

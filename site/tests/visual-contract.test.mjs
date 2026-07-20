@@ -19,11 +19,18 @@ function relativeLuminance(hex) {
   return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
 }
 
+function contrastRatio(foreground, background) {
+  const light = Math.max(relativeLuminance(foreground), relativeLuminance(background));
+  const dark = Math.min(relativeLuminance(foreground), relativeLuminance(background));
+  return (light + 0.05) / (dark + 0.05);
+}
+
 test('WP-5F brand and reading-density contract remains explicit', () => {
   assert.match(css, /--fnl-red:\s*#d82f35/i);
-  assert.match(css, /--sl-color-bg:\s*#202226/i);
-  assert.match(css, /--fnl-link:\s*#5a74a6/i);
-  assert.ok(relativeLuminance('#5a74a6') < relativeLuminance('#6080a8'));
+  assert.match(css, /--sl-color-bg:\s*#16181c/i);
+  assert.match(css, /--fnl-link:\s*#4477c2/i);
+  assert.ok(relativeLuminance('#4477c2') < relativeLuminance('#6080a8'));
+  assert.ok(contrastRatio('#4477c2', '#16181c') > 3.9);
   assert.match(css, /--sl-line-height:\s*1\.55/);
   assert.match(css, /--sl-content-width:\s*54rem/);
   assert.match(css, /body\s*{[^}]*background:\s*var\(--sl-color-bg\)/s);
@@ -38,10 +45,11 @@ test('WP-5F jumpers and text code blocks do not underline, scroll, or clip words
   assert.match(css, /overflow-x:\s*clip/);
 });
 
-test('WP-5F root route, brand assets, dark mode, and IA order are pinned', () => {
+test('WP-5F root route, retained brand assets, dark mode, and IA order are pinned', () => {
   assert.match(config, /['"]\/['"]:\s*`\$\{base\}\/manual\/ninjalive2-manual\/`/);
   assert.match(config, /favicon:\s*['"]\/favicon\.png['"]/);
-  assert.match(config, /fluidninja-live-2-logo\.png/);
+  assert.doesNotMatch(config, /\blogo\s*:/);
+  assert.match(config, /Header:\s*['"]\.\/src\/components\/Header\.astro['"]/);
   assert.match(config, /ThemeProvider:[\s\S]*ThemeSelect:/);
   assert.match(config, /name:\s*['"]color-scheme['"],\s*content:\s*['"]dark['"]/);
 
@@ -51,6 +59,20 @@ test('WP-5F root route, brand assets, dark mode, and IA order are pinned', () =>
   const support = config.indexOf("label: 'Q&A / Support'", setTopics);
   const releases = config.indexOf("label: 'Releases'", support);
   assert.ok(manual >= 0 && manual < parameters && parameters < setTopics && setTopics < support && support < releases);
+});
+
+test('WP-5H desktop layout moves search left, widens navigation, and reclaims header height', () => {
+  assert.match(css, /--sl-sidebar-width:\s*20rem/);
+  assert.match(css, /--sl-content-width:\s*54rem/);
+  assert.match(
+    css,
+    /@media \(min-width:\s*50rem\)[\s\S]*--sl-nav-height:\s*0rem;[\s\S]*--sl-content-margin-inline:\s*4\.5rem auto/,
+  );
+  assert.match(
+    css,
+    /@media \(min-width:\s*50rem\)[\s\S]*\.sl-container\s*{[^}]*margin-inline:\s*4\.5rem auto/s,
+  );
+  assert.match(css, /\.fnl-header[\s\S]*width:\s*calc\(var\(--sl-sidebar-width\) - 2 \* var\(--sl-sidebar-pad-x\)\)/);
 });
 
 test('WP-5F official logo derivatives exist at deployment dimensions', async () => {

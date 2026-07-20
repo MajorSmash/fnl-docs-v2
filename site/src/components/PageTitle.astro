@@ -5,6 +5,7 @@ import type { StarlightRouteData } from '@astrojs/starlight/route-data';
 
 import { isDiscordUrl } from '../lib/discord-url.mjs';
 import { sectionForDocType, versionBadges } from '../lib/document-meta.mjs';
+import { hasSourceDocumentTitle } from '../lib/page-title.mjs';
 
 const route = Astro.locals.starlightRoute as StarlightRouteData;
 const data = route.entry.data as StarlightRouteData['entry']['data'] & {
@@ -30,9 +31,15 @@ const formattedDate =
     : undefined;
 const versionLabels = versionBadges(data);
 const isDiscordSource = isDiscordUrl(data.source_url);
+const renderedHeadings = (
+  route.entry as typeof route.entry & {
+    rendered?: { metadata?: { headings?: Array<{ depth?: number }> } };
+  }
+).rendered?.metadata?.headings;
+const sourceOwnsPageTitle = hasSourceDocumentTitle(data, renderedHeadings);
 ---
 
-<Default />
+{sourceOwnsPageTitle ? <span id="_top" tabindex="-1" /> : <Default />}
 
 {
   data.doc_type && (

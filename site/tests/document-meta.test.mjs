@@ -3,8 +3,8 @@ import test from 'node:test';
 
 import { isDiscordUrl } from '../src/lib/discord-url.mjs';
 import { sectionForDocType, versionBadges } from '../src/lib/document-meta.mjs';
+import { hasSourceDocumentTitle } from '../src/lib/page-title.mjs';
 import rehypeDocumentEnhancements from '../src/plugins/rehype-document-enhancements.mjs';
-import remarkDocumentHeadings from '../src/plugins/remark-document-headings.mjs';
 
 test('all v7 document types map to the intended public section', () => {
   assert.deepEqual(
@@ -87,27 +87,11 @@ test('body enhancements identify Discord links and structure descriptor grammar'
   assert.equal(tree.children[1].children[0].properties.dataDescriptorType, 'parameter');
 });
 
-test('imported Markdown H1s are demoted beneath the Starlight page title', () => {
-  const tree = {
-    type: 'root',
-    children: [
-      {
-        type: 'heading',
-        depth: 1,
-        children: [{ type: 'text', value: 'Repeated source title' }],
-      },
-      {
-        type: 'heading',
-        depth: 2,
-        children: [{ type: 'text', value: 'Existing section' }],
-      },
-    ],
-  };
-
-  remarkDocumentHeadings()(tree);
-
-  assert.equal(tree.children[0].depth, 2);
-  assert.equal(tree.children[1].depth, 2);
+test('corpus pages with their own H1 suppress only the duplicate Starlight title', () => {
+  assert.equal(hasSourceDocumentTitle({ doc_type: 'MANUAL' }, [{ depth: 1 }]), true);
+  assert.equal(hasSourceDocumentTitle({ doc_type: 'DESCRIPTOR' }, [{ depth: 1 }]), true);
+  assert.equal(hasSourceDocumentTitle({ doc_type: 'SET_TOPIC' }, [{ depth: 2 }]), false);
+  assert.equal(hasSourceDocumentTitle({}, [{ depth: 1 }]), false);
 });
 
 test('Discord URL detection uses exact supported hostnames', () => {

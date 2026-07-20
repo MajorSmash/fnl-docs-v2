@@ -6,7 +6,6 @@ import { readFile } from 'node:fs/promises';
 
 import { manualSidebarFromHeadings } from './src/lib/manual-navigation.mjs';
 import rehypeDocumentEnhancements from './src/plugins/rehype-document-enhancements.mjs';
-import remarkDocumentHeadings from './src/plugins/remark-document-headings.mjs';
 
 function normalizeBase(value) {
   const trimmed = String(value || '').trim().replace(/^\/+|\/+$/g, '');
@@ -17,9 +16,7 @@ const base = normalizeBase(process.env.BASE_PATH ?? '/fnl-docs-v2');
 const site = process.env.SITE_URL ?? 'https://example.invalid';
 const ogImage = new URL(`${base || ''}/og.png`, site).href;
 const manualSource = await readFile(new URL('../manual/ninjalive2_manual.md', import.meta.url), 'utf8');
-const manualRenderer = await createMarkdownProcessor({
-  remarkPlugins: [remarkDocumentHeadings],
-});
+const manualRenderer = await createMarkdownProcessor();
 const manualHeadings = (await manualRenderer.render(manualSource)).metadata.headings;
 const manualSidebar = manualSidebarFromHeadings(manualHeadings);
 
@@ -35,11 +32,6 @@ export default defineConfig({
     sitemap(),
     starlight({
       title: 'FluidNinja LIVE 2 Docs',
-      logo: {
-        src: './src/assets/fluidninja-live-2-logo.png',
-        alt: 'FluidNinja LIVE 2',
-        replacesTitle: true,
-      },
       favicon: '/favicon.png',
       description:
         'Canonical FluidNinja LIVE 2 manual, parameter references, release notes, set topics, and approved support answers.',
@@ -51,6 +43,7 @@ export default defineConfig({
       tableOfContents: false,
       customCss: ['./src/styles/custom.css'],
       components: {
+        Header: './src/components/Header.astro',
         PageTitle: './src/components/PageTitle.astro',
         Pagination: './src/components/Pagination.astro',
         Sidebar: './src/components/Sidebar.astro',
@@ -119,7 +112,6 @@ export default defineConfig({
   ],
   markdown: {
     processor: unified({
-      remarkPlugins: [remarkDocumentHeadings],
       rehypePlugins: [rehypeDocumentEnhancements],
     }),
   },

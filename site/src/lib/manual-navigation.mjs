@@ -1,4 +1,5 @@
 const NUMBERED_CHAPTER = /^(\d+)\.\s+(.+)$/;
+const TABLE_OF_CONTENTS = /^table of contents$/i;
 
 function sidebarLink(label, fragment, manualPath) {
   return {
@@ -60,14 +61,33 @@ export function manualSidebarFromHeadings(
   headings,
   manualPath = '/manual/ninjalive2-manual/',
 ) {
-  return manualChaptersFromHeadings(headings).map((chapter) => ({
-    label: chapter.label,
-    collapsed: true,
-    items: [
-      sidebarLink('Chapter overview', chapter.slug, manualPath),
-      ...chapter.sections.map((section) => sidebarLink(section.label, section.slug, manualPath)),
-    ],
-  }));
+  const documentTitles = headings.filter((heading) => heading.depth === 1);
+  const tablesOfContents = headings.filter(
+    (heading) => heading.depth === 2 && TABLE_OF_CONTENTS.test(String(heading.text ?? '').trim()),
+  );
+  if (documentTitles.length !== 1) {
+    throw new Error(
+      `Manual navigation requires exactly one document title heading; found ${documentTitles.length}.`,
+    );
+  }
+  if (tablesOfContents.length !== 1 || !tablesOfContents[0].slug) {
+    throw new Error(
+      `Manual navigation requires exactly one heading-derived Table of Contents anchor; found ${tablesOfContents.length}.`,
+    );
+  }
+
+  return [
+    sidebarLink(String(documentTitles[0].text).trim(), '', manualPath),
+    sidebarLink(String(tablesOfContents[0].text).trim(), tablesOfContents[0].slug, manualPath),
+    ...manualChaptersFromHeadings(headings).map((chapter) => ({
+      label: chapter.label,
+      collapsed: true,
+      items: [
+        sidebarLink('Chapter overview', chapter.slug, manualPath),
+        ...chapter.sections.map((section) => sidebarLink(section.label, section.slug, manualPath)),
+      ],
+    })),
+  ];
 }
 
 export function sidebarWithManualFragments(entries) {
@@ -82,7 +102,10 @@ export function sidebarWithManualFragments(entries) {
     return {
       ...entry,
       attrs,
-      href: typeof fragment === 'string' ? `${entry.href}#${fragment}` : entry.href,
+      href:
+        typeof fragment === 'string' && fragment.length > 0
+          ? `${entry.href}#${fragment}`
+          : entry.href,
       // Starlight matches current pages by pathname. Every chapter targets the
       // same canonical document, so its first match would otherwise open and
       // mark chapter 1 even when another fragment was requested.

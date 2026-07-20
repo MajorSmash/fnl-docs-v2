@@ -10,9 +10,9 @@ import {
   pageLevelPagination,
   sidebarWithManualFragments,
 } from '../src/lib/manual-navigation.mjs';
-import remarkDocumentHeadings from '../src/plugins/remark-document-headings.mjs';
 
 const fixtureHeadings = [
+  { depth: 1, slug: 'fluidninja-live-2-manual', text: 'FLUIDNINJA LIVE-2 MANUAL' },
   { depth: 2, slug: 'contents', text: 'Table of Contents' },
   { depth: 2, slug: '1-introduction', text: '1. Introduction' },
   { depth: 3, slug: '11-first-steps', text: '1.1 First Steps' },
@@ -24,6 +24,16 @@ test('manual navigation exposes numbered chapters as collapsed top-level groups'
   const sidebar = manualSidebarFromHeadings(fixtureHeadings);
 
   assert.deepEqual(sidebar, [
+    {
+      label: 'FLUIDNINJA LIVE-2 MANUAL',
+      link: '/manual/ninjalive2-manual/',
+      attrs: { 'data-manual-fragment': '' },
+    },
+    {
+      label: 'Table of Contents',
+      link: '/manual/ninjalive2-manual/',
+      attrs: { 'data-manual-fragment': 'contents' },
+    },
     {
       label: '1. Introduction',
       collapsed: true,
@@ -73,6 +83,20 @@ test('manual navigation fails closed on duplicate chapter numbers or fragments',
   );
 });
 
+test('manual navigation fails closed when document-top landmarks drift', () => {
+  assert.throws(
+    () => manualSidebarFromHeadings(fixtureHeadings.filter((heading) => heading.depth !== 1)),
+    /exactly one document title heading; found 0/,
+  );
+  assert.throws(
+    () =>
+      manualSidebarFromHeadings(
+        fixtureHeadings.filter((heading) => heading.text !== 'Table of Contents'),
+      ),
+    /exactly one heading-derived Table of Contents anchor; found 0/,
+  );
+});
+
 test('rendered sidebar links append fragments and do not falsely mark chapter 1 current', () => {
   const sidebar = sidebarWithManualFragments([
     {
@@ -116,13 +140,23 @@ test('page pagination excludes synthetic in-document chapter entries', () => {
 
 test('the canonical manual currently yields the complete numbered chapter navigation', async () => {
   const source = await readFile(new URL('../../manual/ninjalive2_manual.md', import.meta.url), 'utf8');
-  const renderer = await createMarkdownProcessor({
-    remarkPlugins: [remarkDocumentHeadings],
-  });
+  const renderer = await createMarkdownProcessor();
   const { headings } = (await renderer.render(source)).metadata;
   const chapters = manualChaptersFromHeadings(headings);
 
   assert.equal(chapters.length, 18);
+  assert.deepEqual(manualSidebarFromHeadings(headings).slice(0, 2), [
+    {
+      label: 'FLUIDNINJA LIVE-2 MANUAL',
+      link: '/manual/ninjalive2-manual/',
+      attrs: { 'data-manual-fragment': '' },
+    },
+    {
+      label: 'Table of Contents',
+      link: '/manual/ninjalive2-manual/',
+      attrs: { 'data-manual-fragment': 'table-of-contents' },
+    },
+  ]);
   assert.equal(chapters[0].label, '1. Introduction');
   assert.equal(chapters.at(-1).label, '18. Synonyms');
   assert.ok(chapters.every((chapter) => chapter.slug));
