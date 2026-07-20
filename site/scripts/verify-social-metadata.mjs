@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
@@ -56,9 +57,17 @@ export async function verifySocialMetadata({
 }) {
   const base = normalizeBase(basePath);
   const expectedDescription = await socialDescriptionFromRegistry(releasesDirectory);
-  const expectedImage = new URL(`${base}/og.png`, siteUrl).href;
   const manualPage = path.join(distDirectory, 'manual', 'ninjalive2-manual', 'index.html');
   const imageFile = path.join(distDirectory, 'og.png');
+  // Must mirror astro.config.mjs: the card URL carries a content hash so
+  // social media proxies re-fetch changed artwork. Deriving it from the SAME
+  // bytes here means a drift between config and gate fails the build rather
+  // than shipping a silently stale card.
+  const expectedImageVersion = createHash('sha256')
+    .update(await readFile(imageFile))
+    .digest('hex')
+    .slice(0, 8);
+  const expectedImage = new URL(`${base}/og.png?v=${expectedImageVersion}`, siteUrl).href;
   const html = await readFile(manualPage, 'utf8');
 
   assert.equal(metaContent(html, 'name', 'description'), expectedDescription);

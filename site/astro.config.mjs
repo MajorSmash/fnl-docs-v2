@@ -2,6 +2,7 @@ import sitemap from '@astrojs/sitemap';
 import { createMarkdownProcessor, unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import remarkBreaks from 'remark-breaks';
 
@@ -16,7 +17,14 @@ function normalizeBase(value) {
 
 const base = normalizeBase(process.env.BASE_PATH ?? '/fnl-docs-v2');
 const site = process.env.SITE_URL ?? 'https://example.invalid';
-const ogImage = new URL(`${base || ''}/og.png`, site).href;
+// Content-versioned so Discord/Slack/etc. re-fetch the card when the artwork
+// changes. Their media proxies cache by IMAGE URL: busting the PAGE url alone
+// re-reads the metadata but still serves stale bytes for an unchanged
+// /og.png (observed 2026-07-20). The filename stays stable so existing links
+// keep working; only the query changes.
+const ogImageBytes = await readFile(new URL('./public/og.png', import.meta.url));
+const ogImageVersion = createHash('sha256').update(ogImageBytes).digest('hex').slice(0, 8);
+const ogImage = new URL(`${base || ''}/og.png?v=${ogImageVersion}`, site).href;
 const socialDescription = await socialDescriptionFromRegistry(
   new URL('../releases/', import.meta.url),
 );
