@@ -3,6 +3,7 @@ import { createMarkdownProcessor, unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
 import { readFile } from 'node:fs/promises';
+import remarkBreaks from 'remark-breaks';
 
 import { manualSidebarFromHeadings } from './src/lib/manual-navigation.mjs';
 import rehypeDocumentEnhancements from './src/plugins/rehype-document-enhancements.mjs';
@@ -112,6 +113,7 @@ export default defineConfig({
   ],
   markdown: {
     processor: unified({
+      remarkPlugins: [remarkBreaks],
       rehypePlugins: [rehypeDocumentEnhancements],
     }),
   },
