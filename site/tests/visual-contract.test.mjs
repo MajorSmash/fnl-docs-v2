@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { access, readFile } from 'node:fs/promises';
 import test from 'node:test';
 
@@ -9,6 +10,10 @@ async function pngDimensions(url) {
   const png = await readFile(url);
   assert.equal(png.subarray(1, 4).toString('ascii'), 'PNG');
   return { width: png.readUInt32BE(16), height: png.readUInt32BE(20) };
+}
+
+async function sha256(url) {
+  return createHash('sha256').update(await readFile(url)).digest('hex');
 }
 
 function relativeLuminance(hex) {
@@ -90,4 +95,21 @@ test('WP-5F official logo derivatives exist at deployment dimensions', async () 
     width: 1200,
     height: 630,
   });
+});
+
+test('WP-6C social artwork preserves the supplied source and exact card dimensions', async () => {
+  const source = new URL('../src/assets/documentation-banner-source.png', import.meta.url);
+  assert.deepEqual(await pngDimensions(source), { width: 1920, height: 1080 });
+  assert.equal(
+    await sha256(source),
+    '825ba50739f802160ddd0da24b2769a18f4e64fd52d9516003b8bcbf09e635bd',
+  );
+  assert.deepEqual(await pngDimensions(new URL('../public/og.png', import.meta.url)), {
+    width: 1200,
+    height: 630,
+  });
+  assert.equal(
+    await sha256(new URL('../public/og.png', import.meta.url)),
+    '7bcfb634635267a1daea95e4bcea4ccc8f7f5427434d013902f5f7787be37964',
+  );
 });

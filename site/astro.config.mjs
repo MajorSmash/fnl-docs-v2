@@ -6,6 +6,7 @@ import { readFile } from 'node:fs/promises';
 import remarkBreaks from 'remark-breaks';
 
 import { manualSidebarFromHeadings } from './src/lib/manual-navigation.mjs';
+import { socialDescriptionFromRegistry } from './src/lib/release-social-description.mjs';
 import rehypeDocumentEnhancements from './src/plugins/rehype-document-enhancements.mjs';
 
 function normalizeBase(value) {
@@ -16,6 +17,9 @@ function normalizeBase(value) {
 const base = normalizeBase(process.env.BASE_PATH ?? '/fnl-docs-v2');
 const site = process.env.SITE_URL ?? 'https://example.invalid';
 const ogImage = new URL(`${base || ''}/og.png`, site).href;
+const socialDescription = await socialDescriptionFromRegistry(
+  new URL('../releases/', import.meta.url),
+);
 const manualSource = await readFile(new URL('../manual/ninjalive2_manual.md', import.meta.url), 'utf8');
 const manualRenderer = await createMarkdownProcessor();
 const manualHeadings = (await manualRenderer.render(manualSource)).metadata.headings;
@@ -34,8 +38,7 @@ export default defineConfig({
     starlight({
       title: 'FluidNinja LIVE 2 Docs',
       favicon: '/favicon.png',
-      description:
-        'Canonical FluidNinja LIVE 2 manual, parameter references, release notes, set topics, and approved support answers.',
+      description: socialDescription,
       pagefind: true,
       credits: true,
       // The WP-5D left sidebar already provides chapter/subsection fragment
@@ -56,6 +59,7 @@ export default defineConfig({
         { tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
         { tag: 'meta', attrs: { property: 'og:image', content: ogImage } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
+        { tag: 'meta', attrs: { name: 'twitter:description', content: socialDescription } },
         { tag: 'meta', attrs: { name: 'twitter:image', content: ogImage } },
       ],
       social: [
