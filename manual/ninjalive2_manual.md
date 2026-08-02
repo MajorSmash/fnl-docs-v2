@@ -1,9 +1,9 @@
 ---
 doc_type: MANUAL
-title: "FluidNinja LIVE-2 Manual"
-date: 2026-07-19
-source_url: "https://drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa"
-doc_revision: "2.02"
+title: FluidNinja LIVE-2 Manual
+date: 2026-08-01
+source_url: https://drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa
+doc_revision: '2.03'
 version_min: null
 version_max: null
 media_urls: []
@@ -11,7 +11,7 @@ media_urls: []
 
 # FLUIDNINJA LIVE-2 MANUAL
 
-**Updated:** 19 July 2026  
+**Updated:** 1 August 2026  
 This document uses MarkDown syntax - opening it with an [MD viewer](https://markpad.dev) results formatted text.
 
 ---
@@ -169,7 +169,7 @@ Cases, when we need to employ external systems:
 
 
 **Extending the simulation area:** to handle large areas that stretch beyond the simulation bounds, we definitely need additional assets. A few examples:
-- Large water: we generate ripples around the player as it moves along a lake coastline. `Live Actor` is handles interaction, runs the fluidsim and forwards the output data to a Mesh Spawner (`Surface Aligned Meshes`). The spawner is responsible for generating a large mesh grid and displaying ninja output on the meshes. The two Actors form "a setup" that manages a far-stretching interactive ocean surface. Members of this setup are in the same folder in the Level Outliner, and they should be deployed together on a new level to have a working ocean. Simple way: copy-pasting them to a new level - and adjusting their settings for the given scene.
+- Large water: we generate ripples around the player as it moves along a lake coastline. `Live Actor` handles interaction, runs the fluidsim and forwards the output data to a Mesh Spawner (`Surface Aligned Meshes`). The spawner is responsible for generating a large mesh grid and displaying ninja output on the meshes. The two Actors form "a setup" that manages a far-stretching interactive ocean surface. Members of this setup are in the same folder in the Level Outliner, and they should be deployed together on a new level to have a working ocean. Simple way: copy-pasting them to a new level - and adjusting their settings for the given scene.
 - Footprints on Landscapes: `Live Actor` is switched to Simple Painter mode to draw footprints and wheeltracks on a sandy ground - the `Landscape Utility` is needed if we'd like to apply the dynamic footprint material on Landscape Components.
 - Extended volume: a landscape covered with low lying fog, center area simulated, rest is passive - rendered by `Surface Aligned Volumes`, data for the center area coming from `Live Actor`.
 - Clouds: `Live Actor` sends data to the standard Unreal `Volumetric Cloud Actor`
@@ -977,7 +977,7 @@ E.g. Live Actor was parented to a pawn on the source level, we pasted it *withou
   Learn more about sparse/dense setups and surface alignment on this tutorial level: `/Content /FluidNinjaLive /Levels /Starter /Tutorial03_KeyConceptsForWater.umap` 
 
 -  **SceneCaptureCamera**: when Live Actor is receiving terrain height data from a SceneCaptureCamera, it needs the vertical position of the capture camera as a reference. We need to adjust this param following paste: `/LiveComponent /LiveInputFields /HeightFields /ExternalHeightData /ExternalHeightDataNullPoint`
-Also, make sure that `Camera XY pos = Live Actor XY pos` and `Camera Z pos` should be above the highest captured object. Learn more at *Chapter 2, Point 12*.
+Also, make sure that `Camera XY pos = Live Actor XY pos` and `Camera Z pos` should be above the highest captured object. Learn more at `Chapter 2, Point 12`.
 
 
 7. **Rotation and Scale**: all setup elements are sensitive to rotation and scale. As a simple rule of thumb: **DO NOT ROTATE AND NEVER SCALE SETUP ELEMENTS**. `Rotation = 0,0,0` and `Scale = 1,1,1`. 
@@ -1016,7 +1016,7 @@ There are three Niagara Systems in the Ninja asset library that *optionally* rel
 
 **Core ninja concepts explained**
 
-Context: *Chapter 2* listed the assets available for setup building. *Chapter 3* explained how we copy-paste existing setups from a ninja demo level to a new level. To modify setups, we need to learn about ninja features.
+Context: `Chapter 2` listed the assets available for setup building. `Chapter 3` explained how we copy-paste existing setups from a ninja demo level to a new level. To modify setups, we need to learn about ninja features.
 
 - This chapter is mirroring text from a tutorial level - and serves like a content guide:
 `/Content /FluidNinjaLive /Levels /Starter /Tutorial01_Basics.umap`
@@ -1208,7 +1208,7 @@ Collected data is forwarded to Live Component every frame.
 Cinematic Camera is usually not recognized as "player" / could not trigger Activation Volume.
 We better switch OFF Proximity based Activation completely before recording a sequence!
 
-*Learn more: `Chapter 14`, Sequencer and MovieRenderQueue*
+Learn more: `Chapter 14`, **Sequencer and MovieRenderQueue**
 
 ---------------------------------------------------------------------------------------
 
@@ -1912,7 +1912,7 @@ In this Chapter:
 - 6.1 <a href="#61-sparse-vs-dense-setups">Sparse vs Dense Setups</a>
 - 6.2 <a href="#62-surface-alignment">Surface Alignment</a>
 	- <a href="#height-input-none">A   Dense setup, Height Input:  NONE</a>
-	- <a href="#height-input-landscape">B   Dense setup, Height Input  LANDSCAPE</a>
+	- <a href="#height-input-labdscape">B   Dense setup, Height Input  LANDSCAPE</a>
 	- <a href="#height-input-scenecap">C   Dense setup, Height Input  SCENECAPTURE</a>
 	- <a href="#height-input-rvt">D   Dense setup, Height Input  RVT</a>
 	- <a href="#sparse-flat">E   Sparse setup, FLAT</a>
@@ -2000,7 +2000,7 @@ Key factors of Surface-alignment:
 
 DENSE Setups on STAGE 2 are showcasing methods to access world height data:
 	- <a href="#height-input-none">A   Dense setup, Height Input:  NONE</a>
-	- <a href="#height-input-landscape">B   Dense setup, Height Input  LANDSCAPE</a>
+	- <a href="#height-input-labdscape">B   Dense setup, Height Input  LANDSCAPE</a>
 	- <a href="#height-input-scenecap">C   Dense setup, Height Input  SCENECAPTURE</a>
 	- <a href="#height-input-rvt">D   Dense setup, Height Input  RVT</a>
 
@@ -2997,17 +2997,21 @@ We can drive volumetrics with real time 2D fluid simulation data:
 
 Ninja setups utilize **FOUR** volume types, each one could be used for different purposes:
 
-1. **FVOL**, Fog Volume: 
-low performance cost, low resolution, low responsivity (high latency), medium size range (10 meters - to - 1 kilometers), no self-shadows, ideal for slowly changing, subtle environmental effects.
+1. **FVOL**, Fog Volume:  
+Low performance cost, low resolution, low responsivity (high latency), medium size range (10 meters - to - 1 kilometers), no self-shadows, supports multiple lightsources. Ideal for slowly changing, subtle environmental effects.
 
-2. **CVOL**, Cloud Volume: 
-medium performance cost, medium resolution, responsive, large size range (0.5 kilometers - 1000 kilometers), ideal for large scale, detailed and dramatic environmental effects. Besides the trivial usage (high altitude clouds): we could adjust the layer altitude param - and render surface aligned clouds at lower altitudes. Possible use cases include low-lying fog on a hillside, emerging mushroom cloud of a large explosion, volcano smoke column, sandstorm, tornado...
+2. **CVOL**, Cloud Volume  
+Medium performance cost, medium resolution, responsive, large size range (0.5 kilometers - 1000 kilometers), ideal for large scale, detailed and dramatic environmental effects. Supports self-shadows and Directional Light, plus we can switch on Point Light support using a CVAR. Besides the trivial usage (high altitude clouds): we could adjust the layer altitude param - and render surface aligned clouds at lower altitudes. Possible use cases include low-lying fog on a hillside, emerging mushroom cloud of a large explosion, volcano smoke column, sandstorm, tornado...
 
-3. **HVOL**, Heterogeneous Volume: 
-high performance cost, high resolution, high responsivity, small-medium size range (1 meters - 1000 meters), ideal for small-scale, detail-rich character and environmental effects
+3. **HVOL**, Heterogeneous Volume:  
+High performance cost, high resolution, high responsivity, small-medium size range (1 meters - 1000 meters), supports self-shadows and multiple lightsources. Ideal for small scale, detail-rich character and environmental effects
 
-4. **SVOL**, Smoke Volume
-similar to HVOL, but supports UNLIT mode - ideal to deliver volumetrics on low-end hardware!
+4. **SVOL**, Smoke Volume  
+Similar to HVOL, but supports UNLIT mode - ideal to deliver volumetrics on low-end hardware!
+Limitation: supports only a single light source - Directional or Point Light.
+
+Learn more about FVOL, CVOL and HVOL at: `Chapter 2, Point 14`, **Native Unreal Volumes**
+Original Volumetrics Documentation for LIVE-1: [LINK](https://drive.google.com/file/d/1F94t04Dh2HMWQRUMmtGVxwD2Dk6RaN79)
 
 ---
 
@@ -3021,9 +3025,6 @@ similar to HVOL, but supports UNLIT mode - ideal to deliver volumetrics on low-e
 - 11.6 <a href="#116-culling-fading-visibility">Culling Fading Visibility</a>
 
 <a href="#table-of-contents">Back to the Table of Contents</a>
-
-Related content in the Manual: `Chapter 2, Point 14`, **Native Unreal Volumes**
-Original Volumetrics Documentation for LIVE-1: [LINK](https://drive.google.com/file/d/1F94t04Dh2HMWQRUMmtGVxwD2Dk6RaN79)
 
 ---------------------------------------------------------------------------------------
 
@@ -3282,8 +3283,10 @@ Fact: while running a lightweight niagara based 2D simulation core, we are drivi
 
 **A. Standalone Benchmarking Builds**
 
-Here comes two pre-compiled, playable build with benchmarking functions!
-(1) Download ZIP, (2) run the included EXE, (3) select a level using the top-left menu, (4) click on the small "B" button on the lower right - *"B" stands for for "benchmark"*.
+Performance in packaged builds is 150-200% better, compared to in-editor performance.
+Here comes two pre-compiled, playable build with benchmarking functions - to test ninja on your own hardware, in a game-like situation!
+
+(1) Download ZIP, (2) run the included EXE, (3) select a level using the top-left menu, (4) click on the small "B" button on the lower right to access *benchmarking tools*.
 - Get **[LOW-END BUILD](https://fluidninja.itch.io/fluidninja-live-2-low-end-demo)** for `GTX 1050 - 1070, RTX 2050-2060, RTX 3050-3060`
 - Get **[HIGH-END BUILD](https://fluidninja.itch.io/fluidninja-live-2-demo)** for `RTX 2070 - 2090, RTX 3070 and all cards above`
 
@@ -3310,17 +3313,17 @@ Multiple Sim Actors Stress:
 
 ### 12.2 Layers of Optimization
 
-We distinguish three layers of performance optimization:
+We distinguish three layers for performance optimization:
 
-1. Low level optimization: tweaking specific parameters of LiveComponent, additional systems and Output Material Instances. We do this to adjust input data throughput, simulation quality and material shader complexity for a given setup.
+1. **Low level optimization**: tweaking specific parameters of LiveComponent, additional systems and Output Material Instances. We do this to adjust input data throughput, simulation quality and material shader complexity for a given setup.
 *e.g. lowering sim resolution, reducing the number of tracked points, forcing more agressive LOD on the external system responsible for water meshing, switching off caustics advection in the Output Material*
 
-2. Medium level optimization: defining the number of ninja instances and external systems that participate in a given setup.
+2. **Medium level optimization**: defining the number of ninja instances and external systems that participate in a given setup.
 *e.g. we have a sandy shoreline with reeds. Water, sand and foliage - all responsive. We give priority to water, remove footprint handler and switch to passive foliage*
 
 
-3. High level optimization: adjusting Project Settings.  
-*e.g. anti-aliasing method, lumen and nanite usage, shader model*  
+3. **High level optimization**: adjusting Project Settings.  
+*e.g. anti-aliasing method, lumen and nanite usage, shader model, RHI*  
 
 *In the next subchapters, we are discussing optimization with this hierarchy in mind, advancing from low-level params towards high level settings.*
 
@@ -3425,17 +3428,23 @@ Each param comes with a detailed description: available as **ToolTip** on the Ac
 
 **Dedicatedly listing the three most important performance-related params:**
 
-1. Simulation RESOLUTION param has the greatest impact on core performance:
+1. **Simulation Resolution** param has the greatest impact on core performance:
 `/LiveComponent /LiveCore /ResolutionX` and `ResolutionY`
+Adjusting sim resolution for fluid setups that are already fine-tuned, might not be easy: resolution changes also change simulation dynamics. Suggestion: leave sim resolution as it is, and use the below two params instead!
+Note: simple painter based setups (eg. footprints) are NOT sensitive for sim resolution changes!
 
-2. Field Buffer Resolution is critical: ninja samples Mesh SDFs using this resolution. By default, we are using `Resolution(X,Y) / 4` - a scaledown factor of four. Key param:  
+2. **Field Buffer Resolution** is critical: ninja samples Mesh SDF, Landscapes and Splines using this resolution. By default, we are using `Resolution(X,Y) / 4` - a scaledown factor of four. 
+Key param:  
 `/LiveComponent /LiveCore /Performance /FieldBufferDownScaleFactor = 4`
-Using no scaledown (`FieldBufferDownScaleFactor = 1`) is a critical performance hit, recommended for cinematic usage only.
+Using no scaledown (`FieldBufferDownScaleFactor = 1`) is a critical performance hit, strictly for cinematic usage only.
+**Recommendation**: in case we are targeting low end hardware (eg. `RTX 3050`), we should set `FieldBufferDownScaleFactor` to `6` , `8` or to an even bigger number. 
 
-3. Paint Buffer Resolution is important. By default, we are using `Resolution(X,Y) / 2` - a scaledown factor of two. Key param:  
+3. **Paint Buffer Resolution** is important. By default, we are using `Resolution(X,Y) / 2` - a scaledown factor of two. Key param:  
 `/LiveComponent /LiveCore /Performance /PaintBufferDownScaleFactor = 2`
 .
 Note: IF `SimplePainterMode = True`, ninja uses full resolution Paint Buffer (no scaledown).
+In this case, we adjust Painter resolution directly with Simulation Resolution.
+**Recommendation**: in case we are targeting low end hardware (eg. `RTX 3050`), we should set `PaintBufferDownScaleFactor` to `4` , `6` or to an even bigger number (in non-simplepainter setups). 
 
 
 ---------------------------------------------------------------------------------------
@@ -3982,7 +3991,7 @@ WORKAROUND: manually re-assing the material following the system duplication.
 **Problems with ninja core**
 
 
-The following text is mirrored from: [PARAMETER DESCRIPTOR](https://drive.google.com/file/d/1FedZwfW3iE1OgJr_Ye551TgaSLjqVUdj), Chapter 7: Ninjalive Core Special Parameters
+The following text is mirrored from: [PARAMETER DESCRIPTOR](https://drive.google.com/file/d/1FedZwfW3iE1OgJr_Ye551TgaSLjqVUdj), "Chapter 7: Ninjalive Core Special Parameters"
 
 Most LIVE-2 functions are packed into a Core Niagara System. User Parameters of the Core are controlled by the wrapper Live Component, we do not access them directly. While the wrapper successfully manages hundreds of simple Niagara User Parameters, there are FIVE komplex DATA INTERFACE structures in Niagara Core, that are (A) NOT exposed to blueprints and (B) tend to randomly lose input-field information on specific Unreal Editor operations. The data loss seems to be an Unreal Engine bug.
 
@@ -4278,7 +4287,7 @@ So, here is a list with a few examples of known ninja usage:
 
 ## 17. Machine Learning
 
-The Manual plus the Content and Parameter descriptor files (linked under `Table of Contents, External Resources`) are suitable to feed Machine Learning Systems. Intended usage: LLMs trained with the data could answer questions and make it easier implement various setups. Using the MCP interface introduced in Unreal Engine 5.8, agentic AI might be able to practically use ninja and build setups. We are actively testing this possibility - with plans to deploy an "answerbot" to the Community Server and a Plugin that facilitates MCP driven ninja usage.
+The Manual plus the Content and Parameter descriptor files (linked under `Table of Contents, External Resources`) are suitable to feed Machine Learning Systems. Intended usage: LLMs trained with the data could answer questions and make it easier to implement various setups. Using the MCP interface introduced in Unreal Engine 5.8, agentic AI might be able to practically use ninja and build setups. We are actively testing this possibility - with plans to deploy an "answerbot" to the Community Server and a Plugin that facilitates MCP driven ninja usage.
 
 ---------------------------------------------------------------------------------------
 
