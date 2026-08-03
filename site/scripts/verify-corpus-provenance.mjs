@@ -30,6 +30,15 @@ const CORPUS_SOURCE_SECTIONS = Object.freeze([
   'releases',
 ]);
 
+const CANONICAL_DOC_TYPES = new Set([
+  'MANUAL',
+  'DESCRIPTOR',
+  'RELEASE',
+  'USECASE',
+  'SET_TOPIC',
+  'APPROVED_SUPPORT',
+]);
+
 async function markdownFiles(directory) {
   let entries;
   try {
@@ -163,6 +172,11 @@ export async function verifyCorpusProvenance(repositoryRoot) {
     try {
       const markdown = await readFile(file, 'utf8');
       const docType = frontmatterScalar(markdown, 'doc_type', relative).toUpperCase();
+      if (!CANONICAL_DOC_TYPES.has(docType)) {
+        throw new Error(
+          `${relative}: doc_type must use one canonical v7 scalar without YAML tags or comments`,
+        );
+      }
       if (!isSetTopicsPath && docType !== 'SET_TOPIC' && docType !== 'USECASE') {
         continue;
       }

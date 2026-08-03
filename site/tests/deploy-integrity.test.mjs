@@ -108,6 +108,29 @@ test('provenance guard admits general by ID and still rejects named legacy chann
   }
 });
 
+test('provenance guard fails closed on YAML doc_type spellings it cannot parse canonically', async () => {
+  for (const [name, docType] of Object.entries({
+    comment: 'SET_TOPIC # comment',
+    tag: '!!str SET_TOPIC',
+    anchor: '&scope SET_TOPIC',
+    'quoted-comment': '"SET_TOPIC" # comment',
+  })) {
+    for (const section of ['manual', 'descriptors', 'set-topics', 'support', 'releases']) {
+      await temporaryDirectory(`fnlkb-provenance-yaml-${section}-${name}-`, async (root) => {
+        await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
+        await writeSetTopic(root, `${name}.md`, '851482546100633601', {
+          docType,
+          section,
+        });
+        await assert.rejects(
+          verifyCorpusProvenance(root),
+          /doc_type must use one canonical v7 scalar/,
+        );
+      });
+    }
+  }
+});
+
 test('set-topic source routes mirror Astro documentId normalization', () => {
   assert.equal(
     setTopicRouteFromSource('set-topics/nested_name/topic_name.MD'),
