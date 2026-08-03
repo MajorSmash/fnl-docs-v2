@@ -22,6 +22,14 @@ const ADMITTED_SET_TOPIC_CHANNEL_IDS = new Set([
   LIVE2_CHANNEL_IDS.general,
 ]);
 
+const CORPUS_SOURCE_SECTIONS = Object.freeze([
+  'manual',
+  'descriptors',
+  'set-topics',
+  'support',
+  'releases',
+]);
+
 async function markdownFiles(directory) {
   let entries;
   try {
@@ -120,7 +128,16 @@ export function setTopicRouteFromSource(relativePath) {
 export async function verifyCorpusProvenance(repositoryRoot) {
   const root = path.resolve(repositoryRoot);
   const setTopicsRoot = path.join(root, 'set-topics');
-  const files = (await markdownFiles(setTopicsRoot)).sort();
+  const corpusFiles = (
+    await Promise.all(
+      CORPUS_SOURCE_SECTIONS.map((section) => markdownFiles(path.join(root, section))),
+    )
+  )
+    .flat()
+    .sort();
+  const files = corpusFiles.filter((file) =>
+    path.relative(root, file).replaceAll('\\', '/').startsWith('set-topics/'),
+  );
   if (files.length === 0) {
     throw new Error(
       `Corpus provenance failed: no set-topic source files found under ${setTopicsRoot}`,
@@ -130,19 +147,25 @@ export async function verifyCorpusProvenance(repositoryRoot) {
   const failures = [];
   const sourceRoutes = [];
   const routeOwners = new Map();
-  for (const file of files) {
+  for (const file of corpusFiles) {
     const relative = path.relative(root, file).replaceAll('\\', '/');
-    const route = setTopicRouteFromSource(relative);
-    sourceRoutes.push(route);
-    const previousOwner = routeOwners.get(route);
-    if (previousOwner) {
-      failures.push(`${relative}: route ${route} duplicates set-topic source ${previousOwner}`);
-    } else {
-      routeOwners.set(route, relative);
+    const isSetTopicsPath = relative.startsWith('set-topics/');
+    if (isSetTopicsPath) {
+      const route = setTopicRouteFromSource(relative);
+      sourceRoutes.push(route);
+      const previousOwner = routeOwners.get(route);
+      if (previousOwner) {
+        failures.push(`${relative}: route ${route} duplicates set-topic source ${previousOwner}`);
+      } else {
+        routeOwners.set(route, relative);
+      }
     }
     try {
       const markdown = await readFile(file, 'utf8');
       const docType = frontmatterScalar(markdown, 'doc_type', relative).toUpperCase();
+      if (!isSetTopicsPath && docType !== 'SET_TOPIC' && docType !== 'USECASE') {
+        continue;
+      }
       const sourceUrl = frontmatterScalar(markdown, 'source_url', relative);
       const channelId = sourceChannelId(sourceUrl, relative);
       if (channelId === LIVE2_CHANNEL_IDS.publicDiscussion) {

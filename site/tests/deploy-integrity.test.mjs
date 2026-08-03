@@ -43,9 +43,9 @@ async function writeSetTopic(
   root,
   name,
   channelId,
-  { bom = false, docType = 'SET_TOPIC' } = {},
+  { bom = false, docType = 'SET_TOPIC', section = 'set-topics' } = {},
 ) {
-  const directory = path.join(root, 'set-topics');
+  const directory = path.join(root, section);
   const target = path.join(directory, ...name.split('/'));
   await mkdir(path.dirname(target), { recursive: true });
   await writeFile(
@@ -79,8 +79,10 @@ test('provenance guard admits general by ID and still rejects named legacy chann
   });
 
   await temporaryDirectory('fnlkb-provenance-general-usecase-', async (root) => {
+    await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
     await writeSetTopic(root, 'general-usecase.md', LIVE2_CHANNEL_IDS.general, {
       docType: 'USECASE',
+      section: 'support',
     });
     await assert.rejects(
       verifyCorpusProvenance(root),
@@ -93,7 +95,11 @@ test('provenance guard admits general by ID and still rejects named legacy chann
     'ninjalive-issues': '850926358196125726',
   })) {
     await temporaryDirectory(`fnlkb-provenance-${name}-`, async (root) => {
-      await writeSetTopic(root, `${name}.md`, channelId);
+      await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
+      await writeSetTopic(root, `${name}.md`, channelId, {
+        docType: 'USECASE',
+        section: 'support',
+      });
       await assert.rejects(
         verifyCorpusProvenance(root),
         new RegExp(`channel ${channelId} is not an admitted LIVE2 set-topic channel`),
