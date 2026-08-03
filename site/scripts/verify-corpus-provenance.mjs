@@ -90,29 +90,15 @@ function frontmatterScalar(markdown, field, sourcePath) {
 }
 
 export function sourceChannelId(sourceUrl, sourcePath = 'set-topic source') {
-  let url;
-  try {
-    url = new URL(sourceUrl);
-  } catch {
-    throw new Error(`${sourcePath}: source_url is not a valid URL`);
-  }
-
-  const pathMatch = url.pathname.match(/^\/channels\/(\d+)\/(\d+)\/(\d+)$/);
-  if (
-    url.protocol !== 'https:' ||
-    url.hostname.toLowerCase() !== 'discord.com' ||
-    url.username !== '' ||
-    url.password !== '' ||
-    url.port !== '' ||
-    url.search !== '' ||
-    url.hash !== '' ||
-    pathMatch === null
-  ) {
+  const canonicalMatch = sourceUrl.match(
+    /^https:\/\/discord\.com\/channels\/(\d+)\/(\d+)\/(\d+)$/i,
+  );
+  if (canonicalMatch === null) {
     throw new Error(
       `${sourcePath}: source_url must be a canonical Discord message URL (/channels/server/channel/message)`,
     );
   }
-  return pathMatch[2];
+  return canonicalMatch[2];
 }
 
 export function setTopicRouteFromSource(relativePath) {

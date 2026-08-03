@@ -122,6 +122,8 @@ test('sourceChannelId pins canonical Discord host and protocol handling', () => 
     `http://discord.com${pathSuffix}`,
     `https://user:pass@discord.com${pathSuffix}`,
     `https://discord.com:444${pathSuffix}`,
+    `https://discord.com:443${pathSuffix}`,
+    `https://discord.com:bad${pathSuffix}`,
     `https://discord.com${pathSuffix}/`,
     `https://discord.com${pathSuffix}?x=1`,
     `https://discord.com${pathSuffix}#fragment`,
@@ -129,10 +131,6 @@ test('sourceChannelId pins canonical Discord host and protocol handling', () => 
   ]) {
     assert.throws(() => sourceChannelId(sourceUrl), /canonical Discord message URL/);
   }
-  assert.throws(
-    () => sourceChannelId(`https://discord.com:bad${pathSuffix}`),
-    /source_url is not a valid URL/,
-  );
 });
 
 test('provenance guard fails a synthetic legacy-channel fixture in a temporary corpus', async () => {
