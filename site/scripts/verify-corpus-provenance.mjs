@@ -97,21 +97,22 @@ export function sourceChannelId(sourceUrl, sourcePath = 'set-topic source') {
     throw new Error(`${sourcePath}: source_url is not a valid URL`);
   }
 
-  const segments = url.pathname.split('/').filter(Boolean);
+  const pathMatch = url.pathname.match(/^\/channels\/(\d+)\/(\d+)\/(\d+)$/);
   if (
     url.protocol !== 'https:' ||
     url.hostname.toLowerCase() !== 'discord.com' ||
-    segments.length !== 4 ||
-    segments[0] !== 'channels' ||
-    !/^\d+$/.test(segments[1]) ||
-    !/^\d+$/.test(segments[2]) ||
-    !/^\d+$/.test(segments[3])
+    url.username !== '' ||
+    url.password !== '' ||
+    url.port !== '' ||
+    url.search !== '' ||
+    url.hash !== '' ||
+    pathMatch === null
   ) {
     throw new Error(
       `${sourcePath}: source_url must be a canonical Discord message URL (/channels/server/channel/message)`,
     );
   }
-  return segments[2];
+  return pathMatch[2];
 }
 
 export function setTopicRouteFromSource(relativePath) {
@@ -155,11 +156,17 @@ export async function verifyCorpusProvenance(repositoryRoot) {
     }
     try {
       const markdown = await readFile(file, 'utf8');
+      const docType = frontmatterScalar(markdown, 'doc_type', relative).toUpperCase();
       const sourceUrl = frontmatterScalar(markdown, 'source_url', relative);
       const channelId = sourceChannelId(sourceUrl, relative);
       if (channelId === LIVE2_CHANNEL_IDS.publicDiscussion) {
         throw new Error(
           `${relative}: source_url uses live2-public-discussion (${channelId}), which is flywheel-only under spec v7 section 3.4`,
+        );
+      }
+      if (channelId === LIVE2_CHANNEL_IDS.general && docType !== 'SET_TOPIC') {
+        throw new Error(
+          `${relative}: source_url uses general (${channelId}), which is admitted only for SET_TOPIC under spec v7 section 3.4`,
         );
       }
       if (!ADMITTED_SET_TOPIC_CHANNEL_IDS.has(channelId)) {

@@ -27,9 +27,9 @@ async function temporaryDirectory(prefix, run) {
   }
 }
 
-function setTopic(sourceUrl) {
+function setTopic(sourceUrl, docType = 'SET_TOPIC') {
   return `---
-doc_type: SET_TOPIC
+doc_type: ${docType}
 title: Synthetic fixture
 date: 2026-07-17
 source_url: "${sourceUrl}"
@@ -39,7 +39,12 @@ Synthetic test content that never enters the repository corpus.
 `;
 }
 
-async function writeSetTopic(root, name, channelId, { bom = false } = {}) {
+async function writeSetTopic(
+  root,
+  name,
+  channelId,
+  { bom = false, docType = 'SET_TOPIC' } = {},
+) {
   const directory = path.join(root, 'set-topics');
   const target = path.join(directory, ...name.split('/'));
   await mkdir(path.dirname(target), { recursive: true });
@@ -47,6 +52,7 @@ async function writeSetTopic(root, name, channelId, { bom = false } = {}) {
     target,
     `${bom ? '\uFEFF' : ''}${setTopic(
       `https://discord.com/channels/850913821240983553/${channelId}/999999999999999999`,
+      docType,
     )}`,
   );
 }
@@ -70,6 +76,16 @@ test('provenance guard admits general by ID and still rejects named legacy chann
     await writeSetTopic(root, 'general.md', LIVE2_CHANNEL_IDS.general);
     const result = await verifyCorpusProvenance(root);
     assert.equal(result.checkedFiles, 1);
+  });
+
+  await temporaryDirectory('fnlkb-provenance-general-usecase-', async (root) => {
+    await writeSetTopic(root, 'general-usecase.md', LIVE2_CHANNEL_IDS.general, {
+      docType: 'USECASE',
+    });
+    await assert.rejects(
+      verifyCorpusProvenance(root),
+      /general .*admitted only for SET_TOPIC/,
+    );
   });
 
   for (const [name, channelId] of Object.entries({
@@ -104,9 +120,19 @@ test('sourceChannelId pins canonical Discord host and protocol handling', () => 
     `https://ptb.discord.com${pathSuffix}`,
     `https://canary.discord.com${pathSuffix}`,
     `http://discord.com${pathSuffix}`,
+    `https://user:pass@discord.com${pathSuffix}`,
+    `https://discord.com:444${pathSuffix}`,
+    `https://discord.com${pathSuffix}/`,
+    `https://discord.com${pathSuffix}?x=1`,
+    `https://discord.com${pathSuffix}#fragment`,
+    `https://discord.com${pathSuffix.replaceAll('/', '//')}`,
   ]) {
     assert.throws(() => sourceChannelId(sourceUrl), /canonical Discord message URL/);
   }
+  assert.throws(
+    () => sourceChannelId(`https://discord.com:bad${pathSuffix}`),
+    /source_url is not a valid URL/,
+  );
 });
 
 test('provenance guard fails a synthetic legacy-channel fixture in a temporary corpus', async () => {
