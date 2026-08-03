@@ -65,6 +65,27 @@ test('provenance guard accepts admitted LIVE2 channels and ignores non-built tem
   });
 });
 
+test('provenance guard admits general by ID and still rejects named legacy channels', async () => {
+  await temporaryDirectory('fnlkb-provenance-general-', async (root) => {
+    await writeSetTopic(root, 'general.md', LIVE2_CHANNEL_IDS.general);
+    const result = await verifyCorpusProvenance(root);
+    assert.equal(result.checkedFiles, 1);
+  });
+
+  for (const [name, channelId] of Object.entries({
+    'tips-tricks': '851482546100633601',
+    'ninjalive-issues': '850926358196125726',
+  })) {
+    await temporaryDirectory(`fnlkb-provenance-${name}-`, async (root) => {
+      await writeSetTopic(root, `${name}.md`, channelId);
+      await assert.rejects(
+        verifyCorpusProvenance(root),
+        new RegExp(`channel ${channelId} is not an admitted LIVE2 set-topic channel`),
+      );
+    });
+  }
+});
+
 test('set-topic source routes mirror Astro documentId normalization', () => {
   assert.equal(
     setTopicRouteFromSource('set-topics/nested_name/topic_name.MD'),

@@ -4,19 +4,22 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 // FNLKB Design Spec v7 section 3.4: committed SET_TOPIC/USECASE pages may
-// originate only in the three admission channels. live2-public-discussion is
-// a dedicated LIVE2 channel too, but remains flywheel-only and must fail here.
+// originate only in the admitted ID set. General is mixed and reaches canon
+// only after its LIVE-2 designator and human review gates in the bot;
+// live2-public-discussion remains flywheel-only and must fail here.
 export const LIVE2_CHANNEL_IDS = Object.freeze({
   announcements: '1460577812795883572',
   betaInfo: '1466643263774527741',
   info: '1319654748873560145',
   publicDiscussion: '1319655034803458069',
+  general: '850913821827792940',
 });
 
 const ADMITTED_SET_TOPIC_CHANNEL_IDS = new Set([
   LIVE2_CHANNEL_IDS.announcements,
   LIVE2_CHANNEL_IDS.betaInfo,
   LIVE2_CHANNEL_IDS.info,
+  LIVE2_CHANNEL_IDS.general,
 ]);
 
 async function markdownFiles(directory) {
