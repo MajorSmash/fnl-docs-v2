@@ -27,13 +27,14 @@ async function temporaryDirectory(prefix, run) {
   }
 }
 
-function setTopic(sourceUrl, docType = 'SET_TOPIC') {
+function setTopic(sourceUrl, docType = 'SET_TOPIC', admittedBy) {
+  const admission = admittedBy === undefined ? '' : `admitted_by: "${admittedBy}"\n`;
   return `---
 doc_type: ${docType}
 title: Synthetic fixture
 date: 2026-07-17
 source_url: "${sourceUrl}"
----
+${admission}---
 
 Synthetic test content that never enters the repository corpus.
 `;
@@ -43,7 +44,7 @@ async function writeSetTopic(
   root,
   name,
   channelId,
-  { bom = false, docType = 'SET_TOPIC', section = 'set-topics' } = {},
+  { bom = false, docType = 'SET_TOPIC', section = 'set-topics', admittedBy } = {},
 ) {
   const directory = path.join(root, section);
   const target = path.join(directory, ...name.split('/'));
@@ -53,6 +54,7 @@ async function writeSetTopic(
     `${bom ? '\uFEFF' : ''}${setTopic(
       `https://discord.com/channels/850913821240983553/${channelId}/999999999999999999`,
       docType,
+      admittedBy,
     )}`,
   );
 }
@@ -71,11 +73,16 @@ test('provenance guard accepts admitted LIVE2 channels and ignores non-built tem
   });
 });
 
-test('provenance guard admits general by ID and still rejects named legacy channels', async () => {
+test('provenance guard admits review-gated general and reviewer-captured readable channels', async () => {
   await temporaryDirectory('fnlkb-provenance-general-', async (root) => {
-    await writeSetTopic(root, 'general.md', LIVE2_CHANNEL_IDS.general);
+    await writeSetTopic(root, 'general.md', LIVE2_CHANNEL_IDS.general, {
+      admittedBy: `auto-capture:${LIVE2_CHANNEL_IDS.general}`,
+    });
+    await writeSetTopic(root, 'dev-lab.md', '1460578674695868510', {
+      admittedBy: 'reviewer-capture:200522590853267456',
+    });
     const result = await verifyCorpusProvenance(root);
-    assert.equal(result.checkedFiles, 1);
+    assert.equal(result.checkedFiles, 2);
   });
 
   await temporaryDirectory('fnlkb-provenance-general-usecase-', async (root) => {
@@ -96,16 +103,67 @@ test('provenance guard admits general by ID and still rejects named legacy chann
   })) {
     await temporaryDirectory(`fnlkb-provenance-${name}-`, async (root) => {
       await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
-      await writeSetTopic(root, `${name}.md`, channelId, {
-        docType: 'USECASE',
-        section: 'support',
-      });
+      await writeSetTopic(root, `${name}.md`, channelId);
       await assert.rejects(
         verifyCorpusProvenance(root),
-        new RegExp(`channel ${channelId} is not an admitted LIVE2 set-topic channel`),
+        new RegExp(`${name}\\.md: expected exactly one admitted_by field`),
       );
     });
   }
+});
+
+test('provenance guard fails closed on absent or malformed non-dedicated admission', async () => {
+  for (const [name, channelId, admittedBy] of [
+    ['general-absent', LIVE2_CHANNEL_IDS.general, undefined],
+    ['legacy-absent', '851482546100633601', undefined],
+    ['reviewer-text', '1460578674695868510', 'reviewer-capture:not-a-snowflake'],
+    ['reviewer-short', '1460578674695868510', 'reviewer-capture:123'],
+    [
+      'reviewer-comment',
+      '1460578674695868510',
+      'reviewer-capture:200522590853267456 # forged comment',
+    ],
+    ['wrong-auto-source', '1460578674695868510', 'auto-capture:1460578674695868510'],
+    ['general-wrong-auto', LIVE2_CHANNEL_IDS.general, 'auto-capture:1319655034803458069'],
+  ]) {
+    await temporaryDirectory(`fnlkb-provenance-admission-${name}-`, async (root) => {
+      await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
+      await writeSetTopic(root, `${name}.md`, channelId, { admittedBy });
+      await assert.rejects(verifyCorpusProvenance(root), /admitted_by/);
+    });
+  }
+});
+
+test('provenance guard rejects duplicate admission fields', async () => {
+  await temporaryDirectory('fnlkb-provenance-admission-duplicate-', async (root) => {
+    const directory = path.join(root, 'set-topics');
+    await mkdir(directory, { recursive: true });
+    const sourceUrl =
+      'https://discord.com/channels/850913821240983553/1460578674695868510/999999999999999999';
+    const admission = 'reviewer-capture:200522590853267456';
+    const duplicate = setTopic(sourceUrl, 'SET_TOPIC', admission).replace(
+      `admitted_by: "${admission}"\n---`,
+      `admitted_by: "${admission}"\nadmitted_by: "${admission}"\n---`,
+    );
+    await writeFile(path.join(directory, 'duplicate.md'), duplicate);
+
+    await assert.rejects(verifyCorpusProvenance(root), /expected exactly one admitted_by field/);
+  });
+});
+
+test('reviewer admission is SET_TOPIC-only and cannot admit a USECASE', async () => {
+  await temporaryDirectory('fnlkb-provenance-usecase-admission-', async (root) => {
+    await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
+    await writeSetTopic(root, 'reviewer-usecase.md', '1460578674695868510', {
+      docType: 'USECASE',
+      section: 'support',
+      admittedBy: 'reviewer-capture:200522590853267456',
+    });
+    await assert.rejects(
+      verifyCorpusProvenance(root),
+      /not an admitted LIVE2 set-topic channel/,
+    );
+  });
 });
 
 test('provenance guard fails closed on YAML doc_type spellings it cannot parse canonically', async () => {
@@ -168,7 +226,7 @@ test('provenance guard fails a synthetic legacy-channel fixture in a temporary c
 
     await assert.rejects(
       verifyCorpusProvenance(root),
-      /source_url channel 100000000000000000 is not an admitted LIVE2 set-topic channel/,
+      /expected exactly one admitted_by field/,
     );
   });
 });
@@ -192,12 +250,25 @@ test('provenance guard rejects site-layer set-topics content beyond the whitelis
   });
 });
 
-test('provenance guard rejects flywheel-only public-discussion pages and an empty section', async () => {
+test('provenance guard admits review-gated public-discussion and rejects it without metadata', async () => {
   await temporaryDirectory('fnlkb-provenance-public-', async (root) => {
-    await writeSetTopic(root, 'public-discussion.md', LIVE2_CHANNEL_IDS.publicDiscussion);
-    await assert.rejects(verifyCorpusProvenance(root), /live2-public-discussion.*flywheel-only/);
+    await writeSetTopic(root, 'public-discussion.md', LIVE2_CHANNEL_IDS.publicDiscussion, {
+      admittedBy: `auto-capture:${LIVE2_CHANNEL_IDS.publicDiscussion}`,
+    });
+    await writeSetTopic(root, 'public-reviewer.md', LIVE2_CHANNEL_IDS.publicDiscussion, {
+      admittedBy: 'reviewer-capture:200522590853267456',
+    });
+    const result = await verifyCorpusProvenance(root);
+    assert.equal(result.checkedFiles, 2);
   });
 
+  await temporaryDirectory('fnlkb-provenance-public-unadmitted-', async (root) => {
+    await writeSetTopic(root, 'public-discussion.md', LIVE2_CHANNEL_IDS.publicDiscussion);
+    await assert.rejects(verifyCorpusProvenance(root), /admitted_by/);
+  });
+});
+
+test('provenance guard rejects an empty set-topic section', async () => {
   await temporaryDirectory('fnlkb-provenance-empty-', async (root) => {
     await assert.rejects(verifyCorpusProvenance(root), /no set-topic source files found/);
   });

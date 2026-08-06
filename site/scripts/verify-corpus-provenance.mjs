@@ -3,10 +3,10 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
-// FNLKB Design Spec v7 section 3.4: committed SET_TOPIC/USECASE pages may
-// originate only in the admitted ID set. General is mixed and reaches canon
-// only after its LIVE-2 designator and human review gates in the bot;
-// live2-public-discussion remains flywheel-only and must fail here.
+// FNLKB Design Spec v7 sections 3.4 and 6.1: three dedicated channels are
+// admitted by source ID alone. Other SET_TOPIC sources require per-record
+// admission metadata created by the review-gated capture path. USECASE does
+// not gain this exception.
 export const LIVE2_CHANNEL_IDS = Object.freeze({
   announcements: '1460577812795883572',
   betaInfo: '1466643263774527741',
@@ -15,12 +15,18 @@ export const LIVE2_CHANNEL_IDS = Object.freeze({
   general: '850913821827792940',
 });
 
-const ADMITTED_SET_TOPIC_CHANNEL_IDS = new Set([
+const UNCONDITIONALLY_ADMITTED_SET_TOPIC_CHANNEL_IDS = new Set([
   LIVE2_CHANNEL_IDS.announcements,
   LIVE2_CHANNEL_IDS.betaInfo,
   LIVE2_CHANNEL_IDS.info,
-  LIVE2_CHANNEL_IDS.general,
 ]);
+
+const AUTO_CAPTURE_CHANNEL_IDS = new Set([
+  LIVE2_CHANNEL_IDS.general,
+  LIVE2_CHANNEL_IDS.publicDiscussion,
+]);
+
+const REVIEWER_CAPTURE_ADMISSION = /^reviewer-capture:[1-9][0-9]{16,19}$/;
 
 const CORPUS_SOURCE_SECTIONS = Object.freeze([
   'manual',
@@ -101,7 +107,7 @@ function frontmatterScalar(markdown, field, sourcePath) {
     value = value.slice(1, -1).trim();
   }
   if (!value || /^(?:null|~)$/i.test(value) || /^[>|]/.test(value)) {
-    throw new Error(`${sourcePath}: ${field} must be a non-empty scalar URL`);
+    throw new Error(`${sourcePath}: ${field} must be a non-empty scalar`);
   }
   return value;
 }
@@ -116,6 +122,17 @@ export function sourceChannelId(sourceUrl, sourcePath = 'set-topic source') {
     );
   }
   return canonicalMatch[2];
+}
+
+function admissionError(channelId, admittedBy, sourcePath) {
+  if (REVIEWER_CAPTURE_ADMISSION.test(admittedBy)) return undefined;
+  if (
+    AUTO_CAPTURE_CHANNEL_IDS.has(channelId) &&
+    admittedBy === `auto-capture:${channelId}`
+  ) {
+    return undefined;
+  }
+  return `${sourcePath}: source_url channel ${channelId} requires well-formed admitted_by (reviewer-capture:<reviewer_id> or its channel-specific auto-capture marker)`;
 }
 
 export function setTopicRouteFromSource(relativePath) {
@@ -182,21 +199,20 @@ export async function verifyCorpusProvenance(repositoryRoot) {
       }
       const sourceUrl = frontmatterScalar(markdown, 'source_url', relative);
       const channelId = sourceChannelId(sourceUrl, relative);
-      if (channelId === LIVE2_CHANNEL_IDS.publicDiscussion) {
-        throw new Error(
-          `${relative}: source_url uses live2-public-discussion (${channelId}), which is flywheel-only under spec v7 section 3.4`,
-        );
-      }
-      if (channelId === LIVE2_CHANNEL_IDS.general && docType !== 'SET_TOPIC') {
-        throw new Error(
-          `${relative}: source_url uses general (${channelId}), which is admitted only for SET_TOPIC under spec v7 section 3.4`,
-        );
-      }
-      if (!ADMITTED_SET_TOPIC_CHANNEL_IDS.has(channelId)) {
+      if (UNCONDITIONALLY_ADMITTED_SET_TOPIC_CHANNEL_IDS.has(channelId)) continue;
+      if (docType !== 'SET_TOPIC') {
+        if (channelId === LIVE2_CHANNEL_IDS.general) {
+          throw new Error(
+            `${relative}: source_url uses general (${channelId}), which is admitted only for SET_TOPIC under spec v7 section 3.4`,
+          );
+        }
         throw new Error(
           `${relative}: source_url channel ${channelId} is not an admitted LIVE2 set-topic channel under spec v7 section 3.4`,
         );
       }
+      const admittedBy = frontmatterScalar(markdown, 'admitted_by', relative);
+      const admissionFailure = admissionError(channelId, admittedBy, relative);
+      if (admissionFailure) throw new Error(admissionFailure);
     } catch (error) {
       failures.push(error instanceof Error ? error.message : String(error));
     }
@@ -233,7 +249,7 @@ async function main() {
   const repositoryRoot = path.resolve(process.argv[2] ?? defaultRoot);
   const { checkedFiles } = await verifyCorpusProvenance(repositoryRoot);
   console.log(
-    `PASS corpus provenance: ${checkedFiles} set-topic source file(s) use admitted LIVE2 channels.`,
+    `PASS corpus provenance: ${checkedFiles} set-topic source file(s) have admitted channel provenance.`,
   );
 }
 
