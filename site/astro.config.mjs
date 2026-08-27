@@ -120,6 +120,7 @@ export default defineConfig({
             { autogenerate: { directory: 'releases', collapsed: true } },
           ],
         },
+        { label: 'Privacy Policy', slug: 'privacy' },
       ],
     }),
   ],

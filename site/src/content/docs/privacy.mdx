@@ -1,0 +1,36 @@
+---
+title: Privacy Policy
+description: What data KnowledgeBot processes, what is published, and how to request removal.
+---
+
+KnowledgeBot is a support assistant operated for the official FluidNinja Discord server by the FluidNinja team (the server's administrators). This page explains what data it processes, what is published, and how to reach the people responsible.
+
+**How you'll know this policy exists.** This page is linked from the bot's Discord profile (the Privacy Policy link on its app profile card), from the support channel's pinned notice, and from this documentation site's navigation. Interacting with the bot is voluntary; if you do not address it, it processes nothing of yours.
+
+**What we process.** The bot reads messages only to: (1) answer questions explicitly addressed to it by @mention or slash command; (2) detect documentation posts by allowlisted developer accounts that carry an explicit "SET TOPIC" marker; (3) receive answers from allowlisted support-team accounts in the bot's own escalation threads. All other messages are ignored and never stored.
+
+**What we store — and what becomes public.**
+*(Note: published Q&A entries link to the original Discord question for provenance; anonymisation removes that link and any identifying wording on request — see removal rights below.)*
+
+- *Knowledge-base entries (PUBLIC):* documentation content from the product team that a human reviewer explicitly approved. These are stored in a public GitHub repository and published on this site, with the authoring team member's display name and a link to the original Discord message. Team members on the capture allowlists have agreed to this as part of writing the product's documentation. Where an approved Q&A entry quotes a user's question, the question text may appear but the asker is never named or identified.
+- *Question logs (PRIVATE):* questions asked to the bot, the bot's responses, and the asker's Discord user, channel, and message IDs — held in a private database, used only to review answer quality and prevent abuse, and never published.
+
+**AI processing.** Questions, captured documentation posts, and retrieved documentation passages are processed by third-party AI APIs at inference time only: Google Gemini (text embeddings and answer generation), Cohere (result ranking), and Groq/Cerebras (content classification, and as fallback answer providers if Gemini is unavailable). We do not train or fine-tune machine-learning models on any Discord data.
+
+**Removal and deletion requests — who handles them and how.** Requests are processed by the server administrators (Discord: **@MajorSmash**, or any member of the FluidNinja support team — reachable by DM or by posting in the support channel). You can request:
+
+- deletion of your question logs (identified by your Discord user ID);
+- removal or anonymisation of any published Q&A entry that includes your question text.
+
+**If you cannot reach us on Discord** — for example your account was banned, deleted, or you have left the server — you can still request removal:
+
+- by email: **[andras.ketzer@gmail.com](mailto:andras.ketzer@gmail.com)**, or
+- by opening an issue on the [public documentation repository](https://github.com/MajorSmash/fnl-docs-v2/issues) (no Discord account needed; include only your Discord user ID or a link to the published entry — do not post other personal details in the public issue).
+
+A ban or account deletion does not by itself delete data already held under this policy; the same removal rights apply and the same 14-day window is honoured regardless of your standing on the server.
+
+Requests are actioned within 14 days; removal from the public repository includes the published page and the retrieval database. Product documentation authored by the FluidNinja team itself is maintained at the team's discretion and is not subject to third-party removal requests.
+
+**What we never collect:** member lists, presence/online status, activity data, DMs (the bot ignores DMs), or messages not described above.
+
+*Last updated: 27 August 2026. Material changes to this policy are announced in the support channel.*
