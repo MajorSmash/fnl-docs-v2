@@ -121,6 +121,7 @@ export default defineConfig({
           ],
         },
         { label: 'Privacy Policy', slug: 'privacy' },
+        { label: 'Terms of Service', slug: 'terms' },
       ],
     }),
   ],
