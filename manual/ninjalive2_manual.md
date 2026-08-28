@@ -1,9 +1,9 @@
 ---
 doc_type: MANUAL
 title: FluidNinja LIVE-2 Manual
-date: 2026-08-01
+date: 2026-08-28
 source_url: https://drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa
-doc_revision: '2.03'
+doc_revision: '2.04'
 version_min: null
 version_max: null
 media_urls: []
@@ -11,17 +11,17 @@ media_urls: []
 
 # FLUIDNINJA LIVE-2 MANUAL
 
-**Updated:** 1 August 2026  
+**Updated:** 28 August 2026  
 This document uses MarkDown syntax - opening it with an [MD viewer](https://markpad.dev) results formatted text.
 
 ---
 
 FluidNinja LIVE is a general purpose visual effect system for Unreal Engine.  
-Following three years of development, FluidNinja LIVE-2 is about to be released 2026 Q3.  
+Following three years of development, FluidNinja LIVE-2 is released.  
 
-- LIVE-2 **BETA** is already available for testing at the [Community Server](https://discord.gg/rgEtwua2tu)  
-- A Playable LIVE-2 [Demo Build](https://fluidninja.itch.io/fluidninja-live-2-demo) is also available  
-- The Project Homepage at [FAB](https://www.fab.com/listings/80fcf53e-49f7-4635-a71c-ba81280c6618) is distributing LIVE-1, until LIVE-2 is officially released. 
+- The LIVE-2 Unreal Project is available for testing at the [Community Server](https://discord.gg/rgEtwua2tu)  
+- A Playable LIVE-2 [Demo Build](https://fluidninja.itch.io/fluidninja-live-2-demo) is also accessible with built-in benchmarking tools  
+- The Project Homepage at [FAB](https://www.fab.com/listings/80fcf53e-49f7-4635-a71c-ba81280c6618) is distributing both LIVE-1 and LIVE-2 
 Learn more about the transition at <a href="#15-live-1-vs-live-2">Chapter 15</a>
 - Support: andras.ketzer@gmail.com
 
@@ -3775,7 +3775,7 @@ Sequence and MRQ config files used by the above example setup:
 ---
 
 Contents of this Chapter:
-- 14.1 <a href="#141-terrain-flow">Limits of terrain flowing water simulation</a>
+- 14.1 <a href="#141-water-accumulation-limits">Water Accumulation - Limitations</a>
 - 14.2 <a href="#142-wave-generator">Prerequisites for Wave Generator</a>
 - 14.3 <a href="#143-dependencies">Live Component - Dependence on Live Actor</a>
 - 14.4 <a href="#144-spawning">Live Actor - Spawning Objects inside the Interaction Volume</a>
@@ -3783,6 +3783,7 @@ Contents of this Chapter:
 - 14.6 <a href="#146-bug---niagara-data-loss">Bug - data loss on the Niagara Systems User Parameter input</a>
 - 14.7 <a href="#147-bug---destructibles">Bug - Chaos Destructible Geometry Collections Memory Leak</a>
 - 14.8 <a href="#148-buoyancy">Buoyancy not supported</a>
+- 14.9 <a href="#149-waterline-and-underwater">Waterline and Dynamic Underwater not supported</a>
 
 <a href="#table-of-contents">Back to the Table of Contents</a>
 
@@ -3790,9 +3791,7 @@ Contents of this Chapter:
 ---------------------------------------------------------------------------------------
 
 
-### 14.1 Terrain Flow
-**Limits of terrain flowing water simulation**
-
+### 14.1 Water Accumulation Limits
 
 Ninja is a generic fluid simulation toolkit - employing the *Navier-Stokes fluid model* for both gases and liquids. **Advantage:** all simulation types could be handled with the same parameter set. 
 **Contra:** when it comes to the simulation of terrain flowing liquids, the feature set is limited - compared to simulations employing a dedicated *shallow water* model.
@@ -3800,10 +3799,11 @@ Ninja is a generic fluid simulation toolkit - employing the *Navier-Stokes fluid
 What ninja terrain flowing water CAN do:
  - confine flow with terrain slope and obstacles
  - use sources to generate water, cache and reaload sim state
- - accumulate a thin layer of fluid (max 1 meter) to fill smaller gaps
+ - dynamically accumulate a thin layer of fluid (1 meter) to fill small gaps as the fluid goes downhill
+ - create large water surfaces at a fixed, user defined elevation
 ---------------------------------------------------------------------------------------
 **What ninja terrain flowing water CAN NOT DO:**
- - we can not dynamically accumulate a thick layer of fluid
+ - we can not dynamically accumulate a thick (multi-meter) layer of fluid at local lows
  - we can not dynamically fill up tanks, rooms, pools from zero to multi-meter depths.
 
 **Workarounds:**
@@ -4096,7 +4096,7 @@ C. A step-by-step guide with screenshots, explaining how to apply the fix
 
 ### 14.8 Buoyancy
 
-LIVE v2.0 does **NOT** support buoyancy. The feature might be implemanted in later versions. 
+LIVE v2.0 does not support buoyancy. The feature might be implemanted in later versions. 
 
 - What we have: using the already existing functions, we can collect points (Actor Locations) on the CPU, send it to Ninja Core on the GPU, sample fluid surface height (altitude) at the listed points and send back the height data to the CPU using Data Channels.
 
@@ -4105,6 +4105,28 @@ LIVE v2.0 does **NOT** support buoyancy. The feature might be implemanted in lat
 Alternative solutions, until we don't have real buoyancy:
 - Making particles water-surface aligned is easy - they run on the GPU. And Mesh particles totally look like objects... See [example video snippet](https://youtu.be/QuCO66Tv8zw?t=233) .
 - In case we have a FLAT water surface, we could set up a PhysicsBody, with a Z-constraint (it can not move vertically) -- this object moves "on the surface" like it is floating.
+- Idea: forwarding water-surface altitude to materials is already implemented on the Paint Buffer Alpha channel. How about creating a material - to be applied on buoyant objects - and using Vertex World Position Offset (WPO) to offset object vertices to water-surface height? While objects pivots remain at the original vertical position, the mesh hull is dynamically snapped to the surface. Feels like a possible source of culling problems... but definitely an idea to be considered.
+
+---
+
+### 14.9 WaterLine and UnderWater
+
+Live v2.0 does not support **waterline**: when the camera is partially submerged under the water and we see under-the-water and above-the-water domains at the same time on the screen.
+
+Workaround: quick (1 frame) camera transition between the two domains (camera should quickly submerge).
+
+---
+
+Live v2.0 does not support **dynamic underwater** postprocessing. We are using finite PostProcess Volumes to generate "underwater look" (see [this](https://youtu.be/O57K5Aog7Hs&t=325) example). The technique demonstrated on most ninja water demo levels employs static, manually placed boxes (postprocess volumes). This method suits only flat, static water surfaces / uneven and terrain-aligned water surfaces can not be managed.
+
+As a proof-of-concept, there is a very slow - but working - solution implemented: we compare camera vertical position and water-surface-elevation - and switch on/off an infinite (boundless) underwater postprocess volume based on the comparison ("if camera is under water, switch on postprocess"). Problem: the current, experimental method is implemented on the CPU side (in blueprint land), very slow. The plan is to implement it on the GPU side, in the ninja core niagara emitter - later on.
+
+The experimental feat is demonstrated on this level:
+`/Content /FluidNinjaLive /Levels /Water_Sparse_River.umap`
+
+The key params are located at:
+`/LiveComponent /LiveLegacy /SlowPostProcessSwitch`
+
 
 ---------------------------------------------------------------------------------------
 
@@ -4113,7 +4135,9 @@ Alternative solutions, until we don't have real buoyancy:
 
 ## 15. LIVE-1 vs LIVE-2
 
-**Licensing**: 
+.
+
+### Licensing 
 - LIVE-2 is an upgrade to LIVE-1, accessible for LIVE-1 license holders
 
 ---
