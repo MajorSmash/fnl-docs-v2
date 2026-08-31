@@ -1,9 +1,9 @@
 ---
 doc_type: MANUAL
 title: FluidNinja LIVE-2 Manual
-date: 2026-08-28
+date: 2026-08-31
 source_url: https://drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa
-doc_revision: '2.04'
+doc_revision: '2.05'
 version_min: null
 version_max: null
 media_urls: []
@@ -11,7 +11,7 @@ media_urls: []
 
 # FLUIDNINJA LIVE-2 MANUAL
 
-**Updated:** 28 August 2026  
+**Updated:** 31 August 2026  
 This document uses MarkDown syntax - opening it with an [MD viewer](https://markpad.dev) results formatted text.
 
 ---
@@ -4127,6 +4127,24 @@ The experimental feat is demonstrated on this level:
 The key params are located at:
 `/LiveComponent /LiveLegacy /SlowPostProcessSwitch`
 
+---
+
+### 14.10 Multiplayer
+
+Live v2.0 is not replicated and setting up multiplayer config is up to the users. Learn how:
+
+1. Ninja operates as a client side VFX tool. 
+2. As such, it has little need of replication in it's core systems. In case the agents (characters, objects) interacting with the simulation are replicated: all local sims produce the same result on the client side. See [this example video.](https://youtu.be/iOWtW1a_GcQ)
+
+In general with replication and networking, we want to replicate as little as possible to save on bandwidth and increase responsiveness; recreating data onto the server/client. As such, Ninja only requires an updated transform per interacting actor.
+
+Based on user experiments, it seems: ninja can operate in a Listen Server networked environment.
+For Dedicated Servers, it will require some modifications to prevent the VFX logic from running on the server.
+
+Learn more at the [Community Server](https://discord.gg/rgEtwua2tu), where users share their experiences with multiplayer setups. Look up this collector post using the search bar: `REPLICATION, MULTIPLAYER, SPLIT-SCREEN`
+
+Related topics: <a href="#144-spawning">Limitations of spawning Objects and Pawns inside the Interaction Volume.</a>
+
 
 ---------------------------------------------------------------------------------------
 
@@ -4143,10 +4161,10 @@ The key params are located at:
 ---
 
 **Transition On FAB**:
-- The Project Homepage at [FAB](https://www.fab.com/listings/80fcf53e-49f7-4635-a71c-ba81280c6618) is going to host both LIVE-1 and LIVE-2:  
+- The Project Homepage at [FAB](https://www.fab.com/listings/80fcf53e-49f7-4635-a71c-ba81280c6618) is hosting both LIVE-1 and LIVE-2:  
   - IF we select UE 5.5 or lower as our UE version at download - we get LIVE-1
   - IF we select UE 5.6 or higher as our UE version at download - we get LIVE-2
-- Until LIVE-2 is officially released, only LIVE-1 is available at FAB, while LIVE-2 BETA could be accessed at the [Community Server](https://discord.gg/rgEtwua2tu) with a LIVE-1 license.
+
 
 ---
 
