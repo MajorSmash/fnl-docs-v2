@@ -7,7 +7,7 @@ author: "Andras Ketzer"
 source_channel: "live2-beta-discussion"
 admitted_by: "reviewer-capture:722009818113638480"
 scope: LIVE2
-version_min: null
+version_min: "2.0.0.56"
 version_max: null
 media_urls: ["https://cdn.discordapp.com/attachments/1460578674695868510/1543176889416294430/LIVE2_nativized_SLVD.png?ex=6a93eaf9&is=6a929979&hm=ababf119c000f6e8aa8ef0a39f6df2b5c168ee322bff9fe03c72a65f8ef41c1f&", "https://cdn.discordapp.com/attachments/1460578674695868510/1543176890133647430/LIVE2_nativized_SLVD_comparison.mp4?ex=6a93eaf9&is=6a929979&hm=eb3513791a83b0af41467d6731d27dd9a24219a7e779138c6a5f5087f59852fa&"]
 ---

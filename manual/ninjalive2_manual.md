@@ -4,7 +4,7 @@ title: FluidNinja LIVE-2 Manual
 date: 2026-08-31
 source_url: https://drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa
 doc_revision: '2.05'
-version_min: null
+version_min: "2.0.0.56"
 version_max: null
 media_urls: []
 ---

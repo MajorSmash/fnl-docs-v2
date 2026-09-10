@@ -6,7 +6,7 @@ source_url: "https://discord.com/channels/850913821240983553/1460577812795883572
 author: "andrasketzer"
 source_channel: "live2-announcements"
 scope: LIVE2
-version_min: null
+version_min: "2.0.0.56"
 version_max: null
 media_urls: []
 ---

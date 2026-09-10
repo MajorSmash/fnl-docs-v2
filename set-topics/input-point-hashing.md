@@ -7,7 +7,7 @@ author: "Andras Ketzer"
 source_channel: "off-topic"
 admitted_by: "reviewer-capture:722009818113638480"
 scope: LIVE2
-version_min: null
+version_min: "2.0.0.56"
 version_max: null
 media_urls: []
 ---

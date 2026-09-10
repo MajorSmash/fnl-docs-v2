@@ -4,7 +4,7 @@ title: "NinjaLive v2 Params Descriptor"
 date: 2026-07-16
 source_url: "https://drive.google.com/file/d/1FedZwfW3iE1OgJr_Ye551TgaSLjqVUdj"
 doc_revision: "1.86"
-version_min: null
+version_min: "2.0.0.56"
 version_max: null
 media_urls: []
 ---

@@ -6,7 +6,7 @@ source_url: "https://discord.com/channels/850913821240983553/1319654748873560145
 author: "andrasketzer"
 source_channel: "live2-info"
 scope: LIVE2
-version_min: null
+version_min: "2.0.0.56"
 version_max: null
 media_urls: ["https://cdn.discordapp.com/attachments/1319654748873560145/1518497180137164980/LIVE-2_Starting_Guide.jpg?ex=6a5874b4&is=6a572334&hm=32d71b548348887e7e3545f8c4a001ecea83fa99b0979fdd35aedacb6181ad94&"]
 ---

@@ -5,7 +5,7 @@ date: 2026-07-21
 source_url: "https://discord.com/channels/850913821240983553/1529031792894410922/1529043158095106128"
 author: "Andras Ketzer"
 question_ref: "https://discord.com/channels/850913821240983553/1527084779780964483/1529031769184014337"
-version_min: null
+version_min: "2.0.0.56"
 version_max: null
 media_urls: []
 ---

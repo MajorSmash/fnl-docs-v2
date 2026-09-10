@@ -4,7 +4,7 @@ title: "NinjaLive v2 Content Descriptor"
 date: 2026-07-16
 source_url: "https://drive.google.com/file/d/15d3QdfleD1jDw8LJ3YQEGpAP-89b9bKa"
 doc_revision: "1.35"
-version_min: null
+version_min: "2.0.0.56"
 version_max: null
 media_urls: []
 ---
