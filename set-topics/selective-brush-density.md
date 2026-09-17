@@ -1,6 +1,6 @@
 ---
 doc_type: SET_TOPIC
-title: "**SELECTIVE BRUSH DENSITY**"
+title: "SELECTIVE BRUSH DENSITY"
 date: 2026-08-05
 source_url: "https://discord.com/channels/850913821240983553/1460578674695868510/1534651443292934156"
 author: "Andras Ketzer"

@@ -1,6 +1,6 @@
 ---
 doc_type: SET_TOPIC
-title: "LIVE-2 **BUOYANCY - NOT YET SUPPORTED**"
+title: "LIVE-2 BUOYANCY - NOT YET SUPPORTED"
 date: 2026-07-17
 source_url: "https://discord.com/channels/850913821240983553/1319654748873560145/1527790446212943932"
 author: "Andras Ketzer"

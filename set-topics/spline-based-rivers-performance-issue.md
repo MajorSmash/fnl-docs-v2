@@ -1,6 +1,6 @@
 ---
 doc_type: SET_TOPIC
-title: "**SPLINE BASED RIVERS PERFORMANCE ISSUE**"
+title: "SPLINE BASED RIVERS PERFORMANCE ISSUE"
 date: 2026-08-28
 source_url: "https://discord.com/channels/850913821240983553/1460578674695868510/1542819105575407666"
 author: "Andras Ketzer"

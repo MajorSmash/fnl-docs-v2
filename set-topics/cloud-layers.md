@@ -1,6 +1,6 @@
 ---
 doc_type: SET_TOPIC
-title: "**CLOUD LAYERS**"
+title: "CLOUD LAYERS"
 date: 2026-08-03
 source_url: "https://discord.com/channels/850913821240983553/850913821827792940/1533724864362315836"
 author: "Andras Ketzer"

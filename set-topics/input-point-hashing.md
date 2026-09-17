@@ -1,6 +1,6 @@
 ---
 doc_type: SET_TOPIC
-title: "**INPUT POINT HASHING**"
+title: "INPUT POINT HASHING"
 date: 2026-08-08
 source_url: "https://discord.com/channels/850913821240983553/852182166103392286/1535772131068088431"
 author: "Andras Ketzer"
