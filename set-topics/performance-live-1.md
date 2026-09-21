@@ -1,6 +1,6 @@
 ---
 doc_type: SET_TOPIC
-title: "PERFORMANCE LIVE-1"
+title: "LIVE-2 PERFORMANCE vs LIVE-1"
 date: 2026-08-29
 source_url: "https://discord.com/channels/850913821240983553/1460578674695868510/1543170511708626975"
 author: "Andras Ketzer"
@@ -12,7 +12,7 @@ version_max: null
 media_urls: []
 ---
 
-PERFORMANCE LIVE-1
+LIVE-2 PERFORMANCE vs LIVE-1
 .
 There is a dedicated chapter in the Manual, comparing L1 and L2: [Chapter 15.1](https://majorsmash.github.io/fnl-docs-v2/manual/ninjalive2-manual/#151-comparison)
 Comparing performance is a complex task:
