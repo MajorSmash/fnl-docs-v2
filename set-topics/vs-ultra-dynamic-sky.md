@@ -1,6 +1,6 @@
 ---
 doc_type: SET_TOPIC
-title: "vs ULTRA DYNAMIC SKY"
+title: "LIVE-2 vs ULTRA DYNAMIC SKY"
 date: 2026-09-17
 source_url: "https://discord.com/channels/850913821240983553/850913821827792940/1550097414575095939"
 author: "Andras Ketzer"

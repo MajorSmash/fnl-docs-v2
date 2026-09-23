@@ -1,6 +1,6 @@
 ---
 doc_type: SET_TOPIC
-title: "vs CONCAVE TERRAINS"
+title: "LIVE-2 vs CONCAVE TERRAINS"
 date: 2026-09-06
 source_url: "https://discord.com/channels/850913821240983553/1319655034803458069/1546126683575165049"
 author: "Andras Ketzer"

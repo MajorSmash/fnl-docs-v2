@@ -1,6 +1,6 @@
 ---
 doc_type: SET_TOPIC
-title: "vs NANITE"
+title: "LIVE-2 vs NANITE"
 date: 2026-09-08
 source_url: "https://discord.com/channels/850913821240983553/1319655034803458069/1546899454488215572"
 author: "Andras Ketzer"
