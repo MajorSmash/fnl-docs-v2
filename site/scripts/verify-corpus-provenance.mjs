@@ -2,31 +2,17 @@ import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 
-// FNLKB Design Spec v7 sections 3.4 and 6.1: three dedicated channels are
-// admitted by source ID alone. Other SET_TOPIC sources require per-record
-// admission metadata created by the review-gated capture path. USECASE does
-// not gain this exception.
-export const LIVE2_CHANNEL_IDS = Object.freeze({
-  announcements: '1460577812795883572',
-  betaInfo: '1466643263774527741',
-  info: '1319654748873560145',
-  publicDiscussion: '1319655034803458069',
-  general: '850913821827792940',
-});
-
-const UNCONDITIONALLY_ADMITTED_SET_TOPIC_CHANNEL_IDS = new Set([
-  LIVE2_CHANNEL_IDS.announcements,
-  LIVE2_CHANNEL_IDS.betaInfo,
-  LIVE2_CHANNEL_IDS.info,
-]);
-
-const AUTO_CAPTURE_CHANNEL_IDS = new Set([
-  LIVE2_CHANNEL_IDS.general,
-  LIVE2_CHANNEL_IDS.publicDiscussion,
-]);
-
-const REVIEWER_CAPTURE_ADMISSION = /^reviewer-capture:[1-9][0-9]{16,19}$/;
+// Spec v7 section 3.4, Wave-11: channel identity is display metadata only.
+// This checked-in snapshot is the ONLY grandfather authority; never derive it
+// from document dates, current directory contents, or a caller-provided list.
+import grandfathered from './pre-wave11-admission.json' with { type: 'json' };
+const GRANDFATHERED_PATHS = new Set(grandfathered.paths);
+// Use the installed renderer's YAML parser, not a second interpretation of YAML.
+// CI must install the locked site dependencies before invoking this guard.
+const requireFromAstro = createRequire(import.meta.resolve('astro/package.json'));
+const { load: parseYaml } = requireFromAstro('js-yaml');
 
 const CORPUS_SOURCE_SECTIONS = Object.freeze([
   'manual',
@@ -87,27 +73,55 @@ async function allFiles(directory) {
   return files;
 }
 
-function frontmatterScalar(markdown, field, sourcePath) {
+function frontmatterScalar(markdown, field, sourcePath, { stringOnly = false, optional = false } = {}) {
   const frontmatter = markdown.match(/^\uFEFF?---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n|$)/)?.[1];
   if (frontmatter === undefined) {
     throw new Error(`${sourcePath}: missing YAML frontmatter`);
   }
 
-  const matches = [...frontmatter.matchAll(new RegExp(`^${field}\\s*:\\s*(.*?)\\s*$`, 'gm'))];
+  let data;
+  try {
+    data = parseYaml(frontmatter);
+  } catch {
+    throw new Error(`${sourcePath}: invalid YAML frontmatter (check duplicate fields and scalar syntax)`);
+  }
+  if (optional && data && typeof data === 'object' && !Array.isArray(data) && !Object.hasOwn(data, field)) return undefined;
+  if (!data || typeof data !== 'object' || Array.isArray(data) || !Object.hasOwn(data, field)) {
+    throw new Error(`${sourcePath}: expected exactly one ${field} field in the YAML mapping`);
+  }
+  // Lines inside multiline quoted values are not frontmatter fields. Parsing
+  // the mapping first closes that bypass; canonical scalar checks below also
+  // prevent tags, aliases and ambiguous syntax from becoming admission facts.
+  const matches = [...frontmatter.matchAll(new RegExp(`^${field}[ \t]*:[ \t]*(.*?)[ \t]*$`, 'gm'))];
   if (matches.length !== 1) {
     throw new Error(`${sourcePath}: expected exactly one ${field} field`);
   }
 
   let value = matches[0][1].trim();
-  if (
-    value.length >= 2 &&
-    ((value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'")))
-  ) {
-    value = value.slice(1, -1).trim();
+  const quoted = value.startsWith('"') || value.startsWith("'");
+  if (quoted) {
+    try {
+      if (value.startsWith('"')) value = JSON.parse(value);
+      else {
+        if (!/^'(?:[^']|'')*'$/.test(value)) throw new Error('invalid quoted scalar');
+        value = value.slice(1, -1).replaceAll("''", "'");
+      }
+      value = value.trim();
+    } catch {
+      throw new Error(`${sourcePath}: ${field} must be a canonical quoted scalar`);
+    }
   }
-  if (!value || /^(?:null|~)$/i.test(value) || /^[>|]/.test(value)) {
+  if (!value || (!quoted && /^(?:null|~)$/i.test(value)) || /^[>|]/.test(value)) {
     throw new Error(`${sourcePath}: ${field} must be a non-empty scalar`);
+  }
+  if (stringOnly && !quoted && (
+    /^[!&*[{#?%@`]|^(?:true|false|yes|no|on|off|[-+]?\.inf|\.nan)$/i.test(value) ||
+    /\s#|:\s/.test(value) || /^[-+]?(?:\d|\.\d)/.test(value)
+  )) {
+    throw new Error(`${sourcePath}: ${field} must be a non-empty admission string`);
+  }
+  if (typeof data[field] !== 'string' || data[field].trim() !== value) {
+    throw new Error(`${sourcePath}: ${field} must be a canonical non-empty string field`);
   }
   return value;
 }
@@ -124,15 +138,10 @@ export function sourceChannelId(sourceUrl, sourcePath = 'set-topic source') {
   return canonicalMatch[2];
 }
 
-function admissionError(channelId, admittedBy, sourcePath) {
-  if (REVIEWER_CAPTURE_ADMISSION.test(admittedBy)) return undefined;
-  if (
-    AUTO_CAPTURE_CHANNEL_IDS.has(channelId) &&
-    admittedBy === `auto-capture:${channelId}`
-  ) {
-    return undefined;
-  }
-  return `${sourcePath}: source_url channel ${channelId} requires well-formed admitted_by (reviewer-capture:<reviewer_id> or its channel-specific auto-capture marker)`;
+function verifyAdmission(markdown, sourcePath) {
+  if (GRANDFATHERED_PATHS.has(sourcePath)) return;
+  // Presence is a non-empty string. Capture marker/channel identity is not a gate.
+  frontmatterScalar(markdown, 'admitted_by', sourcePath, { stringOnly: true });
 }
 
 export function setTopicRouteFromSource(relativePath) {
@@ -142,7 +151,7 @@ export function setTopicRouteFromSource(relativePath) {
   }
 
   // Mirrors documentId() in site/src/content.config.ts without importing the
-  // Astro/TypeScript config into this dependency-free CI guard.
+  // Astro/TypeScript config into this CI guard.
   const documentId = normalized
     .replace(/\.md$/i, '')
     .split('/')
@@ -170,10 +179,16 @@ export async function verifyCorpusProvenance(repositoryRoot) {
     );
   }
 
+  // The loader also publishes site-authored MD/MDX pages. Navigation pages
+  // have no doc_type, but typed pages must not bypass the same admission rule.
+  const siteContentRoot = path.join(root, 'site', 'src', 'content', 'docs');
+  const siteFiles = (await allFiles(siteContentRoot)).filter(file =>
+    /\.(md|mdx)$/i.test(file) && !/^_.*\.md$/i.test(path.basename(file)),
+  );
   const failures = [];
   const sourceRoutes = [];
   const routeOwners = new Map();
-  for (const file of corpusFiles) {
+  for (const file of [...corpusFiles, ...siteFiles]) {
     const relative = path.relative(root, file).replaceAll('\\', '/');
     const isSetTopicsPath = relative.startsWith('set-topics/');
     if (isSetTopicsPath) {
@@ -188,31 +203,20 @@ export async function verifyCorpusProvenance(repositoryRoot) {
     }
     try {
       const markdown = await readFile(file, 'utf8');
-      const docType = frontmatterScalar(markdown, 'doc_type', relative).toUpperCase();
+      const isSiteContent = relative.startsWith('site/src/content/docs/');
+      const docType = frontmatterScalar(markdown, 'doc_type', relative, { optional: isSiteContent })?.toUpperCase();
+      if (docType === undefined) continue; // Untyped site navigation, not canon.
       if (!CANONICAL_DOC_TYPES.has(docType)) {
         throw new Error(
           `${relative}: doc_type must use one canonical v7 scalar without YAML tags or comments`,
         );
       }
-      if (!isSetTopicsPath && docType !== 'SET_TOPIC' && docType !== 'USECASE') {
+      if (docType !== 'SET_TOPIC' && docType !== 'USECASE') {
         continue;
       }
       const sourceUrl = frontmatterScalar(markdown, 'source_url', relative);
-      const channelId = sourceChannelId(sourceUrl, relative);
-      if (UNCONDITIONALLY_ADMITTED_SET_TOPIC_CHANNEL_IDS.has(channelId)) continue;
-      if (docType !== 'SET_TOPIC') {
-        if (channelId === LIVE2_CHANNEL_IDS.general) {
-          throw new Error(
-            `${relative}: source_url uses general (${channelId}), which is admitted only for SET_TOPIC under spec v7 section 3.4`,
-          );
-        }
-        throw new Error(
-          `${relative}: source_url channel ${channelId} is not an admitted LIVE2 set-topic channel under spec v7 section 3.4`,
-        );
-      }
-      const admittedBy = frontmatterScalar(markdown, 'admitted_by', relative);
-      const admissionFailure = admissionError(channelId, admittedBy, relative);
-      if (admissionFailure) throw new Error(admissionFailure);
+      sourceChannelId(sourceUrl, relative); // URL integrity only; no channel gate.
+      verifyAdmission(markdown, relative);
     } catch (error) {
       failures.push(error instanceof Error ? error.message : String(error));
     }
@@ -241,15 +245,15 @@ export async function verifyCorpusProvenance(repositoryRoot) {
     throw new Error(`Corpus provenance failed:\n- ${failures.join('\n- ')}`);
   }
 
-  return { checkedFiles: files.length, sourceRoutes };
+  return { checkedFiles: files.length, corpusFiles: corpusFiles.length, sourceRoutes };
 }
 
 async function main() {
   const defaultRoot = fileURLToPath(new URL('../../', import.meta.url));
   const repositoryRoot = path.resolve(process.argv[2] ?? defaultRoot);
-  const { checkedFiles } = await verifyCorpusProvenance(repositoryRoot);
+  const { checkedFiles, corpusFiles } = await verifyCorpusProvenance(repositoryRoot);
   console.log(
-    `PASS corpus provenance: ${checkedFiles} set-topic source file(s) have admitted channel provenance.`,
+    `PASS corpus admission: ${corpusFiles} canon file(s) checked; ${checkedFiles} set-topic source(s) have admitted_by or pinned pre-Wave-11 grandfathering.`,
   );
 }
 

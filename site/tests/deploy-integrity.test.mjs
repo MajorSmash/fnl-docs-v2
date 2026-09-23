@@ -1,15 +1,17 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 import {
-  LIVE2_CHANNEL_IDS,
   setTopicRouteFromSource,
   sourceChannelId,
   verifyCorpusProvenance,
 } from '../scripts/verify-corpus-provenance.mjs';
+import grandfathered from '../scripts/pre-wave11-admission.json' with { type: 'json' };
 import {
   assertIndexedPageCount,
   assertSetTopicRouteParity,
@@ -18,259 +20,191 @@ import {
   resultRoute,
 } from '../scripts/verify-search.mjs';
 
+const repositoryRoot = fileURLToPath(new URL('../../', import.meta.url));
+const guard = fileURLToPath(new URL('../scripts/verify-corpus-provenance.mjs', import.meta.url));
+// Former privileged channels and legacy channels must behave identically.
+const channels = ['1460577812795883572', '1466643263774527741', '1319654748873560145',
+  '1319655034803458069', '850913821827792940', '851482546100633601', '1460578674695868510'];
+const reviewer = 'reviewer-capture:200522590853267456';
+
 async function temporaryDirectory(prefix, run) {
   const directory = await mkdtemp(path.join(tmpdir(), prefix));
-  try {
-    return await run(directory);
-  } finally {
-    await rm(directory, { force: true, recursive: true });
-  }
+  try { return await run(directory); }
+  finally { await rm(directory, { force: true, recursive: true }); }
 }
 
-function setTopic(sourceUrl, docType = 'SET_TOPIC', admittedBy) {
-  const admission = admittedBy === undefined ? '' : `admitted_by: "${admittedBy}"\n`;
-  return `---
-doc_type: ${docType}
-title: Synthetic fixture
-date: 2026-07-17
-source_url: "${sourceUrl}"
-${admission}---
-
-Synthetic test content that never enters the repository corpus.
-`;
+function setTopic(channelId, { docType = 'SET_TOPIC', admission = `"${reviewer}"`, date = '2026-07-17' } = {}) {
+  return `---\ndoc_type: ${docType}\ntitle: Synthetic fixture\ndate: ${date}\n` +
+    `source_url: "https://discord.com/channels/850913821240983553/${channelId}/999999999999999999"\n` +
+    (admission === null ? '' : `admitted_by: ${admission}\n`) +
+    '---\n\nSynthetic test content that never enters the repository corpus.\n';
 }
 
-async function writeSetTopic(
-  root,
-  name,
-  channelId,
-  { bom = false, docType = 'SET_TOPIC', section = 'set-topics', admittedBy } = {},
-) {
-  const directory = path.join(root, section);
-  const target = path.join(directory, ...name.split('/'));
+async function writeSource(root, relative, markdown) {
+  const target = path.join(root, relative);
   await mkdir(path.dirname(target), { recursive: true });
-  await writeFile(
-    target,
-    `${bom ? '\uFEFF' : ''}${setTopic(
-      `https://discord.com/channels/850913821240983553/${channelId}/999999999999999999`,
-      docType,
-      admittedBy,
-    )}`,
-  );
+  await writeFile(target, markdown);
 }
 
-test('provenance guard accepts admitted LIVE2 channels and ignores non-built templates', async () => {
-  await temporaryDirectory('fnlkb-provenance-valid-', async (root) => {
-    await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
-    await writeSetTopic(root, 'bom.md', LIVE2_CHANNEL_IDS.info, { bom: true });
-    await writeSetTopic(root, '_TEMPLATE.md', '100000000000000000');
+function runGuard(root) {
+  return spawnSync(process.execPath, [guard, root], { encoding: 'utf8' });
+}
 
-    const result = await verifyCorpusProvenance(root);
-    assert.deepEqual(result, {
-      checkedFiles: 2,
-      sourceRoutes: ['/set-topics/bom/', '/set-topics/valid/'],
-    });
-  });
+test('live canon passes the same admission guard used by CI', async () => {
+  const result = await verifyCorpusProvenance(repositoryRoot);
+  assert.ok(result.checkedFiles > 0);
+  assert.ok(result.corpusFiles > result.checkedFiles);
+  const cli = runGuard(repositoryRoot);
+  assert.equal(cli.status, 0, cli.stderr);
+  assert.match(cli.stdout, /PASS corpus admission/);
 });
 
-test('provenance guard admits review-gated general and reviewer-captured readable channels', async () => {
-  await temporaryDirectory('fnlkb-provenance-general-', async (root) => {
-    await writeSetTopic(root, 'general.md', LIVE2_CHANNEL_IDS.general, {
-      admittedBy: `auto-capture:${LIVE2_CHANNEL_IDS.general}`,
-    });
-    await writeSetTopic(root, 'dev-lab.md', '1460578674695868510', {
-      admittedBy: 'reviewer-capture:200522590853267456',
-    });
-    const result = await verifyCorpusProvenance(root);
-    assert.equal(result.checkedFiles, 2);
-  });
-
-  await temporaryDirectory('fnlkb-provenance-general-usecase-', async (root) => {
-    await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
-    await writeSetTopic(root, 'general-usecase.md', LIVE2_CHANNEL_IDS.general, {
-      docType: 'USECASE',
-      section: 'support',
-    });
-    await assert.rejects(
-      verifyCorpusProvenance(root),
-      /general .*admitted only for SET_TOPIC/,
-    );
-  });
-
-  for (const [name, channelId] of Object.entries({
-    'tips-tricks': '851482546100633601',
-    'ninjalive-issues': '850926358196125726',
-  })) {
-    await temporaryDirectory(`fnlkb-provenance-${name}-`, async (root) => {
-      await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
-      await writeSetTopic(root, `${name}.md`, channelId);
-      await assert.rejects(
-        verifyCorpusProvenance(root),
-        new RegExp(`${name}\\.md: expected exactly one admitted_by field`),
-      );
-    });
+test('pinned grandfather list is exact, unique and auditable against its historical tree', async () => {
+  assert.equal(grandfathered.sourceCommit, '291ec1ab3cc2069fb4a229f96d0c6ecc0000b053');
+  assert.equal(grandfathered.paths.length, 20);
+  assert.deepEqual(grandfathered.paths, [...new Set(grandfathered.paths)].sort());
+  for (const relative of grandfathered.paths) {
+    assert.match(relative, /^set-topics\/[a-z0-9-]+\.md$/);
+  }
+  // Full local history proves the manifest against git. Shallow standalone CI
+  // still enforces the pinned list above and all behavioral tests below.
+  const tree = spawnSync('git', ['ls-tree', '-r', '--name-only', grandfathered.sourceCommit],
+    { cwd: repositoryRoot, encoding: 'utf8' });
+  if (tree.status === 0) {
+    const paths = tree.stdout.trim().split(/\r?\n/).filter(p => p.startsWith('set-topics/') && p.endsWith('.md'));
+    assert.deepEqual(grandfathered.paths, paths);
   }
 });
 
-test('provenance guard fails closed on absent or malformed non-dedicated admission', async () => {
-  for (const [name, channelId, admittedBy] of [
-    ['general-absent', LIVE2_CHANNEL_IDS.general, undefined],
-    ['legacy-absent', '851482546100633601', undefined],
-    ['reviewer-text', '1460578674695868510', 'reviewer-capture:not-a-snowflake'],
-    ['reviewer-short', '1460578674695868510', 'reviewer-capture:123'],
-    [
-      'reviewer-comment',
-      '1460578674695868510',
-      'reviewer-capture:200522590853267456 # forged comment',
-    ],
-    ['wrong-auto-source', '1460578674695868510', 'auto-capture:1460578674695868510'],
-    ['general-wrong-auto', LIVE2_CHANNEL_IDS.general, 'auto-capture:1319655034803458069'],
-  ]) {
-    await temporaryDirectory(`fnlkb-provenance-admission-${name}-`, async (root) => {
-      await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
-      await writeSetTopic(root, `${name}.md`, channelId, { admittedBy });
-      await assert.rejects(verifyCorpusProvenance(root), /admitted_by/);
-    });
-  }
-});
-
-test('provenance guard rejects duplicate admission fields', async () => {
-  await temporaryDirectory('fnlkb-provenance-admission-duplicate-', async (root) => {
-    const directory = path.join(root, 'set-topics');
-    await mkdir(directory, { recursive: true });
-    const sourceUrl =
-      'https://discord.com/channels/850913821240983553/1460578674695868510/999999999999999999';
-    const admission = 'reviewer-capture:200522590853267456';
-    const duplicate = setTopic(sourceUrl, 'SET_TOPIC', admission).replace(
-      `admitted_by: "${admission}"\n---`,
-      `admitted_by: "${admission}"\nadmitted_by: "${admission}"\n---`,
-    );
-    await writeFile(path.join(directory, 'duplicate.md'), duplicate);
-
-    await assert.rejects(verifyCorpusProvenance(root), /expected exactly one admitted_by field/);
+test('SET_TOPIC and USECASE admission is channel independent in every corpus folder', async () => {
+  await temporaryDirectory('fnlkb-wave11-admitted-', async root => {
+    for (const docType of ['SET_TOPIC', 'USECASE']) {
+      for (const section of ['manual', 'descriptors', 'set-topics', 'support', 'releases']) {
+        for (const channel of channels) {
+          await writeSource(root, `${section}/${docType}-${channel}.md`, setTopic(channel, { docType }));
+        }
+      }
+    }
+    assert.equal((await verifyCorpusProvenance(root)).corpusFiles, 70);
   });
 });
 
-test('reviewer admission is SET_TOPIC-only and cannot admit a USECASE', async () => {
-  await temporaryDirectory('fnlkb-provenance-usecase-admission-', async (root) => {
-    await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
-    await writeSetTopic(root, 'reviewer-usecase.md', '1460578674695868510', {
-      docType: 'USECASE',
-      section: 'support',
-      admittedBy: 'reviewer-capture:200522590853267456',
-    });
-    await assert.rejects(
-      verifyCorpusProvenance(root),
-      /not an admitted LIVE2 set-topic channel/,
-    );
-  });
-});
-
-test('provenance guard fails closed on YAML doc_type spellings it cannot parse canonically', async () => {
-  for (const [name, docType] of Object.entries({
-    comment: 'SET_TOPIC # comment',
-    tag: '!!str SET_TOPIC',
-    anchor: '&scope SET_TOPIC',
-    'quoted-comment': '"SET_TOPIC" # comment',
-  })) {
-    for (const section of ['manual', 'descriptors', 'set-topics', 'support', 'releases']) {
-      await temporaryDirectory(`fnlkb-provenance-yaml-${section}-${name}-`, async (root) => {
-        await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
-        await writeSetTopic(root, `${name}.md`, '851482546100633601', {
-          docType,
-          section,
-        });
-        await assert.rejects(
-          verifyCorpusProvenance(root),
-          /doc_type must use one canonical v7 scalar/,
-        );
+test('CI exits 1 for unadmitted ungrandfathered docs, including former dedicated channels and old dates', async () => {
+  for (const docType of ['SET_TOPIC', 'USECASE']) {
+    for (const channel of channels) {
+      await temporaryDirectory('fnlkb-wave11-denied-', async root => {
+        await writeSource(root, 'set-topics/unadmitted.md', setTopic(channel, { docType, admission: null, date: '2001-01-01' }));
+        const cli = runGuard(root);
+        assert.equal(cli.status, 1, cli.stderr || cli.stdout);
+        assert.match(cli.stderr, /unadmitted\.md: expected exactly one admitted_by field/);
       });
     }
   }
 });
 
+test('only exact pinned paths are grandfathered; dates, folders and route aliases grant nothing', async () => {
+  const pinned = grandfathered.paths[0];
+  for (const docType of ['SET_TOPIC', 'USECASE']) {
+    await temporaryDirectory('fnlkb-wave11-grandfather-', async root => {
+      await writeSource(root, pinned, setTopic(channels[5], { docType, admission: null, date: '2099-01-01' }));
+      assert.equal((await verifyCorpusProvenance(root)).checkedFiles, 1);
+      for (const relative of [pinned.replaceAll('-', '_').replace('set_topics', 'set-topics'),
+        `support/${path.basename(pinned)}`, `set-topics/nested/${path.basename(pinned)}`, 'set-topics/new.md']) {
+        await writeSource(root, relative, setTopic(channels[0], { docType, admission: null }));
+        await assert.rejects(verifyCorpusProvenance(root), /admitted_by|invalid YAML frontmatter/);
+        await rm(path.join(root, relative));
+      }
+    });
+  }
+});
+
+test('presence does not reintroduce marker/channel-specific admission gates', async () => {
+  await temporaryDirectory('fnlkb-wave11-presence-', async root => {
+    await writeSource(root, 'set-topics/explicit.md', setTopic(channels[5], { admission: '"conductor-approved"' }));
+    await writeSource(root, 'set-topics/legacy-marker.md', setTopic(channels[5], { admission: '"auto-capture:850913821827792940"' }));
+    assert.equal((await verifyCorpusProvenance(root)).checkedFiles, 2);
+  });
+});
+
+test('empty, null, collection, alias, tagged and duplicate admission values fail closed', async () => {
+  for (const admission of ['', '""', 'null', '~', 'false', '# no reviewer', '.nan', '.inf', '[]', '{}', '*reviewer', '&reviewer value',
+    '!!str reviewer', '|', '>', '123', '"unterminated', "'unterminated", 'reviewer # comment', `"${reviewer}"\nadmitted_by: "${reviewer}"`]) {
+    await temporaryDirectory('fnlkb-wave11-malformed-', async root => {
+      await writeSource(root, 'set-topics/malformed.md', setTopic(channels[0], { admission }));
+      await assert.rejects(verifyCorpusProvenance(root), /admitted_by|invalid YAML frontmatter/);
+    });
+  }
+});
+
+test('BOM and ignored templates retain existing behavior', async () => {
+  await temporaryDirectory('fnlkb-wave11-bom-', async root => {
+    await writeSource(root, 'set-topics/bom.md', '\uFEFF' + setTopic(channels[0]));
+    await writeSource(root, 'set-topics/_TEMPLATE.md', 'not frontmatter');
+    const result = await verifyCorpusProvenance(root);
+    assert.deepEqual(result, { checkedFiles: 1, corpusFiles: 1, sourceRoutes: ['/set-topics/bom/'] });
+  });
+});
+
+test('doc_type is authoritative outside set-topics; unsupported YAML cannot bypass admission', async () => {
+  for (const docType of ['SET_TOPIC # comment', '!!str SET_TOPIC', '&scope SET_TOPIC', '"SET_TOPIC" # comment']) {
+    for (const section of ['manual', 'descriptors', 'set-topics', 'support', 'releases']) {
+      await temporaryDirectory('fnlkb-wave11-type-', async root => {
+        await writeSource(root, 'set-topics/valid.md', setTopic(channels[0]));
+        await writeSource(root, `${section}/invalid.md`, setTopic(channels[0], { docType }));
+        await assert.rejects(verifyCorpusProvenance(root), /doc_type must (?:use one canonical v7 scalar|be a canonical quoted scalar|be a canonical non-empty string field)/);
+      });
+    }
+  }
+});
+
+test('grandfathering does not bypass URL integrity checks', async () => {
+  await temporaryDirectory('fnlkb-wave11-url-', async root => {
+    await writeSource(root, grandfathered.paths[0], setTopic(channels[0], { admission: null }).replace('discord.com', 'example.com'));
+    await assert.rejects(verifyCorpusProvenance(root), /canonical Discord message URL/);
+  });
+});
+
 test('set-topic source routes mirror Astro documentId normalization', () => {
-  assert.equal(
-    setTopicRouteFromSource('set-topics/nested_name/topic_name.MD'),
-    '/set-topics/nested-name/topic-name/',
-  );
+  assert.equal(setTopicRouteFromSource('set-topics/nested_name/topic_name.MD'), '/set-topics/nested-name/topic-name/');
 });
 
 test('sourceChannelId pins canonical Discord host and protocol handling', () => {
-  const pathSuffix = `/channels/850913821240983553/${LIVE2_CHANNEL_IDS.info}/999999999999999999`;
-  assert.equal(
-    sourceChannelId(`https://DISCORD.COM${pathSuffix}`),
-    LIVE2_CHANNEL_IDS.info,
-  );
-  for (const sourceUrl of [
-    `https://example.com${pathSuffix}`,
-    `https://ptb.discord.com${pathSuffix}`,
-    `https://canary.discord.com${pathSuffix}`,
-    `http://discord.com${pathSuffix}`,
-    `https://user:pass@discord.com${pathSuffix}`,
-    `https://discord.com:444${pathSuffix}`,
-    `https://discord.com:443${pathSuffix}`,
-    `https://discord.com:bad${pathSuffix}`,
-    `https://discord.com${pathSuffix}/`,
-    `https://discord.com${pathSuffix}?x=1`,
-    `https://discord.com${pathSuffix}#fragment`,
-    `https://discord.com${pathSuffix.replaceAll('/', '//')}`,
-  ]) {
+  const suffix = `/channels/850913821240983553/${channels[0]}/999999999999999999`;
+  assert.equal(sourceChannelId(`https://DISCORD.COM${suffix}`), channels[0]);
+  for (const sourceUrl of [`https://example.com${suffix}`, `https://ptb.discord.com${suffix}`,
+    `https://canary.discord.com${suffix}`, `http://discord.com${suffix}`, `https://user:pass@discord.com${suffix}`,
+    `https://discord.com:443${suffix}`, `https://discord.com:bad${suffix}`, `https://discord.com${suffix}/`,
+    `https://discord.com${suffix}?x=1`, `https://discord.com${suffix}#fragment`,
+    `https://discord.com${suffix.replaceAll('/', '//')}`]) {
     assert.throws(() => sourceChannelId(sourceUrl), /canonical Discord message URL/);
   }
 });
 
-test('provenance guard fails a synthetic legacy-channel fixture in a temporary corpus', async () => {
-  await temporaryDirectory('fnlkb-provenance-contaminated-', async (root) => {
-    await writeSetTopic(root, '_looks-ignored/contaminated.md', '100000000000000000');
-
-    await assert.rejects(
-      verifyCorpusProvenance(root),
-      /expected exactly one admitted_by field/,
-    );
+test('underscore directories cannot hide an unadmitted document', async () => {
+  await temporaryDirectory('fnlkb-wave11-nested-', async root => {
+    await writeSource(root, 'set-topics/_looks-ignored/contaminated.md', setTopic(channels[0], { admission: null }));
+    await assert.rejects(verifyCorpusProvenance(root), /admitted_by|invalid YAML frontmatter/);
   });
 });
 
-test('provenance guard rejects site-layer set-topics content beyond the whitelisted index', async () => {
-  await temporaryDirectory('fnlkb-provenance-shadow-', async (root) => {
-    await writeSetTopic(root, 'valid.md', LIVE2_CHANNEL_IDS.info);
-    const siteSection = path.join(root, 'site', 'src', 'content', 'docs', 'set-topics');
-    await mkdir(siteSection, { recursive: true });
-    await writeFile(path.join(siteSection, 'index.mdx'), '# Section index\n');
-    await writeFile(path.join(siteSection, 'valid.mdx'), '# Shadowing body\n');
-
-    await assert.rejects(
-      verifyCorpusProvenance(root),
-      /valid\.mdx: site-layer set-topics content is forbidden/,
-    );
-
-    await rm(path.join(siteSection, 'valid.mdx'));
-    const result = await verifyCorpusProvenance(root);
-    assert.equal(result.checkedFiles, 1);
+test('site-layer set-topics cannot shadow guarded canon', async () => {
+  await temporaryDirectory('fnlkb-wave11-shadow-', async root => {
+    await writeSource(root, 'set-topics/valid.md', setTopic(channels[0]));
+    const section = 'site/src/content/docs/set-topics';
+    await writeSource(root, `${section}/index.mdx`, '---\ntitle: Index\n---\n# Index\n');
+    await writeSource(root, `${section}/valid.mdx`, '# Shadowing body\n');
+    await assert.rejects(verifyCorpusProvenance(root), /site-layer set-topics content is forbidden/);
+    await rm(path.join(root, section, 'valid.mdx'));
+    assert.equal((await verifyCorpusProvenance(root)).checkedFiles, 1);
   });
 });
 
-test('provenance guard admits review-gated public-discussion and rejects it without metadata', async () => {
-  await temporaryDirectory('fnlkb-provenance-public-', async (root) => {
-    await writeSetTopic(root, 'public-discussion.md', LIVE2_CHANNEL_IDS.publicDiscussion, {
-      admittedBy: `auto-capture:${LIVE2_CHANNEL_IDS.publicDiscussion}`,
-    });
-    await writeSetTopic(root, 'public-reviewer.md', LIVE2_CHANNEL_IDS.publicDiscussion, {
-      admittedBy: 'reviewer-capture:200522590853267456',
-    });
-    const result = await verifyCorpusProvenance(root);
-    assert.equal(result.checkedFiles, 2);
-  });
-
-  await temporaryDirectory('fnlkb-provenance-public-unadmitted-', async (root) => {
-    await writeSetTopic(root, 'public-discussion.md', LIVE2_CHANNEL_IDS.publicDiscussion);
-    await assert.rejects(verifyCorpusProvenance(root), /admitted_by/);
-  });
-});
-
-test('provenance guard rejects an empty set-topic section', async () => {
-  await temporaryDirectory('fnlkb-provenance-empty-', async (root) => {
+test('route collisions and an empty source section still fail closed', async () => {
+  await temporaryDirectory('fnlkb-wave11-collision-', async root => {
     await assert.rejects(verifyCorpusProvenance(root), /no set-topic source files found/);
+    await writeSource(root, 'set-topics/a_b.md', setTopic(channels[0]));
+    await writeSource(root, 'set-topics/a-b.md', setTopic(channels[0]));
+    await assert.rejects(verifyCorpusProvenance(root), /duplicates set-topic source/);
   });
 });
 
@@ -349,4 +283,63 @@ test('set-topic parity rejects an injected site-content page without a guarded s
     () => assertSetTopicRouteParity(['/set-topics/expected/'], builtPages),
     /built set-topic route\(s\) without guarded corpus sources:[\s\S]*\/set-topics\/injected-site-content\//,
   );
+});
+
+
+test('multiline YAML scalar content cannot forge top-level admission or document type', async () => {
+  for (const quote of ['"', "'"]) {
+    await temporaryDirectory('fnlkb-wave11-quoted-forgery-', async root => {
+      const forged = setTopic(channels[0], { admission: null })
+        .replace('title: Synthetic fixture', `title: ${quote}Synthetic\nadmitted_by: forged\n${quote}`);
+      await writeSource(root, 'set-topics/forged.md', forged);
+      const result = runGuard(root);
+      assert.equal(result.status, 1, result.stderr);
+      assert.match(result.stderr, /admitted_by field in the YAML mapping/);
+    });
+  }
+  await temporaryDirectory('fnlkb-wave11-type-forgery-', async root => {
+    await writeSource(root, 'set-topics/valid.md', setTopic(channels[0]));
+    await writeSource(root, 'support/forged.md',
+      '---\n"doc_type": SET_TOPIC\nsource_url: https://discord.com/channels/1/2/3\ntitle: "Synthetic\ndoc_type: MANUAL\n"\n---\nBody\n');
+    await assert.rejects(verifyCorpusProvenance(root), /doc_type.*canonical non-empty string/);
+  });
+});
+
+
+test('frontmatter type alone determines admission; organizational folder does not gate other types', async () => {
+  await temporaryDirectory('fnlkb-wave11-authoritative-type-', async root => {
+    for (const docType of ['MANUAL', 'DESCRIPTOR', 'RELEASE', 'APPROVED_SUPPORT']) {
+      for (const section of ['manual', 'descriptors', 'set-topics', 'support', 'releases']) {
+        await writeSource(root, `${section}/${docType}.md`,
+          setTopic(channels[0], { docType, admission: null }).replace('https://discord.com', 'https://docs.example'));
+      }
+    }
+    const result = await verifyCorpusProvenance(root);
+    assert.equal(result.corpusFiles, 20);
+    assert.equal(result.checkedFiles, 4);
+  });
+});
+
+
+test('all loader-consumed typed site pages require admission, including the allowed topic index', async () => {
+  for (const docType of ['SET_TOPIC', 'USECASE']) {
+    for (const relative of ['support/unadmitted.md', 'support/unadmitted.mdx',
+      'support/nested/unadmitted.mdx', '_unadmitted.mdx', 'set-topics/index.mdx',
+      grandfathered.paths[0]]) {
+      await temporaryDirectory('fnlkb-wave11-site-layer-', async root => {
+        await writeSource(root, 'set-topics/valid.md', setTopic(channels[0]));
+        await writeSource(root, `site/src/content/docs/${relative}`,
+          setTopic(channels[0], { docType, admission: null }));
+        const result = runGuard(root);
+        assert.equal(result.status, 1, result.stderr || result.stdout);
+        assert.match(result.stderr, /admitted_by/);
+      });
+    }
+  }
+  await temporaryDirectory('fnlkb-wave11-site-admitted-', async root => {
+    await writeSource(root, 'set-topics/valid.md', setTopic(channels[0]));
+    await writeSource(root, 'site/src/content/docs/support/admitted.mdx', setTopic(channels[5], { docType: 'USECASE' }));
+    await writeSource(root, 'site/src/content/docs/support/index.mdx', '---\ntitle: Support\n---\nNavigation\n');
+    assert.equal(runGuard(root).status, 0);
+  });
 });

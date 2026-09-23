@@ -1,0 +1,27 @@
+{
+  "contract": "FNL-KB b455693ffe2cb45e95f142a1a6effe7b2cc5a01d, spec v7 section 3.4 Wave-11 amendment",
+  "sourceCommit": "291ec1ab3cc2069fb4a229f96d0c6ecc0000b053",
+  "rationale": "Last docs snapshot before the Wave-11 ruling (2026-09-22 18:42:26 +09:30). Exact SET_TOPIC/USECASE paths from this tree, not a date heuristic. Frozen; new or renamed paths require admitted_by.",
+  "paths": [
+    "set-topics/accessing-dynamic-output-material-instances.md",
+    "set-topics/adjusting-water-level.md",
+    "set-topics/blood-in-water.md",
+    "set-topics/cloud-layers.md",
+    "set-topics/data-channels.md",
+    "set-topics/groundsurface-offset-on-sandy-and-snowy-levels.md",
+    "set-topics/input-point-hashing.md",
+    "set-topics/live-2-buoyancy-not-yet-supported.md",
+    "set-topics/live-2-external-rendertargets.md",
+    "set-topics/live-2-surface-aligned-particles-glitch.md",
+    "set-topics/live-2-vs-editor-fps.md",
+    "set-topics/live-2-vs-mesh-terrain.md",
+    "set-topics/live-2-vs-voxel-terrain.md",
+    "set-topics/nativization.md",
+    "set-topics/performance-live-1.md",
+    "set-topics/presets.md",
+    "set-topics/selective-brush-density.md",
+    "set-topics/spline-based-rivers-performance-issue.md",
+    "set-topics/volumetrics.md",
+    "set-topics/vs-ultra-dynamic-sky.md"
+  ]
+}
