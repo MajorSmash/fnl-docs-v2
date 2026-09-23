@@ -1,20 +1,16 @@
 ---
-doc_type: APPROVED_SUPPORT
-title: "Are there any plans for PCG support for LIVE-2?"
+doc_type: SET_TOPIC
+title: "LIVE-2 vs PCG"
 date: 2026-07-21
 source_url: "https://discord.com/channels/850913821240983553/1529031792894410922/1529043158095106128"
 author: "Andras Ketzer"
-question_ref: "https://discord.com/channels/850913821240983553/1527084779780964483/1529031769184014337"
+source_channel: "ai-support-bot"
+admitted_by: "reviewer-capture:200522590853267456"
+scope: LIVE2
 version_min: "2.0.0.56"
 version_max: null
 media_urls: []
 ---
-
-## Question
-
-Are there any plans for PCG support for LIVE-2?
-
-## Answer
 
 LIVE-2 vs PCG (Unreal's built-in Procedural Content Generation)
 .
