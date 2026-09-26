@@ -1,17 +1,17 @@
 ---
 doc_type: MANUAL
 title: FluidNinja LIVE-2 Manual
-date: 2026-08-31
+date: 2026-09-26
 source_url: https://drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa
-doc_revision: '2.05'
-version_min: "2.0.0.56"
+doc_revision: '2.06'
+version_min: 2.0.0.56
 version_max: null
 media_urls: []
 ---
 
 # FLUIDNINJA LIVE-2 MANUAL
 
-**Updated:** 31 August 2026  
+**Updated:** 26 September 2026  
 This document uses MarkDown syntax - opening it with an [MD viewer](https://markpad.dev) results formatted text.
 
 ---
@@ -4258,7 +4258,8 @@ LIVE-2 is backward compatible:
 - additional project components, like base materials and blueprint utilities are also backward compatible
 
 A problem to handle:
-LIVE-1 project structure and asset names grew somewhat organically. In order to build a clean structure under LIVE-2, folder structure has been changed and assets renamed. For this reason, we can not, in one step, replace the key parts in the LIVE-1 project with the key parts from the LIVE-2 project. Instead, we need to address key assets one by one, then convert the LIVE-1 setups to LIVE-2.
+
+LIVE-1 project structure and asset names grew somewhat organically before LIVE-2 dev started. In order to build a clean structure under LIVE-2, folder structure has been changed and assets renamed. For this reason, we can not, in one step, replace the key parts in the LIVE-1 project with the key parts from the LIVE-2 project. Instead, we need to address key assets one by one, then convert the LIVE-1 setups to LIVE-2.
 
 The method in general is the following:
 
@@ -4266,11 +4267,18 @@ The method in general is the following:
 e.g. `BP_NinjaLiveLandscapeUtility` has been renamed to `DriveExternalSystemsWithSimData`
 2. Move the renamed LIVE-1 assets to specific locations - where LIVE-2 successor assets could overwrite them
 e.g. from `/Content /FluidNinjaLive /UseCases /017_RiverAndLandscape` to `/Content /FluidNinjaLive /Utilities`
+  .
+**Here comes a [LIST OF 18 LIVE-1 ASSETS](https://drive.google.com/file/d/1VUbPFpUGCk7diXCXX076OJdq61kn1UTk), with specific instructions on renaming them and changing their location - before the overwriting process starts.**
+
 3. Resolve REDIRECTORS in the restructured LIVE-1 project 
   (so all on-level setups will have their references pointing to the restructured assets)
+
 4. Quit unreal 
-5. Overwrite the LIVE-1 assets in `/Content /FluidNinjaLive` with the new LIVE-2 assets.
+5. Overwrite the LIVE-1 assets in `/Content /FluidNinjaLive` with the new LIVE-2 assets (also located under `/Content /FluidNinjaLive`) using a file manager, outside Unreal - while Unreal is **not** running).
 6. Start Unreal
+
+
+
 
 RESULT: 
 - the ex. LIVE-1 setups on levels show up as LIVE-2 setups, marked with a LEGACY flag
@@ -4283,8 +4291,6 @@ RESULT:
 4. Save the Level
 
 
-
-The SPECIFIC STEPS of the above described process (what assets to rename, and where to place them) will be described in the upcoming versions of this manual. Thank you for you patience.
 
 <a href="#table-of-contents">Back to the Table of Contents</a>
 
@@ -4304,6 +4310,7 @@ So, here is a list with a few examples of known ninja usage:
 - High on Life 2
 - Clair Obscur: Expedition 33
 - Dune: Awakening
+- The Blood of Dawnwalker
 - Marvel 1943: Rise of Hydra
 - The Elder Scrolls IV Oblivion Remastered
 - Stellar Blade
