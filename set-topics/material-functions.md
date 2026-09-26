@@ -1,6 +1,6 @@
 ---
 doc_type: SET_TOPIC
-title: "<@353627728592896001> 🖐️"
+title: "MATERIAL FUNCTIONS"
 date: 2026-09-06
 source_url: "https://discord.com/channels/850913821240983553/850913821827792940/1546153372858581102"
 author: "Andras Ketzer"
@@ -12,7 +12,6 @@ version_max: null
 media_urls: ["https://cdn.discordapp.com/attachments/850913821827792940/1546153372279771146/image.png?ex=6ab47fca&is=6ab32e4a&hm=4ccbeec8814cbe310fde57a22a9f4c449f86dcad45cfa5fdc11f10a7e1bd8575&"]
 ---
 
-<@353627728592896001> 🖐️
 SET TOPIC: **MATERIAL FUNCTIONS**
 1. Ninja uses a single basematerial for "surface" type objects (non-volumetric objects)
 2. This basematerial is only a *wrapper* for a core material function: `MF_NinjaOutput_BaseFunction_SURFACE.uasset`
