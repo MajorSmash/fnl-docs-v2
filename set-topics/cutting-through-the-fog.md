@@ -19,8 +19,8 @@ Ninja is running a raw simulation under the hood: "density is white, lack of den
 Considering the above: in case our system is "fluidsim driven" (not passive): we can make anything "cut through the density" --- and display it as fog (FVOL) or heterogeneous volume (HVOL) or clouds (CVOL).
 
 Examples:
-- `Clouds.umap` / `Setup-6, Titan`: we are using Inverse brush density - and cutting through the clouds.
-- `Clouds.umap` / `Setup-7, CloudPainter`: we are using positive brush density - and painting clouds.
+- `Clouds.umap` / `Setup-5, Titan`: we are using Inverse brush density - and cutting through the clouds.
+- `Clouds.umap` / `Setup-6, CloudPainter`: we are using positive brush density - and painting clouds.
 - Similar examples could be found on the FVOL and HVOL demo levels, in the `Levels /Misc` Folder.
 
 The key param is `/LiveComponent /LiveInputFields /InvertFieldAndPointDensity` - switching between eraser and positive mode.
