@@ -1,9 +1,9 @@
 ---
 doc_type: MANUAL
 title: FluidNinja LIVE-2 Manual
-date: 2026-09-26
+date: 2026-11-19
 source_url: https://drive.google.com/file/d/19qc6Si5AwDKS8iOinB4egCtdn2hse1aa
-doc_revision: '2.06'
+doc_revision: '2.07'
 version_min: 2.0.0.56
 version_max: null
 media_urls: []
@@ -11,7 +11,7 @@ media_urls: []
 
 # FLUIDNINJA LIVE-2 MANUAL
 
-**Updated:** 26 September 2026  
+**Updated:** 19 November 2026  
 This document uses MarkDown syntax - opening it with an [MD viewer](https://markpad.dev) results formatted text.
 
 ---
@@ -1785,7 +1785,11 @@ Example asset in the ninja project:
       - set the "Visible to CPU systems" and "Visible to GPU systems" flags to TRUE
       - set the "Channel" field to `NinjaDataChannel1`
 
-4. Optionally, we can visualize the sim-source particles by switching ON the "Sprite Renderer" at the very bottom of ther module stack
+4. We are going to use a World Space emitter:
+      - Go to Emitter Properties
+      - Set `Local Space = False`
+
+5. Optionally, we can visualize the sim-source particles by switching ON the "Sprite Renderer" at the very bottom of ther module stack
 
 When all done: hit "Compile" and "Save" at the UI top button bar!
 
